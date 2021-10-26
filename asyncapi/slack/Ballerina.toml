@@ -1,0 +1,12 @@
+[package]
+license = ["Apache-2.0"]
+keywords = ["Communication/Team Chat", "Cost/Freemium"]
+org = "ballerinax"
+name = "trigger.slack"
+repository = "https://github.com/ballerina-platform/asyncapi-triggers"
+version = "0.1.0"
+distribution = "slbeta3"
+authors = ["Ballerina"]
+
+[build-options]
+observabilityIncluded = true
