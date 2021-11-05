@@ -7,23 +7,9 @@
 dependencies-toml-version = "2"
 
 [[package]]
-org = "ballerinax"
-name = "asyncapi.native.handler"
-version = "0.1.0"
-transitive = false
-dependencies = [
-	{org = "ballerina", name = "jballerina.java"},
-	{org = "ballerinai", name = "observe"}
-]
-modules = [
-	{org = "ballerinax", packageName = "asyncapi.native.handler", moduleName = "asyncapi.native.handler"}
-]
-
-[[package]]
 org = "ballerina"
 name = "auth"
-version = "2.0.0"
-transitive = true
+version = "2.0.1"
 dependencies = [
 	{org = "ballerina", name = "crypto"},
 	{org = "ballerina", name = "jballerina.java"},
@@ -36,8 +22,7 @@ dependencies = [
 [[package]]
 org = "ballerina"
 name = "cache"
-version = "3.0.0"
-transitive = true
+version = "3.0.1"
 dependencies = [
 	{org = "ballerina", name = "jballerina.java"},
 	{org = "ballerina", name = "task"},
@@ -47,8 +32,7 @@ dependencies = [
 [[package]]
 org = "ballerina"
 name = "cloud"
-version = "2.0.0-beta.3"
-transitive = false
+version = "2.0.0-beta.4"
 modules = [
 	{org = "ballerina", packageName = "cloud", moduleName = "cloud"}
 ]
@@ -56,8 +40,7 @@ modules = [
 [[package]]
 org = "ballerina"
 name = "crypto"
-version = "2.0.0"
-transitive = true
+version = "2.0.1"
 dependencies = [
 	{org = "ballerina", name = "jballerina.java"},
 	{org = "ballerina", name = "time"}
@@ -66,8 +49,7 @@ dependencies = [
 [[package]]
 org = "ballerina"
 name = "file"
-version = "1.0.0"
-transitive = true
+version = "1.0.1"
 dependencies = [
 	{org = "ballerina", name = "jballerina.java"},
 	{org = "ballerina", name = "log"},
@@ -79,8 +61,7 @@ dependencies = [
 [[package]]
 org = "ballerina"
 name = "http"
-version = "2.0.0"
-transitive = false
+version = "2.0.1"
 dependencies = [
 	{org = "ballerina", name = "auth"},
 	{org = "ballerina", name = "cache"},
@@ -110,8 +91,7 @@ modules = [
 [[package]]
 org = "ballerina"
 name = "io"
-version = "1.0.0"
-transitive = true
+version = "1.0.1"
 dependencies = [
 	{org = "ballerina", name = "jballerina.java"},
 	{org = "ballerina", name = "lang.value"}
@@ -121,13 +101,11 @@ dependencies = [
 org = "ballerina"
 name = "jballerina.java"
 version = "0.0.0"
-transitive = true
 
 [[package]]
 org = "ballerina"
 name = "jwt"
-version = "2.0.0"
-transitive = true
+version = "2.0.1"
 dependencies = [
 	{org = "ballerina", name = "cache"},
 	{org = "ballerina", name = "crypto"},
@@ -143,7 +121,6 @@ dependencies = [
 org = "ballerina"
 name = "lang.__internal"
 version = "0.0.0"
-transitive = true
 dependencies = [
 	{org = "ballerina", name = "jballerina.java"},
 	{org = "ballerina", name = "lang.object"}
@@ -153,7 +130,6 @@ dependencies = [
 org = "ballerina"
 name = "lang.array"
 version = "0.0.0"
-transitive = true
 dependencies = [
 	{org = "ballerina", name = "jballerina.java"},
 	{org = "ballerina", name = "lang.__internal"}
@@ -163,7 +139,6 @@ dependencies = [
 org = "ballerina"
 name = "lang.decimal"
 version = "0.0.0"
-transitive = true
 dependencies = [
 	{org = "ballerina", name = "jballerina.java"}
 ]
@@ -172,7 +147,6 @@ dependencies = [
 org = "ballerina"
 name = "lang.int"
 version = "0.0.0"
-transitive = true
 dependencies = [
 	{org = "ballerina", name = "jballerina.java"}
 ]
@@ -181,13 +155,11 @@ dependencies = [
 org = "ballerina"
 name = "lang.object"
 version = "0.0.0"
-transitive = true
 
 [[package]]
 org = "ballerina"
 name = "lang.runtime"
 version = "0.0.0"
-transitive = true
 dependencies = [
 	{org = "ballerina", name = "jballerina.java"},
 	{org = "ballerina", name = "lang.array"},
@@ -198,7 +170,6 @@ dependencies = [
 org = "ballerina"
 name = "lang.string"
 version = "0.0.0"
-transitive = true
 dependencies = [
 	{org = "ballerina", name = "jballerina.java"}
 ]
@@ -207,7 +178,6 @@ dependencies = [
 org = "ballerina"
 name = "lang.value"
 version = "0.0.0"
-transitive = true
 dependencies = [
 	{org = "ballerina", name = "jballerina.java"}
 ]
@@ -215,18 +185,18 @@ dependencies = [
 [[package]]
 org = "ballerina"
 name = "log"
-version = "2.0.0"
-transitive = true
+version = "2.0.1"
 dependencies = [
+	{org = "ballerina", name = "io"},
 	{org = "ballerina", name = "jballerina.java"},
+	{org = "ballerina", name = "lang.value"},
 	{org = "ballerina", name = "observe"}
 ]
 
 [[package]]
 org = "ballerina"
 name = "mime"
-version = "2.0.0"
-transitive = true
+version = "2.0.1"
 dependencies = [
 	{org = "ballerina", name = "io"},
 	{org = "ballerina", name = "jballerina.java"},
@@ -236,8 +206,7 @@ dependencies = [
 [[package]]
 org = "ballerina"
 name = "oauth2"
-version = "2.0.0"
-transitive = true
+version = "2.0.1"
 dependencies = [
 	{org = "ballerina", name = "cache"},
 	{org = "ballerina", name = "crypto"},
@@ -249,8 +218,7 @@ dependencies = [
 [[package]]
 org = "ballerina"
 name = "observe"
-version = "0.9.0"
-transitive = true
+version = "1.0.0"
 dependencies = [
 	{org = "ballerina", name = "jballerina.java"}
 ]
@@ -258,8 +226,7 @@ dependencies = [
 [[package]]
 org = "ballerina"
 name = "os"
-version = "1.0.0"
-transitive = true
+version = "1.0.1"
 dependencies = [
 	{org = "ballerina", name = "jballerina.java"}
 ]
@@ -267,8 +234,7 @@ dependencies = [
 [[package]]
 org = "ballerina"
 name = "regex"
-version = "1.0.0"
-transitive = true
+version = "1.0.1"
 dependencies = [
 	{org = "ballerina", name = "jballerina.java"}
 ]
@@ -276,8 +242,7 @@ dependencies = [
 [[package]]
 org = "ballerina"
 name = "task"
-version = "2.0.0"
-transitive = true
+version = "2.0.1"
 dependencies = [
 	{org = "ballerina", name = "jballerina.java"},
 	{org = "ballerina", name = "time"}
@@ -286,8 +251,7 @@ dependencies = [
 [[package]]
 org = "ballerina"
 name = "time"
-version = "2.0.0"
-transitive = true
+version = "2.0.1"
 dependencies = [
 	{org = "ballerina", name = "jballerina.java"}
 ]
@@ -295,8 +259,7 @@ dependencies = [
 [[package]]
 org = "ballerina"
 name = "url"
-version = "2.0.0"
-transitive = true
+version = "2.0.1"
 dependencies = [
 	{org = "ballerina", name = "jballerina.java"}
 ]
@@ -305,13 +268,38 @@ dependencies = [
 org = "ballerinai"
 name = "observe"
 version = "0.0.0"
-transitive = false
 dependencies = [
 	{org = "ballerina", name = "jballerina.java"},
 	{org = "ballerina", name = "observe"}
 ]
 modules = [
 	{org = "ballerinai", packageName = "observe", moduleName = "observe"}
+]
+
+[[package]]
+org = "ballerinax"
+name = "asyncapi.native.handler"
+version = "0.1.0"
+dependencies = [
+	{org = "ballerina", name = "jballerina.java"},
+	{org = "ballerinai", name = "observe"}
+]
+modules = [
+	{org = "ballerinax", packageName = "asyncapi.native.handler", moduleName = "asyncapi.native.handler"}
+]
+
+[[package]]
+org = "ballerinax"
+name = "trigger.slack"
+version = "0.1.0"
+dependencies = [
+	{org = "ballerina", name = "cloud"},
+	{org = "ballerina", name = "http"},
+	{org = "ballerinai", name = "observe"},
+	{org = "ballerinax", name = "asyncapi.native.handler"}
+]
+modules = [
+	{org = "ballerinax", packageName = "trigger.slack", moduleName = "trigger.slack"}
 ]
 
 

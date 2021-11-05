@@ -4,10 +4,10 @@ import ballerinax/asyncapi.native.handler;
 service class DispatcherService {
     private map<GenericServiceType> services = {};
     private handler:NativeHandler nativeHandler = new ();
-    private string verificationToken;
+    private ListenerConfig listenerConfig;
 
-    public function init(string verificationToken) {
-      self.verificationToken = verificationToken;
+    public function init(ListenerConfig listenerConfig) {
+      self.listenerConfig = listenerConfig;
     }
 
     isolated function addServiceRef(string serviceType, GenericServiceType genericService) returns error? {
@@ -29,7 +29,7 @@ service class DispatcherService {
     resource function post .(http:Caller caller, http:Request request) returns error? {
         json payload = check request.getJsonPayload();
         // Intent verification Handling
-        if (payload.token !== self.verificationToken) {
+        if (payload.token !== self.listenerConfig.verificationToken) {
             return error("Verification token mismatch");
         }
         string eventOrVerification = check payload.'type;

@@ -1,3 +1,8 @@
+public type ListenerConfig record {
+    # The token which is used in the delivery verification process
+    string verificationToken;
+};
+
 public type GenericEventWrapper record {
     # A unique identifier for this specific event, globally unique across all workspaces.
     string event_id;
