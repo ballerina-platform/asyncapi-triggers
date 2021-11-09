@@ -6,13 +6,13 @@ public class Listener {
     private http:Listener httpListener;
     private DispatcherService dispatcherService;
 
-    public function init(string verificationToken, @cloud:Expose int|http:Listener listenOn = 8090) returns error? {
+    public function init(ListenerConfig listenerConfig, @cloud:Expose int|http:Listener listenOn = 8090) returns error? {
        if listenOn is http:Listener {
            self.httpListener = listenOn;
        } else {
            self.httpListener = check new (listenOn);
        }
-       self.dispatcherService = new DispatcherService(verificationToken);
+       self.dispatcherService = new DispatcherService(listenerConfig);
    }
 
     public isolated function attach(GenericServiceType serviceRef, () attachPoint) returns @tainted error? {
