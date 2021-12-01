@@ -5,7 +5,7 @@ org = "ballerinax"
 name = "trigger.slack"
 repository = "https://github.com/ballerina-platform/asyncapi-triggers"
 version = "0.3.0"
-distribution = "slbeta3"
+distribution = "slbeta5"
 authors = ["Ballerina"]
 
 [build-options]
