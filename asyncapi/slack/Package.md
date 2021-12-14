@@ -7,7 +7,7 @@ This package provides the capability to access Slack Events API.
 ### Compatibility
 |                               | Version                        |
 |-------------------------------|--------------------------------|
-| Ballerina Language            | Ballerina Swan Lake Beta3      |
+| Ballerina Language            | Ballerina Swan Lake Beta5      |
 | Slack Events API              | V1.0.0                         | 
 
 ## Report issues
