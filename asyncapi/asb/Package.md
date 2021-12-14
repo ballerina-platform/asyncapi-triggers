@@ -9,7 +9,7 @@ This package provides the capability to access Microsoft Azure Service Bus messa
 
 |                            | Version               |
 |----------------------------|-----------------------|
-| Ballerina Language         | Swan Lake Beta5       |
+| Ballerina Language         | Swan Lake Beta6       |
 | Azure Service Bus SDK      | 3.5.1                 |
 
 ## Report issues
