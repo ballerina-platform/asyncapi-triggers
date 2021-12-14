@@ -7,11 +7,11 @@ This package provides the capability to access Slack Events API.
 ### Compatibility
 |                               | Version                        |
 |-------------------------------|--------------------------------|
-| Ballerina Language            | Ballerina Swan Lake Beta3      |
+| Ballerina Language            | Ballerina Swan Lake Beta5      |
 | Slack Events API              | V1.0.0                         | 
 
 ## Report issues
-To report bugs, request new features, start new discussions, view project boards, etc., go to the [Ballerina Extended Library repository](https://github.com/ballerina-platform/ballerina-extended-library)
+To report bugs, request new features, start new discussions, view project boards, etc., go to the [Ballerina AsyncAPI Triggers repository](https://github.com/ballerina-platform/asyncapi-triggers)
 
 ## Useful links
 - Discuss code changes of the Ballerina project in [ballerina-dev@googlegroups.com](mailto:ballerina-dev@googlegroups.com).

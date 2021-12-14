@@ -1,13 +1,11 @@
 [package]
 license = ["Apache-2.0"]
-keywords = ["Communication/Team Chat", "Cost/Freemium"]
+keywords = ["Communication/Team Chat", "Cost/Freemium", "Trigger"]
 org = "ballerinax"
-name = "trigger.slack"
-icon = "icon.png"
+name = "trigger.google.sheets"
 repository = "https://github.com/ballerina-platform/asyncapi-triggers"
-version = "0.6.1"
-distribution = "slbeta5"
-icon = "icon.png"
+version = "0.5.0"
+distribution = "slbeta4"
 authors = ["Ballerina"]
 
 [build-options]

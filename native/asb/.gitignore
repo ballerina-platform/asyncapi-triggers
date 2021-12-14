@@ -17,18 +17,16 @@
 *.zip
 *.tar.gz
 *.rar
-target
-javalibs
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 
-# Ballerina configuartion file
+#Ballerina configuartion file
 ballerina.conf
 Config.toml
 
-# JSON files created inside resources folder
-**/resources/*.json
+#json files created inside resources folder
+**/resources
 
 # IDEA file
 .idea
