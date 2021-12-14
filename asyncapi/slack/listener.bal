@@ -1,7 +1,7 @@
 import ballerina/http;
 import ballerina/cloud;
 
-@display {label: "Slack", iconPath: "icon.png"}
+@display {label: "Slack", iconPath: "docs/icon.png"}
 public class Listener {
     private http:Listener httpListener;
     private DispatcherService dispatcherService;

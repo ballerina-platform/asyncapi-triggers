@@ -4,9 +4,9 @@ keywords = ["Communication/Team Chat", "Cost/Freemium", "Trigger"]
 org = "ballerinax"
 name = "trigger.slack"
 repository = "https://github.com/ballerina-platform/asyncapi-triggers"
-version = "0.6.1"
-distribution = "slbeta5"
-icon = "icon.png"
+version = "0.6.2"
+distribution = "slbeta6"
+icon = "docs/icon.png"
 authors = ["Ballerina"]
 
 [build-options]
