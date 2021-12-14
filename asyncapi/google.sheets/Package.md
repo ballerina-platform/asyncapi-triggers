@@ -1,14 +1,13 @@
-Listen to [Slack Events API](https://api.slack.com/events) from Ballerina
+Listen to [Google Sheet Events](https://developers.google.com/apps-script/guides/sheets) from Ballerina
 
 ## Package overview
-The `ballerinax/trigger.slack` is a [Ballerina](https://ballerina.io/) trigger for Slack.
-This package provides the capability to access Slack Events API.
+The `ballerinax/trigger.google.sheets` is a [Ballerina](https://ballerina.io/) trigger for Google Sheets.
+This package provides the capability to access Google App script for Google Sheets.
 
 ### Compatibility
 |                               | Version                        |
 |-------------------------------|--------------------------------|
-| Ballerina Language            | Ballerina Swan Lake Beta5      |
-| Slack Events API              | V1.0.0                         | 
+| Ballerina Language            | Ballerina Swan Lake Beta4      |
 
 ## Report issues
 To report bugs, request new features, start new discussions, view project boards, etc., go to the [Ballerina Extended Library repository](https://github.com/ballerina-platform/ballerina-extended-library)

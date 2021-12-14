@@ -1,7 +1,9 @@
 import ballerina/http;
 import ballerinax/asyncapi.native.handler;
+import ballerina/log;
 
 service class DispatcherService {
+    *http:Service;
     private map<GenericServiceType> services = {};
     private handler:NativeHandler nativeHandler = new ();
     private ListenerConfig listenerConfig;
@@ -31,6 +33,8 @@ service class DispatcherService {
         // Intent verification Handling
         if (payload.token !== self.listenerConfig.verificationToken) {
             return error("Verification token mismatch");
+        } else {
+            log:printInfo("Intent verification success...");
         }
         string eventOrVerification = check payload.'type;
         if (eventOrVerification == "url_verification") {

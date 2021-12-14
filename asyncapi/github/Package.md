@@ -1,14 +1,13 @@
-Listen to [Slack Events API](https://api.slack.com/events) from Ballerina
+Listen to [Github Events API](https://docs.github.com/en/developers/webhooks-and-events/webhooks) from Ballerina
 
 ## Package overview
-The `ballerinax/trigger.slack` is a [Ballerina](https://ballerina.io/) trigger for Slack.
-This package provides the capability to access Slack Events API.
+The `ballerinax/trigger.github` is a [Ballerina](https://ballerina.io/) trigger for Github events api.
+This package provides the capability to access Github Webhook API.
 
 ### Compatibility
 |                               | Version                        |
 |-------------------------------|--------------------------------|
-| Ballerina Language            | Ballerina Swan Lake Beta5      |
-| Slack Events API              | V1.0.0                         | 
+| Ballerina Language            | Ballerina Swan Lake Beta4      |
 
 ## Report issues
 To report bugs, request new features, start new discussions, view project boards, etc., go to the [Ballerina Extended Library repository](https://github.com/ballerina-platform/ballerina-extended-library)
