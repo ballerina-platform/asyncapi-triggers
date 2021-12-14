@@ -16,7 +16,7 @@
 
 import ballerina/http;
 
-@display {label: "Google Sheets", iconPath: "resources/gsheet.svg"}
+@display {label: "Google Sheets", iconPath: "docs/icon.png"}
 public class Listener {
     private http:Listener httpListener;
     private DispatcherService dispatcherService;
