@@ -18,7 +18,7 @@ import ballerina/jballerina.java as java;
 
 # Ballerina Azure Service Bus Message Listener.
 # Provides a listener to consume messages from the Azure Service Bus.
-@display {label: "Azure Service Bus", iconPath: "icon.png"}
+@display {label: "Azure Service Bus", iconPath: "docs/icon.png"}
 public class Listener {
 
     final string connectionString;
