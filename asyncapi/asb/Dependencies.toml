@@ -37,7 +37,7 @@ modules = [
 [[package]]
 org = "ballerinax"
 name = "trigger.asb"
-version = "0.2.0"
+version = "0.3.0"
 dependencies = [
 	{org = "ballerina", name = "jballerina.java"},
 	{org = "ballerinai", name = "observe"}
