@@ -17,7 +17,7 @@
 import ballerina/cloud;
 import ballerina/http;
 
-@display {label: "GitHub", iconPath: "icon.png"}
+@display {label: "GitHub", iconPath: "docs/icon.png"}
 public class Listener {
     private http:Listener httpListener;
     private DispatcherService dispatcherService;
