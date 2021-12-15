@@ -1,6 +1,6 @@
 ## Overview
 
-The `ballerinax/trigger.sfdc` module provides a Listener to grasp events triggered from a Salesforce org. This functionality is provided by [Salesforce Streaming API](https://developer.salesforce.com/docs/atlas.en-us.api_streaming.meta/api_streaming/intro_stream.htm).
+The `ballerinax/trigger.salesforce` module provides a Listener to grasp events triggered from a Salesforce org. This functionality is provided by [Salesforce Streaming API](https://developer.salesforce.com/docs/atlas.en-us.api_streaming.meta/api_streaming/intro_stream.htm).
 
 ## Prerequisites
 Before using this connector in your Ballerina application, complete the following:
@@ -16,13 +16,13 @@ Before using this connector in your Ballerina application, complete the followin
 To use the Salesforce listener in your Ballerina application, update the .bal file as follows:
 
 ### Step 1: Import listener
-Import the `ballerinax/trigger.sfdc` module as shown below.
+Import the `ballerinax/trigger.salesforce as sfdc` module as shown below.
 ```ballerina
-import ballerinax/trigger.sfdc;
+import ballerinax/trigger.salesforce as sfdc;
 ```
 
 ### Step 2: Create a new listener instance
-Create a `sfdc:Listener` using your `Slack Verification Token`, port and initialize the listener with it.
+Create a `sfdc:Listener` using your `Salesforce User Name`, `Salesforce Password` `Salesforce Security Token`, `Subscribe Channel Name` and initialize the listener with it.
 ```ballerina
 sfdc:ListenerConfig configuration = {
     username: "USER_NAME",
@@ -40,7 +40,7 @@ listener Listener sfdcListener = new (configuration);
 * Following is a simple sample for using Salesforce listener
 ```ballerina
 import ballerina/log;
-import ballerinax/trigger.sfdc;
+import ballerinax/trigger.salesforce as sfdc;
 
 service sfdc:StreamingEventService on sfdcListener {
     isolated remote function onUpdate(sfdc:EventData event) returns error? {
