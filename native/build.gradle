@@ -26,6 +26,5 @@ allprojects {
 
 subprojects {
     apply plugin: 'java'
-
     dependencies {}
 }
