@@ -342,8 +342,8 @@ modules = [
 
 [[package]]
 org = "ballerinax"
-name = "sfdc"
-version = "3.1.0"
+name = "salesforce"
+version = "4.0.0"
 scope = "testOnly"
 dependencies = [
 	{org = "ballerina", name = "http"},
@@ -362,15 +362,15 @@ dependencies = [
 	{org = "ballerinai", name = "observe"}
 ]
 modules = [
-	{org = "ballerinax", packageName = "sfdc", moduleName = "sfdc"},
-	{org = "ballerinax", packageName = "sfdc", moduleName = "sfdc.bulk"},
-	{org = "ballerinax", packageName = "sfdc", moduleName = "sfdc.soap"}
+	{org = "ballerinax", packageName = "salesforce", moduleName = "salesforce"},
+	{org = "ballerinax", packageName = "salesforce", moduleName = "salesforce.bulk"},
+	{org = "ballerinax", packageName = "salesforce", moduleName = "salesforce.soap"}
 ]
 
 [[package]]
 org = "ballerinax"
 name = "trigger.salesforce"
-version = "0.2.0"
+version = "0.3.0"
 dependencies = [
 	{org = "ballerina", name = "io"},
 	{org = "ballerina", name = "jballerina.java"},
@@ -379,7 +379,7 @@ dependencies = [
 	{org = "ballerina", name = "os"},
 	{org = "ballerina", name = "test"},
 	{org = "ballerinai", name = "observe"},
-	{org = "ballerinax", name = "sfdc"}
+	{org = "ballerinax", name = "salesforce"}
 ]
 modules = [
 	{org = "ballerinax", packageName = "trigger.salesforce", moduleName = "trigger.salesforce"}

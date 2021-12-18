@@ -75,15 +75,16 @@ public class DispatcherService {
         for (MethodType function:attachedFunctions) {
             if (ON_CREATE.equals(function.getName()) && eventType.equals(CREATE)) {
                 executeResourceOnEvent(eventDataRecord, ON_CREATE);
-            } else if (ON_UPDATE.equals(function.getName()) && eventType.equals(UPDATE)) {
+            } 
+            if (ON_UPDATE.equals(function.getName()) && eventType.equals(UPDATE)) {
                 executeResourceOnEvent(eventDataRecord, ON_UPDATE);
-            } else if (ON_DELETE.equals(function.getName()) && eventType.equals(DELETE)) {
+            } 
+            if (ON_DELETE.equals(function.getName()) && eventType.equals(DELETE)) {
                 executeResourceOnEvent(eventDataRecord, ON_DELETE);
-            } else if (ON_RESTORE.equals(function.getName()) && eventType.equals(UNDELETE)) {
+            } 
+            if (ON_RESTORE.equals(function.getName()) && eventType.equals(UNDELETE)) {
                 executeResourceOnEvent(eventDataRecord, ON_RESTORE);
-            } else {
-                return;
-            }
+            } 
         }
     }
 

@@ -19,7 +19,7 @@ import ballerina/lang.runtime;
 import ballerina/log;
 import ballerina/os;
 import ballerina/test;
-import ballerinax/sfdc;
+import ballerinax/salesforce as sfdc;
 
 configurable string & readonly username = os:getEnv("SF_USERNAME");
 configurable string & readonly password = os:getEnv("SF_PASSWORD");
@@ -30,31 +30,59 @@ ListenerConfig listenerConfig = {
     channelName: "/data/ChangeEvents"
 };
 listener Listener eventListener = new (listenerConfig);
+
 isolated boolean isUpdated = false;
+isolated boolean isCreated = false;
+isolated boolean isDeleted = false;
+isolated boolean isRestored = false;
 
 service StreamingEventService on eventListener {
+    remote function onCreate(EventData payload) {
+        string? eventType = payload.metadata?.changeType;
+        if (eventType is string && eventType == "CREATE") {       
+            lock {
+                isCreated= true;
+            }
+            io:println("Created " + payload.toString());
+        } else {
+            io:println(payload.toString());
+        }    
+    }
+
     remote isolated function onUpdate(EventData payload) {
         json accountName = payload.changedData.get("Name");
         if (accountName.toString() == "WSO2 Inc") {
             lock {
                 isUpdated = true;
             }
+            io:println("Updated " + payload.toString());
+        } else {
             io:println(payload.toString());
+        }
+    }
+        
+    remote function onDelete(EventData payload) {
+        string? eventType = payload.metadata?.changeType;
+        if (eventType is string && eventType == "DELETE") {
+            lock {
+                isDeleted = true;
+            }
+            io:println("Deleted " + payload.toString());
         } else {
             io:println(payload.toString());
         }
     }
 
-    remote function onCreate(EventData payload) {
-
-    }
-        
-    remote function onDelete(EventData payload) {
-
-    }
-
     remote function onRestore(EventData payload) {
-
+        string? eventType = payload.metadata?.changeType;
+        if (eventType is string && eventType == "UNDELETE") {
+            lock {
+                isRestored = true;
+            }
+            io:println("Restored " + payload.toString());
+        }  else {
+            io:println(payload.toString());
+        }
     }
 }
 
@@ -120,18 +148,6 @@ function testUpdateRecord() {
     enable: true,
     dependsOn: [testUpdateRecord]
 }
-function testUpdatedEventTrigger() {
-    runtime:sleep(5.0);
-    lock {
-        test:assertTrue(isUpdated, "Error in retrieving account update!");
-
-    }
-}
-
-@test:Config {
-    enable: true,
-    dependsOn: [testUpdatedEventTrigger]
-}
 function testDeleteRecord() {
     log:printInfo("baseClient -> deleteRecord()");
 
@@ -140,4 +156,52 @@ function testDeleteRecord() {
     if (response is error) {
         test:assertFail(msg = response.message());
     } 
+}
+
+@test:Config {
+    enable: true,
+    dependsOn: [testCreateRecord]
+}
+function testCreatedEventTrigger() {
+    runtime:sleep(10.0);
+    lock {
+        test:assertTrue(isCreated, "Error in retrieving account update!");
+
+    }
+}
+
+@test:Config {
+    enable: true,
+    dependsOn: [testUpdateRecord]
+}
+function testUpdatedEventTrigger() {
+    runtime:sleep(10.0);
+    lock {
+        test:assertTrue(isUpdated, "Error in retrieving account update!");
+
+    }
+}
+
+@test:Config {
+    enable: true,
+    dependsOn: [testDeleteRecord]
+}
+function testDeletedEventTrigger() {
+    runtime:sleep(10.0);
+    lock {
+        test:assertTrue(isDeleted, "Error in retrieving account update!");
+
+    }
+}
+
+@test:Config {
+    enable: false,
+    dependsOn: [testDeleteRecord]
+}
+function testRestoredEventTrigger() {
+    runtime:sleep(10.0);
+    lock {
+        test:assertTrue(isRestored, "Error in retrieving account update!");
+
+    }
 }
