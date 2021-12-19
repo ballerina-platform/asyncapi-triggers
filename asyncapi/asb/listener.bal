@@ -18,7 +18,7 @@ import ballerina/jballerina.java as java;
 
 # Ballerina Azure Service Bus Message Listener.
 # Provides a listener to consume messages from the Azure Service Bus.
-@display {label: "Azure Service Bus", iconPath: "icon.png"}
+@display {label: "Azure Service Bus", iconPath: "docs/icon.png"}
 public class Listener {
 
     final string connectionString;
@@ -36,6 +36,12 @@ public class Listener {
     public isolated function init(ListenerConfig listenerConfig) returns error? {
         self.connectionString = listenerConfig.connectionString;
         self.entityPath = listenerConfig.entityPath;
+        // TODO: Remove this logic when Choreo UI support enums
+        if ((listenerConfig?.receiveMode != ()) && !(listenerConfig?.receiveMode == "PEEKLOCK") && 
+            !(listenerConfig?.receiveMode == "RECEIVEANDDELETE")) {
+            return error("Invalid receive mode. " +
+                "Please provide `Receive mode` as PEEKLOCK or RECEIVEANDDELETE (default : PEEKLOCK)");
+        } 
         self.receiveMode = listenerConfig?.receiveMode ?: PEEKLOCK;
         self.listenerHandle = check initListener(java:fromString(self.connectionString), 
             java:fromString(self.entityPath), java:fromString(self.receiveMode));

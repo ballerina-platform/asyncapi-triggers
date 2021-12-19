@@ -29,7 +29,8 @@ import io.ballerina.runtime.api.values.BString;
 import io.ballerinax.asb.util.ASBConstants;
 import io.ballerinax.asb.util.ASBUtils;
 import io.ballerinax.asb.util.ModuleUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.UUID;
 
@@ -38,7 +39,7 @@ import java.util.UUID;
  */
 public class Caller {
 
-    private static final Logger log = Logger.getLogger(Caller.class);
+    private static final Logger log = LoggerFactory.getLogger(Caller.class);
 
     /**
      * Complete Messages from Queue or Subscription based on messageLockToken

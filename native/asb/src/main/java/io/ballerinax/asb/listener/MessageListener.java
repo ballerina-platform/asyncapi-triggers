@@ -28,8 +28,9 @@ import io.ballerina.runtime.api.Runtime;
 import io.ballerina.runtime.api.values.BObject;
 import io.ballerinax.asb.MessageDispatcher;
 import io.ballerinax.asb.util.ASBUtils;
-import org.apache.log4j.Logger;
 import io.ballerinax.asb.util.ASBConstants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 
@@ -40,7 +41,7 @@ import static io.ballerinax.asb.util.ASBConstants.RECEIVEANDDELETE;
  * Listens to incoming messages from Azure Service Bus.
  */
 public class MessageListener {
-    private static final Logger log = Logger.getLogger(MessageListener.class);
+    private static final Logger log = LoggerFactory.getLogger(MessageListener.class);
 
     private static Runtime runtime;
     private static boolean started = false;

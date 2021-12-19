@@ -21,7 +21,7 @@ public type ListenerConfig record {
     # Name or path of the entity (e.g : Queue name, Subscription path)
     string entityPath;
     # Receive mode as PEEKLOCK or RECEIVEANDDELETE (default : PEEKLOCK)
-    ReceiveMode receiveMode?;
+    string receiveMode?;
 };
 
 # Azure service bus message representation.

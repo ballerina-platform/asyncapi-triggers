@@ -20,7 +20,7 @@ repositories {
 
 dependencies {
     implementation group: 'com.microsoft.azure', name: 'azure-servicebus', version: project.asb_sdk_version
-    implementation group: 'log4j', name: 'log4j', version: project.log4j_version
+    implementation group: 'org.slf4j', name: 'slf4j-api', version: project.slf4jVersion
     compile group: 'org.ballerinalang', name: 'ballerina-lang', version: project.ballerinaLangVersion
     compile(group: 'org.ballerinalang', name: 'ballerina-runtime', version: project.ballerinaLangVersion) {
         transitive = false
