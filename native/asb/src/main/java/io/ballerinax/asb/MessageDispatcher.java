@@ -34,8 +34,9 @@ import io.ballerina.runtime.api.values.BObject;
 import io.ballerina.runtime.api.values.BString;
 import io.ballerinax.asb.util.ASBUtils;
 import io.ballerinax.asb.util.ModuleUtils;
-import org.apache.log4j.Logger;
 import io.ballerinax.asb.util.ASBConstants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
@@ -48,7 +49,7 @@ import static io.ballerinax.asb.listener.MessageListener.isServiceAttached;
  * Handles and dispatched messages with data binding.
  */
 public class MessageDispatcher {
-    private static final Logger log = Logger.getLogger(MessageDispatcher.class);
+    private static final Logger log = LoggerFactory.getLogger(MessageDispatcher.class);
 
     private BObject service;
     private BObject caller;
