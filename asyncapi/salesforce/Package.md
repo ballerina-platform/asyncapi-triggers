@@ -1,13 +1,13 @@
 Listen to [Salesforce Streaming API](https://developer.salesforce.com/docs/atlas.en-us.api_streaming.meta/api_streaming/intro_stream.htm) from Ballerina
 
 ## Package overview
-The `ballerinax/trigger.sfdc` is a [Ballerina](https://ballerina.io/) trigger for Salesforce.
+The `ballerinax/trigger.salesforce` is a [Ballerina](https://ballerina.io/) trigger for Salesforce.
 This package provides the capability to access Salesforce Streaming API.
 
 ### Compatibility
 |                               | Version                   |
 |-------------------------------|---------------------------|
-| Ballerina Language            | Ballerina Swan Lake Beta5 |
+| Ballerina Language            | Ballerina Swan Lake Beta6 |
 | Salesforce Streaming API      | 43.0                      | 
 
 ## Report issues
