@@ -51,7 +51,7 @@ service slack:UserChangeService on slackListener {
 * Register the request URL
     1. Run your ballerina service (similar to above sample) on prefered port.
     2. Start ngrok on same port using the command ``` ./ngrok http 9090 ```
-    3. In `Event Subscriptions` section of your Slack App settings, paste the URL issued by ngrok following with your service path (eg : ```https://365fc542d344.ngrok.io/slack/events```) (`'/slack/events'` should be added after thr ngrok URL).
+    3. In `Event Subscriptions` section of your Slack App settings, paste the URL issued by ngrok following with your service path (eg : ```https://365fc542d344.ngrok.io/slack/events```) (`'/slack/events'` should be added after thr ngrok URL. Even if it's not an ngrok URL, trailing / at the end of the URL is mandatory).
     4. Slack Event API will send a url_verification event containing the token and challenge key value pairs.
     5. Slack Listener will automatically verify the URL by comparing the token and send the required response back to slack
     6. Check whether your request URL displayed as `verified` in `Event Subscriptions` section of your Slack App.
