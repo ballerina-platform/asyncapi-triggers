@@ -95,7 +95,7 @@ Use `bal run` command to compile and run the Ballerina program.
 
 ### Step 5: Configure Github webhook with the URL of the service
 - Create a webhook in github following [github documentation](https://docs.github.com/en/developers/webhooks-and-events/webhooks/creating-webhooks)
-- Provide the public URL of the started service as the Payload URL. 
+- Provide the public URL of the started service as the Payload URL (Add a trailing / to the URL if its not present). 
 - Provide application/json for the content type. 
 - Support for secret field will be available in the next github trigger releases. 
 - Select the list of events you need to subscribe to and click on Add webhook.
