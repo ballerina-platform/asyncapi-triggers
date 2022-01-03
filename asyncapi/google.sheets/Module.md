@@ -68,7 +68,7 @@ Before using this connector in your Ballerina application, complete the followin
                 'payload' : payload
             };
 
-            UrlFetchApp.fetch('<BASE_URL>/onEdit/', options);
+            UrlFetchApp.fetch('<BASE_URL>/', options);
 
             saveValue(range.getSheet().getLastRow());
             saveDeleteStatus(0);
