@@ -289,7 +289,7 @@ modules = [
 [[package]]
 org = "ballerinax"
 name = "trigger.github"
-version = "0.5.2"
+version = "0.5.3"
 dependencies = [
 	{org = "ballerina", name = "cloud"},
 	{org = "ballerina", name = "http"},
