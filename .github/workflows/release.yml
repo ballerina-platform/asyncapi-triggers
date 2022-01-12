@@ -1,0 +1,23 @@
+name: Release
+
+on:
+  release:
+    types:
+      - published
+
+jobs:
+  container:
+    runs-on: ubuntu-latest
+    container:
+      image: ballerina/ballerina:swan-lake-beta6
+      options: --user root
+    steps:
+      - name: Install Git
+        run: apk --no-cache add git
+      - uses: actions/checkout@v2
+      - name: Build with Gradle
+        env:
+          BALLERINA_CENTRAL_ACCESS_TOKEN: ${{ secrets.BALLERINA_CENTRAL_ACCESS_TOKEN }}
+          JAVA_OPTS: -DBALLERINA_DEV_COMPILE_BALLERINA_ORG=true
+        run: |
+           ./gradlew build -Prelease=true

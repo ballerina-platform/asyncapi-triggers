@@ -1,0 +1,106 @@
+import groovy.io.FileType
+
+plugins {
+    id 'java'
+    id "com.github.spotbugs" version "${githubSpotbugsVersion}"
+    id "de.undercouch.download" version "${underCouchDownloadVersion}"
+    id "net.researchgate.release" version "${researchgateReleaseVersion}"
+}
+
+apply plugin: 'jacoco'
+apply plugin: 'maven-publish'
+
+ext.ballerinaLangVersion = project.ballerinaLangVersion
+
+allprojects {
+    repositories {
+        mavenLocal()
+
+        maven {
+            url = 'https://maven.wso2.org/nexus/content/groups/wso2-public/'
+        }
+
+        maven {
+            url = 'https://repo.maven.apache.org/maven2'
+        }
+
+        maven {
+            url = 'https://maven.pkg.github.com/ballerina-platform/ballerina-lang'
+            credentials {
+                username System.getenv("packageUser")
+                password System.getenv("packagePAT")
+            }
+        }
+    }
+}
+
+subprojects {
+    apply plugin: 'java'
+    dependencies {}
+}
+
+def ballerinaDistributionPath = System.getenv("BALLERINA_HOME")
+List<String> ballerinaPackages = new ArrayList<>();
+boolean release = false;
+if (project.hasProperty("release")){
+    release = new Boolean(project.property("release").toString())
+}
+
+String asyncApiPackageDirPath = project.projectDir.absolutePath + "/asyncapi";
+def dir = new File(asyncApiPackageDirPath)
+dir.traverse (type: FileType.DIRECTORIES, maxDepth: 0) { file ->
+  ballerinaPackages.add( file )
+}
+
+task codeBuild {
+    dependsOn subprojects.build
+    doLast {
+        println "Task: Building triggers..."
+        for (String path : ballerinaPackages) {
+            exec {
+                commandLine 'sh', '-c', "${ballerinaDistributionPath}/bin/bal pack ${path}"
+            }
+        }
+
+        if (!release) {
+            println "Task: Pushing triggers to local..."
+            for (String path : ballerinaPackages) {
+                try {
+                    exec {
+                        workingDir "${path}"
+                        commandLine 'sh', '-c', "${ballerinaDistributionPath}/bin/bal push --repository=local"
+                    }
+                }
+                catch (Exception ex) {
+                    println "Failed to push trigger [" + path + "] to local repository. Error : " + ex.toString(); 
+                }
+            }
+        }
+    }
+}
+
+task releaseTrigger {
+    doLast {
+        if(release){
+            println "Task: Pushing triggers to Ballerina Central..."
+            for (String path : ballerinaPackages) {          
+                try {
+                    exec {
+                        println "Pushing trigger [" + path + "] to Ballerina Central"
+                        workingDir "${path}"
+                        commandLine 'sh', '-c', "${ballerinaDistributionPath}/bin/bal push"
+                    }
+                } catch (Exception ex) {
+                    println "Failed to push trigger [" + path + "] to Ballerina Central. Error : " + ex.toString(); 
+                }
+                println "---------------------------------------"
+            }
+            println "Task: Pushed all triggers to Ballerina Central successfully..."
+            println "Success"
+        }
+    }
+}
+
+
+build.dependsOn releaseTrigger
+releaseTrigger.dependsOn codeBuild
