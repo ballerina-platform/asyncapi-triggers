@@ -284,7 +284,7 @@ modules = [
 [[package]]
 org = "ballerinax"
 name = "trigger.google.sheets"
-version = "0.5.2"
+version = "0.5.3"
 dependencies = [
 	{org = "ballerina", name = "http"},
 	{org = "ballerina", name = "log"},
