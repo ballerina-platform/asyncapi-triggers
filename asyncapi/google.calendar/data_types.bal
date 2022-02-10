@@ -15,21 +15,22 @@
 // under the License.
 
 import ballerinax/googleapis.calendar;
+import ballerina/http;
 
 # Listener Configuration.
 #
 # + calendarId - Identifier of the specific calendar
-# + token - Identifier of the specific calendar
 # + address - Identifier of the specific calendar
 # + expiration - Identifier of the specific calendar
+# + auth - Identifier of the specific calendar
 @display {label: "Connection Config"}
 public type ListenerConfig record {
     @display {label: "Calendar Id"}
     string calendarId;
-    @display {label: "Google Auth Token"}
-    string token;
+    @display {label: "Google Auth"}
+    http:BearerTokenConfig|http:OAuth2RefreshTokenGrantConfig|http:JwtIssuerConfig auth;
     string address;
-    string? expiration;
+    string? expiration = ();
 };
 
 # Defines watch response.

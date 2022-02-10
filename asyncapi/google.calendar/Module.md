@@ -1,164 +1,92 @@
 ## Overview
 
-The [Ballerina](https://ballerina.io/) listener for Google Sheets provides the capability to listen to simple events using the [App Scripts triggers](https://developers.google.com/apps-script/guides/triggers). App Scripts runs a function automatically whenever a certain event occurs, for example, when a user changes a value in a spreadsheet. When an event is triggered, Apps Script passes the event object ( typically `e`) as an argument to the function. The event object contains information about the context that caused the event to trigger. Using App Script [Installable triggers](https://developers.google.com/apps-script/guides/triggers/installable) we can invoke services that require authorization and pass the event information. The Google Sheets Ballerina listener can listen to these events triggered and execute the user logic based on the event type received.
+The [Ballerina](https://ballerina.io/) listener for Google Calendar provides the capability to listen to calendar events using the [Google Calendar API V3](https://developers.google.com/calendar/api/v3/reference).
 
-The trigger can listen to events triggered  when a spreadsheet is edited such as when a row is appended to a spreadsheet or when a row is updated in a spreadsheet with the following trigger methods: 
-* `onAppendRow`
-* `onUpdateRow`
-
-This module supports [Google App Scripts](https://developers.google.com/apps-script/guides/triggers).
+The trigger can listen to events triggered  when a calendar event is created, updated or deleted edited with the following trigger methods: 
+* `onNewEvent`
+* `onEventUpdate`
+* `onEventDelete`
 
 ## Prerequisites
 
 Before using this connector in your Ballerina application, complete the following:
 
 - Create [Google account](https://accounts.google.com/signup/v2/webcreateaccount?utm_source=ga-ob-search&utm_medium=google-account&flowName=GlifWebSignIn&flowEntry=SignUp)
-- Enable Google App Script trigger to listen to internal changes of a spreadsheet.
+- Generate OAuth credentials to be used with the Google Calendar API V3
 
-    1. Open the google sheet.
-    2. Navigate to `Extensions > Apps Script`.
-    3. Name your project. (Example: Name the project `GSheet_Ballerina_Trigger`)
-    4. Remove all the code that is currently in the Code.gs file, and replace it with this:
-        ```
-        function atChange(e){
-            if (e.changeType == "REMOVE_ROW") {
-                saveDeleteStatus(1);
-            }
-        }
-
-        function atEdit(e){
-            var source = e.source;
-            var range = e.range;
-
-            var a = range.getRow();
-            var b = range.getSheet().getLastRow();
-            var previousLastRow = Number(getValue());
-            var deleteStatus = Number(getDeleteStatus());
-            var eventType = "edit";
-
-            if ((a == b && b != previousLastRow) || (a == b && b == previousLastRow && deleteStatus == 1)) {
-                eventType = "appendRow";
-            }
-            else if ((a != b) || (a == b && b == previousLastRow && deleteStatus == 0)) {
-                eventType = "updateRow";
-            }
-            
-            var formData = {
-                    'spreadsheetId' : source.getId(),
-                    'spreadsheetName' : source.getName(),
-                    'worksheetId' : range.getSheet().getSheetId(),
-                    'worksheetName' : range.getSheet().getName(),
-                    'rangeUpdated' : range.getA1Notation(),
-                    'startingRowPosition' : range.getRow(),
-                    'startingColumnPosition' : range.getColumn(),
-                    'endRowPosition' : range.getLastRow(),
-                    'endColumnPosition' : range.getLastColumn(),
-                    'newValues' : range.getValues(),
-                    'lastRowWithContent' : range.getSheet().getLastRow(),
-                    'lastColumnWithContent' : range.getSheet().getLastColumn(),
-                    'previousLastRow' : previousLastRow,
-                    'eventType' : eventType,
-                    'eventData' : e
-            };
-            var payload = JSON.stringify(formData);
-
-            var options = {
-                'method' : 'post',
-                'contentType': 'application/json',
-                'payload' : payload
-            };
-
-            UrlFetchApp.fetch('<BASE_URL>/', options);
-
-            saveValue(range.getSheet().getLastRow());
-            saveDeleteStatus(0);
-        }
-
-        var properties = PropertiesService.getScriptProperties();
-
-        function saveValue(lastRow) {
-            properties.setProperty('PREVIOUS_LAST_ROW', lastRow);
-        }
-
-        function getValue() {
-            return properties.getProperty('PREVIOUS_LAST_ROW');
-        }
-
-        function saveDeleteStatus(deleteStatus) {
-            properties.setProperty('DELETE_STATUS', deleteStatus);
-        }
-
-        function getDeleteStatus() {
-            return properties.getProperty('DELETE_STATUS');
-        }
-        ```
-        We’re using the UrlFetchApp class to communicate with other applications on the internet.
-
-    5. Replace the <BASE_URL> section with the base URL where your listener service is running. (Note: You can use [ngrok](https://ngrok.com/docs) to expose your web server to the internet. Example: 'https://7745640c2478.ngrok.io/')
-    6. Navigate to the `Triggers` section in the left menu of the editor.
-    7. Click `Add Trigger` button.
-    8. Select the following values for the following fields.
-
-        | Field                        | Value             |
-        |------------------------------|-------------------|
-        | Choose which function to run | `atChange`        |
-        | Select event source          | `From spreadsheet`|
-        | Select event type            | `On change`       |
-
-    9. This will prompt you to authorize your script to connect to an external service. Click `Review Permissions` and then `Allow` to continue.
-    10. Repeat the same process, add a new trigger with the following values for the following fields. Then click Save!.
-
-        | Field                        | Value             |
-        |------------------------------|-------------------|
-        | Choose which function to run | `atEdit`          |
-        | Select event source          | `From spreadsheet`|
-        | Select event type            | `On edit`         |
-    11. You have now configured your triggers. You can test these triggers by editing the Google sheet.
+    1. Go to [Google API Console](https://console.developers.google.com/) 
+    2. Create a new project if needed
+    3. Navigate to `APIs & Services > Enabled APIs and Services`.
+    4. Click on `+ENABLE APIS AND SERVICES`
+    5. Search for `Google Calendar API` and select it.
+    6. In the Google Calendar API page click on `Enable This API`
+    7. Go back to `APIs & Services` Page and navigate to `OAuth Consent Screen`.
+    8. Create a new app providing a name and relevant details.
+    9. Add at least the following scopes for the app. You can add further scopes accordingly
+        - ./auth/calendar.app.created
+        - ./auth/calendar.calendarlist.readonly
+        - ./auth/calendar.events.freebusy
+        - ./auth/calendar.events.public.readonly
+    10. After completing the OAuth Consent, go back to `APIs & Services` Page and navigate to `Credentials`.
+    11. Click on `+ Create Credentials` and click on OAuth Client ID.
+    12. From the create credentials form select `Web Application` as application type.
+    13. Add https://developers.google.com/oauthplayground to `Authorized redirect URIs`, if you hope to use Google OAuth playground to generate access and refresh tokens.
+    14. Click on create and record Client ID and Client Secret you receive.
+    15. In a separate browser window or tab, visit [OAuth 2.0 playground](https://developers.google.com/oauthplayground/).
+    16. Click the gear icon in the upper right corner and check the box labeled Use your own OAuth credentials (if it isn't already checked) and enter the OAuth2 client ID and OAuth2 client secret you obtained in step 14.
+    17. Select required Google Calendar scopes, and then click Authorize APIs.
+    18. When you receive your authorization code, click Exchange authorization code for tokens to obtain the refresh token and access token.
 
 ## Quickstart
-To use the Google Sheets listener in your Ballerina application, update the .bal file as follows:
+To use the Google Calendar listener in your Ballerina application, update the .bal file as follows:
 
 ### Step 1: Import listener
-Import the ballerinax/trigger.google.sheets module into the Ballerina project.
+Import the ballerinax/trigger.google.calendar module into the Ballerina project.
 ```ballerina
-    import ballerinax/trigger.google.sheets;
+    import ballerinax/trigger.google.calendar;
 ```
 
 ### Step 2: Create a new listener instance
-Create a `sheets:ListenerConfig` with the spreadsheet ID obtained, and initialize the listener with it. 
+Create a `calendar:ListenerConfig` with the details obtained in the prerequisite steps, and initialize the listener with it. 
 ```ballerina
-    configurable sheets:ListenerConfig userInput = {
-        spreadsheetId: "1rqmQttRXGYSYJheibCpVCYXBa4jmggrEXpcgH2ahk94"
-    };
-
-    listener sheets:Listener sheetListener = new (userInput);
+    listener calendar:Listener calendarListener = new(listenerConfig = {
+        calendarId: "primary", // If you have a specific calendar ID you can use it. To address the primary calendar you can use "primary"
+        address: "", // Callback URL for the Google calendar API. This is usually the public url of the ballerina service.ex:-You can use ngrok to get public url 
+        auth: {
+            refreshUrl: "https://oauth2.googleapis.com/token", // For google services you can use this refresh URL
+            refreshToken: "", // Obtained in prerequisite step 18
+            clientId: "", // Obtained in prerequisite step 14
+            clientSecret: "", // Obtained in prerequisite step 14
+        }
+    });
 ```
-**!!! NOTE:** Spreadsheet ID is available in the spreadsheet URL "https://docs.google.com/spreadsheets/d/" + <SPREADSHEET_ID> + "/edit#gid=" + <WORKSHEET_ID>
 
 ### Step 3: Invoke listener triggers
 1. Now you can use the triggers available within the listener. 
 
-    Following is an example on how to listen to append events and update events of a spreadsheet using the listener. 
-    Add the trigger implementation logic under each section based on the event type you want to listen to using the Google sheets Listener.
+    Following is an example on how to listen to create events and update events of a calendar using the listener. 
+    Add the trigger implementation logic under each section based on the event type you want to listen to using the Google calendar Listener.
 
     Listen to append events and update events
 
     ```ballerina
-    service sheets:SheetRowService on sheetListener {
+    service calendar:CalendarService on calendarListener {
 
-        remote function onAppendRow(sheets:GSheetEvent payload) returns error? {
-            json? eventData = payload?.eventData;
-            // Write your logic here.....
+        remote function onEventDelete(calendar:Event payload) returns error? {
+            return;
         }
 
-        remote function onUpdateRow(sheets:GSheetEvent payload) returns error? {
-            json? eventData = payload?.eventData;
-            // Write your logic here.....
+        remote function onEventUpdate(calendar:Event payload) returns error? {
+            return;
+        }
+
+        remote function onNewEvent(calendar:Event payload) returns error? {
+            return;
         }
     }
     ```
 
-    **!!! NOTE:** The Google Sheets Trigger can listen to events triggered when a spreadsheet is edited such as when a new row is appended or when a row is updated with the following trigger methods: `onAppendRow`, `onUpdateRow`. We can get more information about the edit event such as the `spreadsheet ID, spreadsheet name, worksheet ID, worksheet name, range updated, starting row position, end row position, starting column position, end column position, new values, last row with content, last column with content` etc.
+    **!!! NOTE:** The Google Calendar Trigger can listen to events triggered when a spreadsheet is edited such as when a new event is created, deleted or  updated with the following trigger methods: `onNewEvent`,`onEventDelete`, `onEventUpdate`. We can get more information about the event using the payload parameter in each of the remote function.
 
 2. Use `bal run` command to compile and run the Ballerina program. 
 

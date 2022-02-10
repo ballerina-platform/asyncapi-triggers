@@ -38,16 +38,13 @@ public class Listener {
            self.httpListener = check new (listenOn);
        }
         calendar:ConnectionConfig config = {
-            auth: {
-                token : listenerConfig.token
-            }
+            auth: listenerConfig.auth
         };
        self.config = config;
        self.calendarId = listenerConfig.calendarId;
        self.address = listenerConfig.address;
        self.expiration = listenerConfig.expiration;
        self.dispatcherService = new DispatcherService(listenerConfig, config);
-       log:printInfo("Dispatcher Init Done");
    }
 
     public isolated function attach(GenericServiceType serviceRef, () attachPoint) returns @tainted error? {

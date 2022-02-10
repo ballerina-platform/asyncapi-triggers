@@ -1,13 +1,13 @@
-Listen to [Google Sheet Events](https://developers.google.com/apps-script/guides/sheets) from Ballerina
+Listen to [Google Calendar Events](https://calendar.google.com/) from Ballerina
 
 ## Package overview
-The `ballerinax/trigger.google.sheets` is a [Ballerina](https://ballerina.io/) trigger for Google Sheets.
-This package provides the capability to access Google App script for Google Sheets.
+The `ballerinax/trigger.google.calendar` is a [Ballerina](https://ballerina.io/) trigger for Google Calendar.
+This package provides the capability to access Google calendar events.
 
 ### Compatibility
 |                               | Version                        |
 |-------------------------------|--------------------------------|
-| Ballerina Language            | Ballerina Swan Lake Beta4      |
+| Ballerina Language            | Ballerina Swan Lake Beta6      |
 
 ## Report issues
 To report bugs, request new features, start new discussions, view project boards, etc., go to the [Ballerina Extended Library repository](https://github.com/ballerina-platform/ballerina-extended-library)
