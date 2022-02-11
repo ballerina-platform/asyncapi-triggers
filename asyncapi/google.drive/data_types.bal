@@ -14,11 +14,10 @@
 // specific language governing permissions and limitations
 // under the License.
 
-import ballerinax/googleapis.drive as drive;
+import ballerinax/googleapis.drive;
 
 # Listener Configuration. 
-#
-# + port - Port for the listener.  
+# 
 # + specificFolderOrFileId - Folder or file Id.  
 # + domainVerificationFileContent - File content of HTML file used in domain verification.
 # + callbackURL - Callback URL registered.  
@@ -26,8 +25,6 @@ import ballerinax/googleapis.drive as drive;
 # + channelRenewalConfig - Channel renewal configuration.
 @display {label: "Listener Config"}
 public type ListenerConfiguration record {
-    @display {label: "Port"}
-    int port;
     @display {label: "Callback URL"}
     string callbackURL;
     @display {label: "Domain Verification File Content"}
@@ -54,26 +51,6 @@ public type ChannelRenewalConfig record {
     int leadTime?;
     @display {label: "Domain Verification Delay"}
     int domainVerificationDelay?;
-};
-
-# Represents the available methods in the listener. 
-# These values is automatically set from the available methods inside the listener.
-#
-# + isOnNewFileCreate - Trigger on new file creation
-# + isOnNewFolderCreate - Trigger on new folder creation
-# + isOnFileUpdate - Trigger on file update
-# + isOnFolderUpdate - Trigger on folder update
-# + isOnFileTrash - Trigger on file trash operation (temporary delete)
-# + isOnFolderTrash - Trigger on folder trash operation (temporary delete)
-# + isOnDelete - Trigger on delete operation (permenantly delete)
-public type MethodNames record {
-    boolean isOnNewFileCreate;
-    boolean isOnNewFolderCreate;
-    boolean isOnFileUpdate;
-    boolean isOnFolderUpdate;
-    boolean isOnFileTrash;
-    boolean isOnFolderTrash;
-    boolean isOnDelete;
 };
 
 # Optional parameters for the watch files.

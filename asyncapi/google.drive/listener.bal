@@ -16,7 +16,7 @@
 
 import ballerina/http;
 import ballerina/log;
-import ballerinax/googleapis.drive as drive;
+import ballerinax/googleapis.drive;
 import ballerina/task;
 import ballerina/time;
 
@@ -40,8 +40,12 @@ public class Listener {
     #
     # + config - Listener configuration
     # + return - An error on failure of initialization or else `()`
-    public isolated function init(ListenerConfiguration config) returns @tainted error? {
-        self.httpListener = check new (config.port);
+    public isolated function init(ListenerConfiguration config, int|http:Listener listenOn = 8090) returns @tainted error? {
+        if listenOn is http:Listener {
+            self.httpListener = listenOn;
+        } else {
+            self.httpListener = check new (listenOn);
+        }
         self.driveClient = check new (config.clientConfiguration);
         self.config = config;
         self.domainVerificationFileContent = config.domainVerificationFileContent;

@@ -7,7 +7,7 @@ This package provides the capability to access Google Drive API
 ### Compatibility
 |                               | Version                        |
 |-------------------------------|--------------------------------|
-| Ballerina Language            | Ballerina Swan Lake Beta5      |
+| Ballerina Language            | Ballerina Swan Lake Beta6      |
 | Google Drive API              | v3                             | 
 
 ## Report issues

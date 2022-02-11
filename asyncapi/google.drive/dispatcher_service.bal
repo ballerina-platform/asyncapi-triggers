@@ -16,7 +16,7 @@
 
 import ballerina/log;
 import ballerina/http;
-import ballerinax/googleapis.drive as drive;
+import ballerinax/googleapis.drive;
 import ballerinax/asyncapi.native.handler;
 
 service class DispatcherService {
@@ -27,9 +27,9 @@ service class DispatcherService {
     private string currentToken;
     private string watchResourceId;
     private json[] currentFileStatus = [];
-    private final ListenerConfiguration & readonly config;
+    private final ListenerConfiguration config;
     private final string specificFolderOrFileId;
-    private final drive:ConnectionConfig & readonly driveConfig;
+    private final drive:ConnectionConfig  driveConfig;
     private final boolean isWatchOnSpecificResource;
     private final boolean isFolder;
     private final string domainVerificationFileContent;
@@ -41,8 +41,8 @@ service class DispatcherService {
         self.channelUuid = channelUuid;
         self.currentToken = currentToken;
         self.watchResourceId = watchResourceId;
-        self.driveConfig = config.clientConfiguration.cloneReadOnly();
-        self.config = config.cloneReadOnly();
+        self.driveConfig = config.clientConfiguration.clone();
+        self.config = config.clone();
         self.isFolder = isFolder;
         self.isWatchOnSpecificResource = isWatchOnSpecificResource;
         self.specificFolderOrFileId = specificFolderOrFileId;
@@ -93,6 +93,7 @@ service class DispatcherService {
     }
 
     resource isolated function post .(http:Caller caller, http:Request request) returns @tainted error? {
+        log:printInfo("Message Received");
         if (check request.getHeader(GOOGLE_CHANNEL_ID) != self.getChannelUuid()) {
             fail error("Different channel IDs found, Resend the watch request");
         } else {
