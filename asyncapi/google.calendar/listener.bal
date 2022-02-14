@@ -38,7 +38,12 @@ public class Listener {
            self.httpListener = check new (listenOn);
        }
         calendar:ConnectionConfig config = {
-            auth: listenerConfig.auth
+            auth: {
+                clientId: listenerConfig.clientId,
+                clientSecret: listenerConfig.clientSecret,
+                refreshUrl: listenerConfig.refreshUrl,
+                refreshToken: listenerConfig.refreshToken
+            }
         };
        self.config = config;
        self.calendarId = listenerConfig.calendarId;
