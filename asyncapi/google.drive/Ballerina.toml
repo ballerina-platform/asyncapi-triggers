@@ -1,0 +1,14 @@
+[package]
+license = ["Apache-2.0"]
+keywords = ["Communication/Team Chat", "Cost/Freemium", "Trigger"]
+org = "ballerinax"
+name = "trigger.google.drive"
+repository = "https://github.com/ballerina-platform/asyncapi-triggers"
+version = "0.5.4"
+distribution = "slbeta6"
+icon = "docs/icon.png"
+authors = ["Ballerina"]
+
+[build-options]
+observabilityIncluded = true
+
