@@ -29,20 +29,20 @@ service class DispatcherService {
     private json[] currentFileStatus = [];
     private final ListenerConfiguration config;
     private final string specificFolderOrFileId;
-    private final drive:ConnectionConfig  driveConfig;
+    private final drive:ConnectionConfig driveConfig;
     private final boolean isWatchOnSpecificResource;
     private final boolean isFolder;
     private final string domainVerificationFileContent;
 
     isolated function init(ListenerConfiguration config, string channelUuid, string currentToken, string watchResourceId,
                             boolean isWatchOnSpecificResource, boolean isFolder,
-                            string specificFolderOrFileId, string domainVerificationFileContent) {
+                            string specificFolderOrFileId, string domainVerificationFileContent, drive:ConnectionConfig driveConfig) {
 
         self.channelUuid = channelUuid;
         self.currentToken = currentToken;
         self.watchResourceId = watchResourceId;
-        self.driveConfig = config.clientConfiguration.clone();
         self.config = config.clone();
+        self.driveConfig = driveConfig;
         self.isFolder = isFolder;
         self.isWatchOnSpecificResource = isWatchOnSpecificResource;
         self.specificFolderOrFileId = specificFolderOrFileId;
@@ -93,11 +93,10 @@ service class DispatcherService {
     }
 
     resource isolated function post .(http:Caller caller, http:Request request) returns @tainted error? {
-        log:printInfo("Message Received");
         if (check request.getHeader(GOOGLE_CHANNEL_ID) != self.getChannelUuid()) {
             fail error("Different channel IDs found, Resend the watch request");
         } else {
-            ChangesListResponse[] response = check getAllChangeList(self.getCurrentToken(), self.config);
+            ChangesListResponse[] response = check getAllChangeList(self.getCurrentToken(), self.driveConfig);
             foreach ChangesListResponse item in response {
                 self.setCurrentToken(item?.newStartPageToken.toString());
                 if (self.isWatchOnSpecificResource && self.isFolder) {

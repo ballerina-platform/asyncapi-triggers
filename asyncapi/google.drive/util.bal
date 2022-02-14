@@ -14,7 +14,7 @@
 // specific language governing permissions and limitations
 // under the License.
 
-import ballerinax/googleapis.drive as drive;
+import ballerinax/googleapis.drive;
 import ballerina/http;
 import ballerina/log;
 import ballerina/time;
@@ -27,14 +27,14 @@ import ballerina/uuid;
 # + fileId - FileId that you want to initiate watch operations. Optional. 
 # Dont specify if you want TO trigger the listener for all the changes.
 # + return - 'WatchResponse' on success and error if unsuccessful. 
-isolated function startWatch(ListenerConfiguration config, string callbackURL, string? fileId = ())
+isolated function startWatch(drive:ConnectionConfig config, string callbackURL, string? fileId = ())
                         returns @tainted WatchResponse|error {
     if (fileId is string) {
         // Watch for specified file changes
-        return watchFilesById(config.clientConfiguration, fileId, callbackURL);
+        return watchFilesById(config, fileId, callbackURL);
     } else {
         // Watch for all file changes.
-        return watchFiles(config.clientConfiguration, callbackURL);
+        return watchFiles(config, callbackURL);
     }
 }
 
@@ -44,9 +44,9 @@ isolated function startWatch(ListenerConfiguration config, string callbackURL, s
 # + watchResourceId - An opaque value that identifies the watched resource
 #
 # + return - Returns error, if unsuccessful.
-isolated function stopWatchChannel(ListenerConfiguration config, string channelUuid, string watchResourceId)
+isolated function stopWatchChannel(drive:ConnectionConfig config, string channelUuid, string watchResourceId)
                                     returns @tainted error? {
-    boolean|error response = watchStop(config.clientConfiguration, channelUuid, watchResourceId);
+    boolean|error response = watchStop(config, channelUuid, watchResourceId);
     if (response is boolean) {
         log:printInfo("Watch channel stopped");
         return;
@@ -61,12 +61,12 @@ isolated function stopWatchChannel(ListenerConfiguration config, string channelU
 # + pageToken - The token for continuing a previous list request on the next page. This should be set to the value of 
 # 'nextPageToken' from the previous response or to the response from the getStartPageToken method.
 # + return - 'ChangesListResponse[]' on success and error if unsuccessful. 
-isolated function getAllChangeList(string pageToken, ListenerConfiguration config)
+isolated function getAllChangeList(string pageToken, drive:ConnectionConfig config)
                         returns @tainted ChangesListResponse[]|error {
     ChangesListResponse[] changeList = [];
     string? token = pageToken;
     while (token is string) {
-        ChangesListResponse response = check listChanges(config.clientConfiguration, pageToken);
+        ChangesListResponse response = check listChanges(config, pageToken);
         changeList.push(response);
         token = response?.nextPageToken;
     }

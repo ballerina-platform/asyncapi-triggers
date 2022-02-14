@@ -21,7 +21,7 @@ import ballerina/task;
 import ballerina/time;
 
 # Drive event listener   
-@display {label: "Google Drive Listener", iconPath: "docs/icon.png"}
+@display {label: "Google Drive", iconPath: "docs/icon.png"}
 public class Listener {
     # Watch Channel ID
     public string channelUuid = EMPTY_STRING;
@@ -36,6 +36,7 @@ public class Listener {
     private http:Listener httpListener;
     private string domainVerificationFileContent;
     private DispatcherService dispatcherService;
+    private drive:ConnectionConfig driveConnection;
     # Initializes Google Drive connector listener.
     #
     # + config - Listener configuration
@@ -46,12 +47,20 @@ public class Listener {
         } else {
             self.httpListener = check new (listenOn);
         }
-        self.driveClient = check new (config.clientConfiguration);
+        self.driveConnection = {
+            auth: {
+                clientId: config.clientId,
+                clientSecret: config.clientSecret,
+                refreshUrl: config.refreshUrl,
+                refreshToken: config.refreshToken
+            }
+        };
+        self.driveClient = check new (self.driveConnection);
         self.config = config;
         self.domainVerificationFileContent = config.domainVerificationFileContent;
         self.dispatcherService = new (config, self.channelUuid, self.currentToken, self.watchResourceId,
                                             self.isWatchOnSpecificResource, self.isFolder,
-                                            self.specificFolderOrFileId, self.domainVerificationFileContent);
+                                            self.specificFolderOrFileId, self.domainVerificationFileContent, self.driveConnection);
     }
 
     public isolated function attach(GenericServiceType serviceRef, () attachPoint) returns error? {
@@ -68,20 +77,20 @@ public class Listener {
     }
 
     public isolated function detach(GenericServiceType serviceRef) returns @tainted error? {
-        check stopWatchChannel(self.config, self.channelUuid, self.watchResourceId);
+        check stopWatchChannel(self.driveConnection, self.channelUuid, self.watchResourceId);
         log:printDebug("Unsubscribed from the watch channel ID : " + self.channelUuid);
         string serviceTypeStr = self.getServiceTypeStr(serviceRef);
         check self.dispatcherService.removeServiceRef(serviceTypeStr);
     }
 
     public isolated function gracefulStop() returns @tainted error? {
-        check stopWatchChannel(self.config, self.channelUuid, self.watchResourceId);
+        check stopWatchChannel(self.driveConnection, self.channelUuid, self.watchResourceId);
         log:printDebug("Unsubscribed from the watch channel ID : " + self.channelUuid);
         return self.httpListener.gracefulStop();
     }
 
     public isolated function immediateStop() returns @tainted error? {
-        check stopWatchChannel(self.config, self.channelUuid, self.watchResourceId);
+        check stopWatchChannel(self.driveConnection, self.channelUuid, self.watchResourceId);
         log:printDebug("Unsubscribed from the watch channel ID : " + self.channelUuid);
         return self.httpListener.immediateStop();
     }

@@ -43,6 +43,7 @@ class Job {
     private int retryInterval;
     private int leadTime;
     private int domainVerificationDelay;
+    private drive:ConnectionConfig driveConnection;
 
     isolated function init(ListenerConfiguration config, drive:Client driveClient,
                             Listener httpListener, DispatcherService dispatcherService) {
@@ -54,6 +55,14 @@ class Job {
         self.retryInterval = config?.channelRenewalConfig?.retryInterval ?: 100;
         self.leadTime = config?.channelRenewalConfig?.leadTime ?: 180;
         self.domainVerificationDelay = config?.channelRenewalConfig?.domainVerificationDelay ?: 300;
+        self.driveConnection = {
+            auth: {
+                clientId: config.clientId,
+                clientSecret: config.clientSecret,
+                refreshUrl: config.refreshUrl,
+                refreshToken: config.refreshToken
+            }
+        };
     }
 
     public isolated function execute() {
@@ -89,18 +98,18 @@ class Job {
         if (self.config.specificFolderOrFileId is string && self.isFolder == true) {
             check validateSpecificFolderExsistence(self.config.specificFolderOrFileId.toString(), self.driveClient);
             self.specificFolderOrFileId = self.config.specificFolderOrFileId.toString();
-            self.watchResponse = check watchFilesById(self.config.clientConfiguration, self.specificFolderOrFileId.toString(),
+            self.watchResponse = check watchFilesById(self.driveConnection, self.specificFolderOrFileId.toString(),
             self.config.callbackURL);
             self.isWatchOnSpecificResource = true;
         } else if (self.config.specificFolderOrFileId is string && self.isFolder == false) {
             check validateSpecificFolderExsistence(self.config.specificFolderOrFileId.toString(), self.driveClient);
             self.specificFolderOrFileId = self.config.specificFolderOrFileId.toString();
-            self.watchResponse = check watchFilesById(self.config.clientConfiguration, self.specificFolderOrFileId.toString(),
+            self.watchResponse = check watchFilesById(self.driveConnection, self.specificFolderOrFileId.toString(),
             self.config.callbackURL);
             self.isWatchOnSpecificResource = true;
         } else {
             self.specificFolderOrFileId = EMPTY_STRING;
-            self.watchResponse = check watchFiles(self.config.clientConfiguration, self.config.callbackURL);
+            self.watchResponse = check watchFiles(self.driveConnection, self.config.callbackURL);
         }
         self.channelUuid = self.watchResponse?.id.toString();
         self.currentToken = self.watchResponse?.startPageToken.toString();

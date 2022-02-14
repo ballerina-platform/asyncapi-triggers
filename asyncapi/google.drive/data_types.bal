@@ -17,23 +17,46 @@
 import ballerinax/googleapis.drive;
 
 # Listener Configuration. 
-# 
+# + clientId - Client Id
+# + clientSecret -Client Secret
+# + refreshUrl - Refrest URL
+# + refreshToken - Refresh Token
 # + specificFolderOrFileId - Folder or file Id.  
 # + domainVerificationFileContent - File content of HTML file used in domain verification.
 # + callbackURL - Callback URL registered.  
-# + clientConfiguration - Drive client connecter configuration.
 # + channelRenewalConfig - Channel renewal configuration.
 @display {label: "Listener Config"}
 public type ListenerConfiguration record {
+    @display {label: "Client Id"}
+    string clientId;
+    @display {label: "Client Secret"}
+    string clientSecret;
+    @display {label: "Refresh URL"}
+    string refreshUrl;
+    @display {label: "Refresh Token"}
+    string refreshToken;
     @display {label: "Callback URL"}
     string callbackURL;
     @display {label: "Domain Verification File Content"}
     string domainVerificationFileContent;
-    drive:ConnectionConfig clientConfiguration;
     @display {label: "Specific Folder ID"}
     string? specificFolderOrFileId = ();
     ChannelRenewalConfig channelRenewalConfig?;
 };
+
+# Client configuration for cookies.
+#
+# + enabled - User agents provide users with a mechanism for disabling or enabling cookies
+# + maxCookiesPerDomain - Maximum number of cookies per domain, which is 50
+# + maxTotalCookieCount - Maximum number of total cookies allowed to be stored in cookie store, which is 3000
+# + blockThirdPartyCookies - User can block cookies from third party responses and refuse to send cookies for third 
+# party requests, if needed
+public type CookieConfig record {|
+    boolean enabled = false;
+    int maxCookiesPerDomain = 50;
+    int maxTotalCookieCount = 3000;
+    boolean blockThirdPartyCookies = true;
+|};
 
 # Channel Renewal Configuration
 #
