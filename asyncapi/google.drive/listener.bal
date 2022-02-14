@@ -32,7 +32,7 @@ public class Listener {
     private drive:Client driveClient;
     private boolean isWatchOnSpecificResource = false;
     private boolean isFolder = true;
-    private ListenerConfiguration listenerConfig;
+    private ListenerConfig listenerConfig;
     private http:Listener httpListener;
     private string domainVerificationFileContent;
     private DispatcherService dispatcherService;
@@ -41,7 +41,7 @@ public class Listener {
     #
     # + listenerConfig - Listener configuration
     # + return - An error on failure of initialization or else `()`
-    public isolated function init(ListenerConfiguration listenerConfig, int|http:Listener listenOn = 8090) returns @tainted error? {
+    public isolated function init(ListenerConfig listenerConfig, int|http:Listener listenOn = 8090) returns @tainted error? {
         if listenOn is http:Listener {
             self.httpListener = listenOn;
         } else {

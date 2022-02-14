@@ -25,7 +25,7 @@ class Job {
     private DispatcherService dispatcherService;
     private Listener httpListener;
     private drive:Client driveClient;
-    private ListenerConfiguration config;
+    private ListenerConfig config;
 
     private boolean isWatchOnSpecificResource = false;
     private boolean isFolder = true;
@@ -45,7 +45,7 @@ class Job {
     private int domainVerificationDelay;
     private drive:ConnectionConfig driveConnection;
 
-    isolated function init(ListenerConfiguration config, drive:Client driveClient,
+    isolated function init(ListenerConfig config, drive:Client driveClient,
                             Listener httpListener, DispatcherService dispatcherService) {
         self.config = config;
         self.driveClient = driveClient;
