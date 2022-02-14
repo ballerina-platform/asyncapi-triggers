@@ -32,16 +32,16 @@ public class Listener {
     private drive:Client driveClient;
     private boolean isWatchOnSpecificResource = false;
     private boolean isFolder = true;
-    private ListenerConfiguration config;
+    private ListenerConfiguration listenerConfig;
     private http:Listener httpListener;
     private string domainVerificationFileContent;
     private DispatcherService dispatcherService;
     private drive:ConnectionConfig driveConnection;
     # Initializes Google Drive connector listener.
     #
-    # + config - Listener configuration
+    # + listenerConfig - Listener configuration
     # + return - An error on failure of initialization or else `()`
-    public isolated function init(ListenerConfiguration config, int|http:Listener listenOn = 8090) returns @tainted error? {
+    public isolated function init(ListenerConfiguration listenerConfig, int|http:Listener listenOn = 8090) returns @tainted error? {
         if listenOn is http:Listener {
             self.httpListener = listenOn;
         } else {
@@ -49,16 +49,16 @@ public class Listener {
         }
         self.driveConnection = {
             auth: {
-                clientId: config.clientId,
-                clientSecret: config.clientSecret,
-                refreshUrl: config.refreshUrl,
-                refreshToken: config.refreshToken
+                clientId: listenerConfig.clientId,
+                clientSecret: listenerConfig.clientSecret,
+                refreshUrl: listenerConfig.refreshUrl,
+                refreshToken: listenerConfig.refreshToken
             }
         };
         self.driveClient = check new (self.driveConnection);
-        self.config = config;
-        self.domainVerificationFileContent = config.domainVerificationFileContent;
-        self.dispatcherService = new (config, self.channelUuid, self.currentToken, self.watchResourceId,
+        self.listenerConfig = listenerConfig;
+        self.domainVerificationFileContent = listenerConfig.domainVerificationFileContent;
+        self.dispatcherService = new (listenerConfig, self.channelUuid, self.currentToken, self.watchResourceId,
                                             self.isWatchOnSpecificResource, self.isFolder,
                                             self.specificFolderOrFileId, self.domainVerificationFileContent, self.driveConnection);
     }
@@ -68,7 +68,7 @@ public class Listener {
         check self.dispatcherService.addServiceRef(serviceTypeStr, serviceRef);
         time:Utc currentUtc = time:utcNow();
         time:Civil time = time:utcToCivil(currentUtc);
-        _ = check task:scheduleOneTimeJob(new Job(self.config, self.driveClient, self, self.dispatcherService), time);
+        _ = check task:scheduleOneTimeJob(new Job(self.listenerConfig, self.driveClient, self, self.dispatcherService), time);
     }
 
     public isolated function 'start() returns error? {

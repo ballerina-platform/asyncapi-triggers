@@ -1,4 +1,4 @@
-Listen to [Slack Events API](https://api.slack.com/events) from Ballerina
+Listen to [Google Drive Events](https://drive.google.com/events) from Ballerina
 
 ## Package overview
 The `ballerinax/trigger.google.drive` is a [Ballerina](https://ballerina.io/) trigger for Google Drive.
