@@ -44,12 +44,22 @@ public class Listener {
         http:ClientSecureSocket? socketConfig = listenerConfig.secureSocketConfig;
         // Create pubsub http client.
         self.pubSubClient = check new (PUBSUB_BASE_URL, {
-            auth: listenerConfig.auth,
+            auth: {
+                clientId: listenerConfig.clientId,
+                clientSecret: listenerConfig.clientSecret,
+                refreshUrl: listenerConfig.refreshUrl,
+                refreshToken: listenerConfig.refreshToken
+            },
             secureSocket: socketConfig
         });
         // Create gmail http client.
         gmail:ConnectionConfig gmailConfig = {
-            auth: listenerConfig.auth,
+            auth: {
+                clientId: listenerConfig.clientId,
+                clientSecret: listenerConfig.clientSecret,
+                refreshUrl: listenerConfig.refreshUrl,
+                refreshToken: listenerConfig.refreshToken
+            },
             secureSocket: listenerConfig?.secureSocketConfig
         };
         self.gmailHttpClient = check new (gmail:BASE_URL, gmailConfig);

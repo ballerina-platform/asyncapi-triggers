@@ -1,10 +1,10 @@
 [package]
 license = ["Apache-2.0"]
-keywords = ["Communication/Email", "Cost/Freemium", "Trigger"]
+keywords = ["Cost/Freemium", "Trigger"]
 org = "ballerinax"
 name = "trigger.google.mail"
 repository = "https://github.com/ballerina-platform/asyncapi-triggers"
-version = "0.5.4"
+version = "0.5.6"
 distribution = "slbeta6"
 icon = "docs/icon.png"
 authors = ["Ballerina"]
