@@ -20,8 +20,14 @@ import ballerina/http;
 // Listener related configurations should be included here
 @display {label: "Listener Config"}
 public type ListenerConfig record {
-    @display {label: "Google Auth"}
-    http:BearerTokenConfig|http:OAuth2RefreshTokenGrantConfig auth;
+    @display {label: "Client Id"}
+    string clientId;
+    @display {label: "Client Secret"}
+    string clientSecret;
+    @display {label: "Refresh URL"}
+    string refreshUrl;
+    @display {label: "Refresh Token"}
+    string refreshToken;
     @display {label: "Project"}
     string project;
     @display {label: "Push Endpoint"}

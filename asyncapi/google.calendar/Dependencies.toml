@@ -328,7 +328,7 @@ modules = [
 [[package]]
 org = "ballerinax"
 name = "trigger.google.calendar"
-version = "0.5.3"
+version = "0.5.15"
 dependencies = [
 	{org = "ballerina", name = "http"},
 	{org = "ballerina", name = "lang.runtime"},

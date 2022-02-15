@@ -13,13 +13,10 @@
 // KIND, either express or implied.  See the License for the
 // specific language governing permissions and limitations
 // under the License.
-
-import ballerinax/googleapis.calendar;
-
 public type CalendarService service object {
-    remote function onNewEvent(calendar:Event payload) returns error?;
-    remote function onEventUpdate(calendar:Event payload) returns error?;
-    remote function onEventDelete(calendar:Event payload) returns error?;
+    remote function onNewEvent(Event payload) returns error?;
+    remote function onEventUpdate(Event payload) returns error?;
+    remote function onEventDelete(Event payload) returns error?;
 };
 
 public type GenericServiceType CalendarService;

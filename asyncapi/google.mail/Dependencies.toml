@@ -333,7 +333,7 @@ modules = [
 [[package]]
 org = "ballerinax"
 name = "trigger.google.mail"
-version = "0.5.4"
+version = "0.5.6"
 dependencies = [
 	{org = "ballerina", name = "http"},
 	{org = "ballerina", name = "lang.runtime"},

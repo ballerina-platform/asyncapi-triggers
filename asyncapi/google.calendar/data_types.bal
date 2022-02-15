@@ -15,22 +15,32 @@
 // under the License.
 
 import ballerinax/googleapis.calendar;
-import ballerina/http;
 
 # Listener Configuration.
 #
 # + calendarId - Identifier of the specific calendar
-# + address - Identifier of the specific calendar
-# + expiration - Identifier of the specific calendar
-# + auth - Identifier of the specific calendar
+# + address - Public service url
+# + expiration - Expiration period of the token
+# + clientId - Client ID 
+# + clientSecret - Client Secret
+# + refreshUrl - Refresh URL
+# + refreshToken - Refresh Token
 @display {label: "Connection Config"}
 public type ListenerConfig record {
     @display {label: "Calendar Id"}
     string calendarId;
-    @display {label: "Google Auth"}
-    http:BearerTokenConfig|http:OAuth2RefreshTokenGrantConfig|http:JwtIssuerConfig auth;
+    @display {label: "Call Back address"}
     string address;
-    string? expiration = ();
+    @display {label: "Client Id"}
+    string clientId;
+    @display {label: "Client Secret"}
+    string clientSecret;
+    @display {label: "Refresh URL"}
+    string refreshUrl;
+    @display {label: "Refresh Token"}
+    string refreshToken;
+    @display {label: "expiration"}
+    string expiration?;
 };
 
 # Defines watch response.
@@ -50,4 +60,6 @@ public type WatchResponse record {
     string expiration;
 };
 
-public type GenericDataType calendar:Event;
+public type Event calendar:Event;
+
+public type GenericDataType Event;
