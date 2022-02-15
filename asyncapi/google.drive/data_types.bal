@@ -26,7 +26,7 @@ import ballerinax/googleapis.drive;
 # + callbackURL - Callback URL registered.  
 # + channelRenewalConfig - Channel renewal configuration.
 @display {label: "Listener Config"}
-public type ListenerConfiguration record {
+public type ListenerConfig record {
     @display {label: "Client Id"}
     string clientId;
     @display {label: "Client Secret"}
@@ -38,9 +38,9 @@ public type ListenerConfiguration record {
     @display {label: "Callback URL"}
     string callbackURL;
     @display {label: "Domain Verification File Content"}
-    string domainVerificationFileContent;
+    string domainVerificationFileContent?;
     @display {label: "Specific Folder ID"}
-    string? specificFolderOrFileId = ();
+    string specificFolderOrFileId?;
     ChannelRenewalConfig channelRenewalConfig?;
 };
 

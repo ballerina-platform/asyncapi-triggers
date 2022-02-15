@@ -27,14 +27,14 @@ service class DispatcherService {
     private string currentToken;
     private string watchResourceId;
     private json[] currentFileStatus = [];
-    private final ListenerConfiguration config;
+    private final ListenerConfig config;
     private final string specificFolderOrFileId;
     private final drive:ConnectionConfig driveConfig;
     private final boolean isWatchOnSpecificResource;
     private final boolean isFolder;
     private final string domainVerificationFileContent;
 
-    isolated function init(ListenerConfiguration config, string channelUuid, string currentToken, string watchResourceId,
+    isolated function init(ListenerConfig config, string channelUuid, string currentToken, string watchResourceId,
                             boolean isWatchOnSpecificResource, boolean isFolder,
                             string specificFolderOrFileId, string domainVerificationFileContent, drive:ConnectionConfig driveConfig) {
 
