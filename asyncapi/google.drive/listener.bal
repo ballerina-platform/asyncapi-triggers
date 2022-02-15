@@ -34,7 +34,6 @@ public class Listener {
     private boolean isFolder = true;
     private ListenerConfig listenerConfig;
     private http:Listener httpListener;
-    private string domainVerificationFileContent;
     private DispatcherService dispatcherService;
     private drive:ConnectionConfig driveConnection;
     # Initializes Google Drive connector listener.
@@ -57,10 +56,10 @@ public class Listener {
         };
         self.driveClient = check new (self.driveConnection);
         self.listenerConfig = listenerConfig;
-        self.domainVerificationFileContent = listenerConfig.domainVerificationFileContent;
+        string domainVerificationFileContent = listenerConfig.domainVerificationFileContent ?: EMPTY_STRING;
         self.dispatcherService = new (listenerConfig, self.channelUuid, self.currentToken, self.watchResourceId,
                                             self.isWatchOnSpecificResource, self.isFolder,
-                                            self.specificFolderOrFileId, self.domainVerificationFileContent, self.driveConnection);
+                                            self.specificFolderOrFileId, domainVerificationFileContent, self.driveConnection);
     }
 
     public isolated function attach(GenericServiceType serviceRef, () attachPoint) returns error? {

@@ -38,9 +38,9 @@ public type ListenerConfig record {
     @display {label: "Callback URL"}
     string callbackURL;
     @display {label: "Domain Verification File Content"}
-    string domainVerificationFileContent;
+    string domainVerificationFileContent?;
     @display {label: "Specific Folder ID"}
-    string? specificFolderOrFileId = ();
+    string specificFolderOrFileId?;
     ChannelRenewalConfig channelRenewalConfig?;
 };
 
