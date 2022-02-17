@@ -69,8 +69,10 @@ public class Listener {
             return "ReleaseService";
         } else if serviceRef is LabelService {
             return "LabelService";
-        } else {
+        } else if serviceRef is MilestoneService {
             return "MilestoneService";
+        } else {
+            return "PushService";
         }
 
     }
