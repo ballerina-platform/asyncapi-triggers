@@ -17,10 +17,13 @@
 # Azure service bus listener configuration.
 public type ListenerConfig record {
     # The connection string of Azure service bus
+    @display {label: "Connection String", "description": "The connection string of Azure service bus"}
     string connectionString;
     # Name or path of the entity (e.g : Queue name, Subscription path)
+    @display {label: "Entity Path", "description": "Name or path of the entity (e.g : Queue name, Subscription path)"}
     string entityPath;
     # Receive mode as PEEKLOCK or RECEIVEANDDELETE (default : PEEKLOCK)
+    @display {label: "Receive Mode", "description": "Receive mode as PEEKLOCK or RECEIVEANDDELETE (default : PEEKLOCK)"}
     string receiveMode?;
 };
 

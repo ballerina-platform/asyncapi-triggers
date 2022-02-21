@@ -14,6 +14,7 @@
 // specific language governing permissions and limitations
 // under the License.
 
+import ballerina/cloud;
 import ballerina/http;
 
 @display {label: "Google Sheets", iconPath: "docs/icon.png"}
@@ -21,7 +22,7 @@ public class Listener {
     private http:Listener httpListener;
     private DispatcherService dispatcherService;
 
-    public function init(ListenerConfig listenerConfig, int|http:Listener listenOn = 8090) returns error? {
+    public function init(ListenerConfig listenerConfig, @cloud:Expose int|http:Listener listenOn = 8090) returns error? {
        if listenOn is http:Listener {
            self.httpListener = listenOn;
        } else {

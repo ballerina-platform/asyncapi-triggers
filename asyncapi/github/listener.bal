@@ -22,7 +22,7 @@ public class Listener {
     private http:Listener httpListener;
     private DispatcherService dispatcherService;
 
-    public function init(ListenerConfig listenerConfig = { secret: DEFAULT_SECRET }, @cloud:Expose int|http:Listener listenOn = 8090) returns error? {
+    public function init(ListenerConfig listenerConfig = { webhookSecret: DEFAULT_SECRET }, @cloud:Expose int|http:Listener listenOn = 8090) returns error? {
         if listenOn is http:Listener {
             self.httpListener = listenOn;
         } else {

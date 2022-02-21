@@ -47,7 +47,7 @@ public class Listener {
         };
        self.config = config;
        self.calendarId = listenerConfig.calendarId;
-       self.address = listenerConfig.address;
+       self.address = listenerConfig.callbackUrl;
        self.expiration = listenerConfig.expiration;
        self.dispatcherService = new DispatcherService(listenerConfig, config);
    }
