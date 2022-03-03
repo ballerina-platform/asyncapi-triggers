@@ -47,7 +47,7 @@ service class DispatcherService {
         json payload = check <@untainted> request.getJsonPayload();
         //byte [] binaryPay = <@untainted>  payload.toJsonString().toBytes();
         string eventName = check  request.getHeader("X-GitHub-Event");
-        if (self.listenerConfig.secret === DEFAULT_SECRET) {
+        if (self.listenerConfig.webhookSecret === DEFAULT_SECRET) {
             // TODO: Validate secret with X-Hub-Signature-256 header for intent verification
             // Return error if intent verification fails
         } 
@@ -213,6 +213,9 @@ service class DispatcherService {
                         check self.executeRemoteFunc(genericDataType, "opened", "MilestoneService", "onOpened");
                     }
                 }
+            }
+            "push" => {
+                check self.executeRemoteFunc(genericDataType, "pushed", "PushService", "onPush");
             }
         }
     }

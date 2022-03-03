@@ -80,4 +80,8 @@ public type MilestoneService service object {
     remote function onOpened(MilestoneEvent payload) returns error?;
 };
 
-public type GenericServiceType IssuesService|IssueCommentService|PullRequestService|PullRequestReviewService|PullRequestReviewCommentService|ReleaseService|LabelService|MilestoneService;
+public type PushService service object {
+    remote function onPush(PushEvent payload) returns error?;
+};
+
+public type GenericServiceType IssuesService|IssueCommentService|PullRequestService|PullRequestReviewService|PullRequestReviewCommentService|ReleaseService|LabelService|MilestoneService|PushService;

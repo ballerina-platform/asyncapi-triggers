@@ -17,7 +17,8 @@
 // Listener related configurations should be included here
 @display {label: "Listener Config"}
 public type ListenerConfig record {
-    string secret = DEFAULT_SECRET;
+    @display {label: "Webhook Secret", "description": "Secret specified when adding the github webhook"}
+    string webhookSecret = DEFAULT_SECRET;
 };
 
 public type GenericEventWrapper record {

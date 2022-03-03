@@ -25,13 +25,13 @@
 #   - `Specific number` - Get all events that occurred after the event with the specified replay ID
 @display{label: "Listener Config"}
 public type ListenerConfig record {|
-    @display{label: "Username"}
+    @display{label: "Username", "description": "Salesforce login username"}
     string username;
-    @display{label: "Password"}
+    @display{label: "Password", "description": "Salesforce login password appended with the security token (<password><security token>)"}
     string password;
-    @display{label: "Channel Name"}
+    @display{label: "Channel Name", "description": "The channel name to which a client can subscribe to receive event notifications"}
     string channelName;
-    @display{label: "Replay ID"}
+    @display{label: "Replay ID", "description": "The replay ID to change the point in time when events are read"}
     int replayFrom = REPLAY_FROM_TIP;
 |};
 

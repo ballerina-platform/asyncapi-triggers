@@ -1,5 +1,6 @@
 public type ListenerConfig record {
     # The token which is used in the delivery verification process
+    @display{label: "Verification Token", "description": "The token which is used in the delivery verification process"}
     string verificationToken;
 };
 

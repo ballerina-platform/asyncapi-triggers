@@ -27,19 +27,19 @@ import ballerinax/googleapis.calendar;
 # + refreshToken - Refresh Token
 @display {label: "Connection Config"}
 public type ListenerConfig record {
-    @display {label: "Calendar Id"}
+    @display {label: "Calendar Id", "description": "Google Calendar ID ('primary' for main calendar)"}
     string calendarId;
-    @display {label: "Call Back address"}
-    string address;
-    @display {label: "Client Id"}
+    @display {label: "Call Back URL", "description": "Callback service URL for webhook" }
+    string callbackUrl;
+    @display {label: "Client Id", "description": "OAuth Credentials - Client ID"}
     string clientId;
-    @display {label: "Client Secret"}
+    @display {label: "Client Secret", "description": "OAuth Credentials - Client Secret"}
     string clientSecret;
-    @display {label: "Refresh URL"}
+    @display {label: "Refresh URL", "description": "OAuth Credentials - Refresh URL"}
     string refreshUrl;
-    @display {label: "Refresh Token"}
+    @display {label: "Refresh Token", "description": "OAuth Credentials - Refresh Token"}
     string refreshToken;
-    @display {label: "expiration"}
+    @display {label: "Expiration", "description": "Date and time of notification channel expiration"}
     string expiration?;
 };
 

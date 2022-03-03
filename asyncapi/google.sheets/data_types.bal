@@ -19,7 +19,7 @@
 # + spreadsheetId - Identifier of the specific spreadsheet
 @display {label: "Connection Config"}
 public type ListenerConfig record {
-    @display {label: "Spreadsheet Id"}
+    @display {label: "Spreadsheet Id", "description": "Spreadsheet ID (This can be found in the spreadsheet URL 'https://docs.google.com/spreadsheets/d/<SPREADSHEET_ID>'"}
     string spreadsheetId;
 };
 

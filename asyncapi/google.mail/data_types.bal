@@ -20,19 +20,19 @@ import ballerina/http;
 // Listener related configurations should be included here
 @display {label: "Listener Config"}
 public type ListenerConfig record {
-    @display {label: "Client Id"}
+    @display {label: "Client Id", "description": "OAuth Credentials - Client ID"}
     string clientId;
-    @display {label: "Client Secret"}
+    @display {label: "Client Secret", "description": "OAuth Credentials - Client Secret"}
     string clientSecret;
-    @display {label: "Refresh URL"}
+    @display {label: "Refresh URL", "description": "OAuth Credentials - Refresh URL"}
     string refreshUrl;
-    @display {label: "Refresh Token"}
+    @display {label: "Refresh Token", "description": "OAuth Credentials - Refresh Token"}
     string refreshToken;
-    @display {label: "Project"}
+    @display {label: "Project", "description": "OAuth project ID"}
     string project;
-    @display {label: "Push Endpoint"}
-    string pushEndpoint;
-    @display {label: "SSL Config"}
+    @display {label: "Callback URL", "description": "Callback service URL for webhook"}
+    string callbackUrl;
+    @display {label: "SSL Config", "description": "SSL Configuration for webhook"}
     http:ClientSecureSocket secureSocketConfig?;
 };
 
