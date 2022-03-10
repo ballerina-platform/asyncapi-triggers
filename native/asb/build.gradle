@@ -6,6 +6,12 @@ plugins {
 group project.asb_trigger_group
 version project.asb_trigger_version
 
+configurations {
+    dist {
+        transitive true
+    }
+}
+
 repositories {
     mavenCentral()
 
@@ -20,10 +26,20 @@ repositories {
 
 dependencies {
     implementation group: 'com.microsoft.azure', name: 'azure-servicebus', version: project.asb_sdk_version
+    dist group: 'com.microsoft.azure', name: 'azure-servicebus', version: project.asb_sdk_version
     implementation group: 'org.slf4j', name: 'slf4j-api', version: project.slf4jVersion
     compile group: 'org.ballerinalang', name: 'ballerina-lang', version: project.ballerinaLangVersion
     compile(group: 'org.ballerinalang', name: 'ballerina-runtime', version: project.ballerinaLangVersion) {
         transitive = false
+    }
+}
+
+jar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    dependsOn configurations.dist
+    from { configurations.dist.collect { it.isDirectory() ? it : zipTree(it) } } {
+        exclude 'META-INF/*.RSA', 'META-INF/*.SF', 'META-INF/*.DSA', 'io/netty/**', 'com/google/gson/**', 
+        'org/slf4j/**', 'org/apache/commons/lang3/**' 
     }
 }
 
