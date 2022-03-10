@@ -19,7 +19,7 @@ import ballerinax/googleapis.calendar;
 # Listener Configuration.
 #
 # + calendarId - Identifier of the specific calendar
-# + address - Public service url
+# + callbackUrl - Public service url
 # + expiration - Expiration period of the token
 # + clientId - Client ID 
 # + clientSecret - Client Secret
