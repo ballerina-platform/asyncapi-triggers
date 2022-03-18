@@ -19,7 +19,7 @@ import ballerinax/googleapis.calendar;
 # Listener Configuration.
 #
 # + calendarId - Identifier of the specific calendar
-# + callbackUrl - Public service url
+# + callbackURL - Public service url
 # + expiration - Expiration period of the token
 # + clientId - Client ID 
 # + clientSecret - Client Secret
@@ -30,7 +30,7 @@ public type ListenerConfig record {
     @display {label: "Calendar Id", "description": "Google Calendar ID ('primary' for main calendar)"}
     string calendarId;
     @display {label: "Call Back URL", "description": "Callback service URL for webhook" }
-    string callbackUrl;
+    string callbackURL;
     @display {label: "Client Id", "description": "OAuth Credentials - Client ID"}
     string clientId;
     @display {label: "Client Secret", "description": "OAuth Credentials - Client Secret"}
