@@ -64,7 +64,8 @@ class Job {
     isolated function scheduleNextWatchRenewal() returns error? {
         time:Utc currentUtc = time:utcNow();
         time:Utc scheduledUtcTime = time:utcAddSeconds(currentUtc, INTERVAL_TO_WATCH);
-        time:Civil scheduledTime = time:utcToCivil(scheduledUtcTime);
+        time:Zone timeZone = check time:loadSystemZone();
+        time:Civil scheduledTime = timeZone.utcToCivil(scheduledUtcTime);
         _ = check task:scheduleOneTimeJob(self, scheduledTime);
     }
 }

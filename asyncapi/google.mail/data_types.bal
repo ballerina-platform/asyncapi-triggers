@@ -31,7 +31,7 @@ public type ListenerConfig record {
     @display {label: "Project", "description": "OAuth project ID"}
     string project;
     @display {label: "Callback URL", "description": "Callback service URL for webhook"}
-    string callbackUrl;
+    string callbackURL;
     @display {label: "SSL Config", "description": "SSL Configuration for webhook"}
     http:ClientSecureSocket secureSocketConfig?;
 };

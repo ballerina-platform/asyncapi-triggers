@@ -18,7 +18,6 @@ import ballerina/http;
 import ballerina/log;
 import ballerinax/googleapis.drive;
 import ballerina/task;
-import ballerina/time;
 
 # Drive event listener   
 @display {label: "Google Drive", iconPath: "docs/icon.png"}
@@ -65,9 +64,7 @@ public class Listener {
     public isolated function attach(GenericServiceType serviceRef, () attachPoint) returns error? {
         string serviceTypeStr = self.getServiceTypeStr(serviceRef);
         check self.dispatcherService.addServiceRef(serviceTypeStr, serviceRef);
-        time:Utc currentUtc = time:utcNow();
-        time:Civil time = time:utcToCivil(currentUtc);
-        _ = check task:scheduleOneTimeJob(new Job(self.listenerConfig, self.driveClient, self, self.dispatcherService), time);
+        _ = check task:scheduleJobRecurByFrequency(new Job(self.listenerConfig, self.driveClient, self, self.dispatcherService), 0, 1);
     }
 
     public isolated function 'start() returns error? {

@@ -65,9 +65,9 @@ public class Listener {
         self.gmailHttpClient = check new (gmail:BASE_URL, gmailConfig);
         self.gmailConfig = gmailConfig;
         self.project = listenerConfig.project;
-        self.pushEndpoint = listenerConfig.callbackUrl;
+        self.pushEndpoint = listenerConfig.callbackURL;
 
-        TopicSubscriptionDetail topicSubscriptionDetail = check createTopic(self.pubSubClient, listenerConfig.project, listenerConfig.callbackUrl);
+        TopicSubscriptionDetail topicSubscriptionDetail = check createTopic(self.pubSubClient, listenerConfig.project, listenerConfig.callbackURL);
         self.topicResource = topicSubscriptionDetail.topicResource;
         self.subscriptionResource = topicSubscriptionDetail.subscriptionResource;
         self.requestBody = {topicName: self.topicResource, labelIds: [INBOX], labelFilterAction: INCLUDE};
