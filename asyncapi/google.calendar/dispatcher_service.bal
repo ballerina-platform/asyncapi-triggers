@@ -79,7 +79,7 @@ service class DispatcherService {
                 check caller->respond(res);
             }
         } else {
-            return error(INVALID_ID_ERROR);
+            check caller->respond(http:STATUS_OK);
         }
     }
 
