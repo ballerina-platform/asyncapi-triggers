@@ -32,11 +32,11 @@ public class Listener {
     private calendar:ConnectionConfig config;
 
     public function init(ListenerConfig listenerConfig, int|http:Listener listenOn = 8090) returns error? {
-       if listenOn is http:Listener {
-           self.httpListener = listenOn;
-       } else {
-           self.httpListener = check new (listenOn);
-       }
+        if listenOn is http:Listener {
+            self.httpListener = listenOn;
+        } else {
+            self.httpListener = check new (listenOn);
+        }
         calendar:ConnectionConfig config = {
             auth: {
                 clientId: listenerConfig.clientId,
@@ -45,12 +45,12 @@ public class Listener {
                 refreshToken: listenerConfig.refreshToken
             }
         };
-       self.config = config;
-       self.calendarId = listenerConfig.calendarId;
-       self.address = listenerConfig.callbackURL;
-       self.expiration = listenerConfig.expiration;
-       self.dispatcherService = new DispatcherService(listenerConfig, config);
-   }
+        self.config = config;
+        self.calendarId = listenerConfig.calendarId;
+        self.address = listenerConfig.callbackURL;
+        self.expiration = listenerConfig.expiration;
+        self.dispatcherService = new DispatcherService(listenerConfig, config);
+    }
 
     public isolated function attach(GenericServiceType serviceRef, () attachPoint) returns @tainted error? {
         string serviceTypeStr = self.getServiceTypeStr(serviceRef);
@@ -71,10 +71,14 @@ public class Listener {
     }
 
     public isolated function gracefulStop() returns @tainted error? {
+        check stopChannel(self.config, self.calendarId, self.resourceId);
+        log:printInfo("Unsubscribed from channel id: " + self.channelId + ", resource id: " + self.resourceId);
         return self.httpListener.gracefulStop();
     }
 
     public isolated function immediateStop() returns error? {
+        check stopChannel(self.config, self.calendarId, self.resourceId);
+        log:printInfo("Unsubscribed from channel id: " + self.channelId + ", resource id: " + self.resourceId);
         return self.httpListener.immediateStop();
     }
 
