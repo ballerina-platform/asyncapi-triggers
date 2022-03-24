@@ -73,21 +73,19 @@ public class Listener {
     }
 
     public isolated function detach(GenericServiceType serviceRef) returns @tainted error? {
-        check stopWatchChannel(self.driveConnection, self.channelUuid, self.watchResourceId);
-        log:printDebug("Unsubscribed from the watch channel ID : " + self.channelUuid);
         string serviceTypeStr = self.getServiceTypeStr(serviceRef);
         check self.dispatcherService.removeServiceRef(serviceTypeStr);
     }
 
     public isolated function gracefulStop() returns @tainted error? {
         check stopWatchChannel(self.driveConnection, self.channelUuid, self.watchResourceId);
-        log:printDebug("Unsubscribed from the watch channel ID : " + self.channelUuid);
+        log:printInfo("Unsubscribed from the watch channel ID: " + self.channelUuid);
         return self.httpListener.gracefulStop();
     }
 
     public isolated function immediateStop() returns @tainted error? {
         check stopWatchChannel(self.driveConnection, self.channelUuid, self.watchResourceId);
-        log:printDebug("Unsubscribed from the watch channel ID : " + self.channelUuid);
+        log:printInfo("Unsubscribed from the watch channel ID: " + self.channelUuid);
         return self.httpListener.immediateStop();
     }
     private isolated function getServiceTypeStr(GenericServiceType serviceRef) returns string {

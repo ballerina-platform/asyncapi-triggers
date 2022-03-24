@@ -93,10 +93,14 @@ public class Listener {
     }
 
     public isolated function gracefulStop() returns @tainted error? {
+        check stop(self.gmailHttpClient, self.userId);
+        log:printInfo("Unsubscribed from the watch channel for user id: " + self.userId);
         return self.httpListener.gracefulStop();
     }
 
     public isolated function immediateStop() returns error? {
+        check stop(self.gmailHttpClient, self.userId);
+        log:printInfo("Unsubscribed from the watch channel for user id: " + self.userId);
         return self.httpListener.immediateStop();
     }
 
