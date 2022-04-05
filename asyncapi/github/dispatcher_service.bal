@@ -57,9 +57,7 @@ service class DispatcherService {
 
     private function matchRemoteFunc(anydata genericDataType, string eventName) returns error? {
         if (genericDataType is GenericDataType) {
-
             string actionName = genericDataType?.action.toString();
-
             match eventName {
                 "issues" => {
                     match actionName {
@@ -238,7 +236,6 @@ service class DispatcherService {
                         }
                     }
                 }
-
             }
         }
     }
