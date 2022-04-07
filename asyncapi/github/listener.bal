@@ -71,6 +71,8 @@ public class Listener {
             return "LabelService";
         } else if serviceRef is MilestoneService {
             return "MilestoneService";
+        } else if serviceRef is ProjectCardService {
+            return "ProjectCardService";
         } else {
             return "PushService";
         }

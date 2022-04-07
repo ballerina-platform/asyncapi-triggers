@@ -307,7 +307,7 @@ modules = [
 [[package]]
 org = "ballerinax"
 name = "googleapis.gmail"
-version = "2.2.0"
+version = "2.2.1"
 dependencies = [
 	{org = "ballerina", name = "http"},
 	{org = "ballerina", name = "io"},
@@ -333,7 +333,7 @@ modules = [
 [[package]]
 org = "ballerinax"
 name = "trigger.google.mail"
-version = "0.6.4"
+version = "0.6.5"
 dependencies = [
 	{org = "ballerina", name = "http"},
 	{org = "ballerina", name = "lang.runtime"},

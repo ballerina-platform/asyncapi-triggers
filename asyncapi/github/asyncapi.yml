@@ -1,0 +1,636 @@
+asyncapi: 2.1.0
+info:
+  title: Github Events API
+  version: 1.0.0
+  description: A webhook-based event bus using a subscription model for GitHub apps.
+  termsOfService: 'https://docs.github.com/en/github/site-policy/github-terms-of-service#h-api-terms'
+  contact:
+    name: GitHub Support
+    url: 'https://support.github.com/request'
+externalDocs:
+  description: GitHub Events API documentation
+  url: 'https://docs.github.com/en/developers/webhooks-and-events/events'
+components:
+  schemas:
+    GenericEventWrapper:
+      additionalProperties: true 
+      externalDocs:
+        description: Common properties returned from Events API
+        url: 'https://docs.github.com/en/developers/webhooks-and-events/events/github-event-types#event-object-common-properties' 
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the event
+        type:
+          type: string
+          description: The type of event.Events uses PascalCase for the name
+        actor:
+          type: object
+          description: The user that triggered the event.
+          id:
+            type: integer
+            description: The unique identifier for the actor.
+          url:
+            type: string
+            description: The REST API URL used to retrieve the user object, which includes additional user information.
+          login:
+            type: string
+            description: The username of the actor.
+          display_login:
+            type: string
+            description: The username of the actor.
+          gravatar_id:
+            type: string
+            description: The unique identifier of the Gravatar profile for the actor.
+          avatar_url:
+            type: string
+            description: The URL of the actor's profile image.
+        repo:
+          type: object
+          description: The repository object where the event occurred.
+          id:
+            type: integer
+            description: he unique identifier of the repository.
+          name:
+            type: string
+            description: The name of the repository, which includes the owner and repository name.
+            x-examples: "'octocat/hello-world' is the name of the 'hello-world' repository owned by the 'octocat' user account."
+          url:
+            type: string
+            description: 	The REST API URL used to retrieve the repository object, which includes additional repository information.
+    CommitCommentEventWrapper: 
+      additionalProperties: true
+      externalDocs:
+        description: Event documentation for commit-comment-event
+        url: 'https://docs.github.com/en/developers/webhooks-and-events/events/github-event-types#commitcommentevent'
+      properties: 
+        $ref: '#/components/schemas/GenericEventWrapper'
+        payload:
+          action:
+            type: string
+            description: The action performed.
+          comment:
+            type: object
+            description: The commit comment resource.
+    CreateEventWrapper: 
+      additionalProperties: true
+      externalDocs:
+        description: Event documentation for create-event
+        url: 'https://docs.github.com/en/developers/webhooks-and-events/events/github-event-types#createevent'
+      properties: 
+        $ref: '#/components/schemas/GenericEventWrapper'
+        payload:
+          ref: 
+            type: string
+            description: The git ref resource.
+          ref_type:
+            type: string
+            description: The type of Git ref object created in the repository. Can be either branch or tag.
+          master_branch:
+            type: string
+            description: The name of the repository's default branch (usually main).
+          description:
+            type: string
+            description: The repository's current description.
+    DeleteEventWrapper: 
+      additionalProperties: true
+      externalDocs:
+        description: Event documentation for delete-event
+        url: 'https://docs.github.com/en/developers/webhooks-and-events/events/github-event-types#deleteevent'
+      properties: 
+        $ref: '#/components/schemas/GenericEventWrapper'
+        payload:
+          ref: 
+            type: string
+            description: The git ref resource.
+          ref_type:
+            type: string
+            description: The type of Git ref oject deleted in the repository. Can be branch or tag.
+    ForkEventWrapper:
+      additionalProperties: true
+      externalDocs:
+        description: Event documentation for fork-event
+        url: 'https://docs.github.com/en/developers/webhooks-and-events/events/github-event-types#forkevent'
+      properties:
+        $ref: '#/components/schemas/GenericEventWrapper'
+        payload:
+          forkee:
+            type: object
+            description: The created repository resource.
+    GollumEventWrapper:
+      additionalProperties: true
+      externalDocs:
+        description: Event documentation for gollum-event
+        url: 'https://docs.github.com/en/developers/webhooks-and-events/events/github-event-types#gollumevent'
+      properties:
+        $ref: '#/components/schemas/GenericEventWrapper'
+        payload:
+          pages:
+            type: array
+            description: The pages that were updated.
+          pages[][page_name]: 
+            type: string
+            description: The name of the page.
+          pages[][title]:
+            type: string
+            description: The current page title.
+          pages[][action]:
+            type: string
+            description: The action that was performed on the page. Can be created or edited.
+          pages[][sha]:
+            type: string
+            description: The latest commit SHA of the page.
+          pages[][html_url]:
+            type: string
+            description: Points to the HTML wiki page.
+    ProjectCardEventWrapper:
+      additionalProperties: true
+      externalDocs:
+        description: Event documentation for project-card-event
+        url: 'https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#project_card'
+      properties:
+        $ref: '#/components/schemas/GenericEventWrapper'
+        payload: 
+          action: 
+            type: string
+            description: The action performed on the project card. Can be created, edited, moved, converted, or deleted.
+          changes:
+            type: object
+            description: The changes to the project card if the action was edited or converted.
+          changes[note][from]:
+            type: string
+            description: The previous version of the note if the action was edited or converted.
+          after_id:
+            type: integer
+            description: The id of the card that this card now follows if the action was "moved". Will be null if it is the first card in a column.
+          project_card:
+            type: object
+            description: The project card itself.
+          repository:
+            type: object
+            description: Repository where the event occured.
+          organization:
+            type: object
+            description: Configured for an organization or the event occurs from activity in a repository owned by an organization.
+          installation:
+            type: object
+            description: The GitHub app installation.
+          sender:
+            type: object
+            description: The user that triggered the event.
+    IssueCommentEventWrapper:
+      additionalProperties: true
+      externalDocs:
+        description: Event documentation for issue-comment-event
+        url: 'https://docs.github.com/en/developers/webhooks-and-events/events/github-event-types#issuecommentevent'
+      properties:
+        $ref: '#/components/schemas/GenericEventWrapper'
+        payload:
+          action:
+            type: string
+            description: The action that was performed on the comment. Can be one of created, edited, or deleted
+          changes:
+            type: object
+            description: The changes to the comment if the action was edited.
+          changes[body][from]:
+            type: string
+            description: The previous version of the body if the action was edited.
+          issue:
+            type: object
+            description: The issue the comment belongs to.
+          comment:
+            type: object
+            description: The comment itself.
+    IssueEventWrapper:
+      additionalProperties: true
+      externalDocs:
+        description: Event documentation for issue-event
+        url: 'https://docs.github.com/en/developers/webhooks-and-events/events/github-event-types#issuesevent'
+      properties:
+        $ref: '#/components/schemas/GenericEventWrapper'
+        payload:
+          action:
+            type: string
+            description: The action that was performed. Can be one of opened, closed, reopened, assigned, unassigned, labeled, or unlabeled.
+          issue:
+            type: object
+            description: The issue itself.
+          changes:
+            type: object
+            description: The changes to the issue if the action was edited.
+          changes[title][from]:
+            type: string
+            description: The previous version of the title if the action was edited.
+          changes[body][from]:
+            type: string
+            description: The previous version of the body if the action was edited.
+          assignee:
+            type: object
+            description: The optional user who was assigned or unassigned from the issue.
+          label:
+            type: object
+            description: The optional label that was added or removed from the issue.
+    MemberEventWrapper:
+      additionalProperties: true
+      externalDocs:
+        description: Event documentation for member-event
+        url: 'https://docs.github.com/en/developers/webhooks-and-events/events/github-event-types#memberevent'
+      properties:
+        $ref: '#/components/schemas/GenericEventWrapper'
+        payload:
+          action:
+            type: string
+            description: The action that was performed. Can be added to indicate a user accepted an invitation to a repository.
+          member:
+            type: object
+            description: The user that was added.
+          changes:
+            type: object
+            description: The changes to the collaborator permissions if the action was edited.
+          changes[old_permission][from]: 
+            type: string
+            description: The previous permissions of the collaborator if the action was edited.
+    PublicEventWrapper:
+      additionalProperties: true
+      externalDocs:
+        description: Event documentation for public-event
+        url: 'https://docs.github.com/en/developers/webhooks-and-events/events/github-event-types#publicevent'
+      properties:
+        $ref: '#/components/schemas/GenericEventWrapper'
+        payload:
+          type: object
+          description: This event returns an empty payload object.
+    PullRequestEventWrapper:
+      additionalProperties: true
+      externalDocs:
+        description: Event documentation for pull-request-event
+        url: 'https://docs.github.com/en/developers/webhooks-and-events/events/github-event-types#pullrequestevent'
+      properties:
+        $ref: '#/components/schemas/GenericEventWrapper'
+        payload:
+          action:
+            type: string
+            description: The action that was performed. Can be one of opened, closed, reopened, assigned, unassigned, review_requested, review_request_removed, labeled, unlabeled, and synchronize.
+          member:
+            type: integer
+            description: The pull request number.
+          changes:
+            type: object
+            description: The changes to the comment if the action was edited.
+          changes[title][from]:
+            type: string
+            description: The previous version of the title if the action was edited.
+          changes[body][from]:
+            type: string
+            description: The previous version of the body if the action was edited.
+          pull_request:
+            type: object
+            description: The pull request itself.
+    PullRequestReviewEventWrapper:
+      additionalProperties: true
+      externalDocs:
+        description: Event documentation for pull-request-review-event
+        url: 'https://docs.github.com/en/developers/webhooks-and-events/events/github-event-types#pullrequestreviewevent'
+      properties:
+        $ref: '#/components/schemas/GenericEventWrapper'
+        payload:
+          action:
+            type: string
+            description: The action that was performed. Can be created.
+          pull_request:
+            type: object
+            description: The pull request the review pertains to.
+          review:
+            type: object
+            description: The review that was affected.
+    PullRequestReviewCommnetEventWrapper:
+      additionalProperties: true
+      externalDocs:
+        description: Event documentation for pull-request-review-comment-event
+        url: 'https://docs.github.com/en/developers/webhooks-and-events/events/github-event-types#pullrequestreviewcommentevent'
+      properties:
+        $ref: '#/components/schemas/GenericEventWrapper'
+        payload:
+          action:
+            type: string
+            description: The action that was performed on the comment. Can be created.
+          changes:
+            type: object
+            description: The changes to the comment if the action was edited.
+          changes[body][from]:
+            type: string
+            description: The previous version of the body if the action was edited.
+          pull_request:
+            type: object
+            description: The pull request the comment belongs to.
+          comment:
+            type: object
+            description: The comment itself.
+    PushEventWrapper:
+      additionalProperties: true
+      externalDocs:
+        description: Event documentation for push-event
+        url: 'https://docs.github.com/en/developers/webhooks-and-events/events/github-event-types#pushevent'
+      properties:
+        $ref: '#/components/schemas/GenericEventWrapper'
+        payload:
+          push_id:
+            type: integer
+            description: 'Unique identifier for the push.'
+          size:
+            type: integer
+            description: 'The number of commits in the push.'
+          distinct_size:
+            type: integer
+            description: 'The number of distinct commits in the push.'
+          ref:
+            type: string
+            description: The full git ref that was pushed.
+            x-example: refs/heads/main
+          head:
+            type: string
+            description: The SHA of the most recent commit on ref after the push.
+          before:
+            type: string
+            description: The SHA of the most recent commit on ref before the push.
+          commits:
+            type: array
+            description: An array of commit objects describing the pushed commits. (The array includes a maximum of 20 commits. If necessary, you can use the Commits API to fetch additional commits. This limit is applied to timeline events only and isn't applied to webhook deliveries.)
+          commits[][sha]:
+            type: string
+            description: The SHA of the commit.
+          commits[][message]:
+            type: string 
+            description: The commit message.
+          commits[][author]:
+            type: object
+            description: The git author of the commit.
+          commits[][author][name]:
+            type: string
+            description: The git author's name.
+          commits[][author][email]:
+            type: string
+            description: The git author's email address.
+          commits[][url]:
+            type: url
+            description: URL that points to the commit API resource.
+          commits[][distinct]:
+            type: boolean
+            description: Whether this commit is distinct from any that have been pushed before.
+    ReleaseEventWrapper:
+      additionalProperties: true
+      externalDocs:
+        description: Event documentation for release-event
+        url: 'https://docs.github.com/en/developers/webhooks-and-events/events/github-event-types#releaseevent'
+      properties:
+        $ref: '#/components/schemas/GenericEventWrapper'
+        payload:
+          action:
+            type: string
+            description: The action that was performed. Can be published.
+          changes[body][from]:
+            type: string
+            description: The previous version of the body if the action was edited.
+          changes[name][from]:
+            type: string
+            description: 	The previous version of the name if the action was edited.
+          release:
+            type: object
+            description: 	The release object.
+    SponsorshipEventWrapper:
+      additionalProperties: true
+      externalDocs:
+        description: Event documentation for sponsorship-event
+        url: 'https://docs.github.com/en/developers/webhooks-and-events/events/github-event-types#sponsorshipevent'
+      properties:
+        $ref: '#/components/schemas/GenericEventWrapper'
+        payload:
+          action:
+            type: string
+            description: The action that was performed. This can be created.
+          effective_date:
+            type: string
+            description: The pending_cancellation and pending_tier_change event types will include the date the cancellation or tier change will take effect.
+          changes[tier][from]:
+            type: object
+            description: The tier_changed and pending_tier_change will include the original tier before the change or pending change.
+          changes[privacy_level][from]:
+            type: string
+            description: The edited event types include the details about the change when someone edits a sponsorship to change the privacy.
+    WatchEventWrapper:
+      additionalProperties: true
+      externalDocs:
+        description: Event documentation for watch-event
+        url: 'https://docs.github.com/en/developers/webhooks-and-events/events/github-event-types#watchevent'
+      properties:
+        $ref: '#/components/schemas/GenericEventWrapper'
+        payload:
+        action:
+          type: string
+          description: The action that was performed. Currently, can only be started.
+channels:
+  commit-comment:
+    subscribe:
+      message:
+        name: commit_comment
+        title: CommitCommentEvent
+        summary: A commit comment is created.
+        x-ballerina-event-type: "created"
+        payload:
+          $ref: '#/components/schemas/CommitCommentEventWrapper'
+  create:
+    subscribe:
+      message:
+        name: create
+        title: CreateEvent
+        summary: A git branch or tag is created.
+        payload:
+            $ref: '#/components/schemas/CreateEventWrapper'
+  delete:
+    subscribe:
+      message:
+        name: delete
+        title: DeleteEvent
+        summary: A git branch or tag is deleted.
+        payload:
+            $ref: '#/components/schemas/DeleteEventWrapper'
+  fork:
+    subscribe:
+        message:
+          name: fork
+          title: ForkEvent
+          summary: A user forks a repository.
+          payload:
+              $ref: '#/components/schemas/ForkEventWrapper'
+  gollum:
+    subscribe:
+      message:
+        name: gollum
+        title: GollumEvent
+        summary: A wiki page is created or updated.
+        payload:
+            $ref: '#/components/schemas/GollumEventWrapper'
+  issue-comment:
+    subscribe:
+      message:
+        name: issue_comment
+        title: IssueCommentEvent
+        summary: Activity relate to an issue or pull request comment.
+    oneOf:
+      - x-ballerina-event-type: "created"
+        payload:
+        $ref: '#/components/schemas/IssueCommentEventWrapper'
+      - x-ballerina-event-type: "edited"
+        payload:
+        $ref: '#/components/schemas/IssueCommentEventWrapper'
+      - x-ballerina-event-type: "deleted"
+        payload:
+        $ref: '#/components/schemas/IssueCommentEventWrapper'
+  project_card:
+    subscribe:
+      message:
+        name: project_card
+        title: ProjectCardEvent
+        summary: Activity related to project_card
+    oneOf:
+      - x-ballerina-event-type: "created"
+        payload:
+          $ref: '#/components/schemas/ProjectCardEventWrapper'
+      - x-ballerina-event-type: "edited"
+        payload:
+          $ref: '#/components/schemas/ProjectCardEventWrapper'
+      - x-ballerina-event-type: "moved"
+        payload:
+          $ref: '#/components/schemas/ProjectCardEventWrapper'
+      - x-ballerina-event-type: "converted"
+        payload:
+          $ref: '#/components/schemas/ProjectCardEventWrapper'
+      - x-ballerina-event-type: "deleted"
+        payload:
+          $ref: '#/components/schemas/ProjectCardEventWrapper'
+  issue:
+    subscribe:
+      message:
+        name: issue
+        title: IssueEvent
+        summary: Activity related to an issue.
+    oneOf:
+      - x-ballerina-event-type: "opened"
+        payload:
+          $ref: '#/components/schemas/IssueEventWrapper'
+      - x-ballerina-event-type: "closed"
+        payload:
+          $ref: '#/components/schemas/IssueEventWrapper'
+      - x-ballerina-event-type: "reopened"
+        payload:
+          $ref: '#/components/schemas/IssueEventWrapper'
+      - x-ballerina-event-type: "assigned"
+        payload:
+          $ref: '#/components/schemas/IssueEventWrapper'
+      - x-ballerina-event-type: "unassigned"
+        payload:
+          $ref: '#/components/schemas/IssueEventWrapper'
+      - x-ballerina-event-type: "labeled"
+        payload:
+          $ref: '#/components/schemas/IssueEventWrapper'
+      - x-ballerina-event-type: "unlabeled"
+        payload:
+          $ref: '#/components/schemas/IssueEventWrapper'
+  member:
+    subscribe:
+      message:
+        name: member
+        title: MemberEvent
+        summary: Activity related to repository collaborators.
+        x-ballerina-event-type: "added"
+        payload:
+          $ref: '#/components/schemas/MemberEventWrapper'
+  public:
+    subscribe:
+      message:
+        name: public
+        title: PublicEvent
+        summary: When a private repository made public
+        payload:
+          $ref: '#/components/schemas/PublicEventWrapper'
+  pull-requet:
+    subscribe:
+      message:
+        name: pull_request
+        title: PullRequestEvent
+        summary: Activity related to pull request.
+    oneOf:  
+      - x-ballerina-event-type: "opened"
+        payload:
+          $ref: '#/components/schemas/PullRequestEventWrapper'
+      - x-ballerina-event-type: "closed"
+        payload:
+          $ref: '#/components/schemas/PullRequestEventWrapper'
+      - x-ballerina-event-type: "reopened"
+        payload:
+          $ref: '#/components/schemas/PullRequestEventWrapper'
+      - x-ballerina-event-type: "assigned"
+        payload:
+          $ref: '#/components/schemas/PullRequestEventWrapper'
+      - x-ballerina-event-type: "unassigned"
+        payload:
+          $ref: '#/components/schemas/PullRequestEventWrapper'
+      - x-ballerina-event-type: "review_requested"
+        payload:
+          $ref: '#/components/schemas/PullRequestEventWrapper'
+      - x-ballerina-event-type: "review_request_removed"
+        payload:
+          $ref: '#/components/schemas/PullRequestEventWrapper'
+      - x-ballerina-event-type: "labeled"
+        payload:
+          $ref: '#/components/schemas/PullRequestEventWrapper'
+      - x-ballerina-event-type: "unlabeled"
+        payload:
+          $ref: '#/components/schemas/PullRequestEventWrapper'
+      - x-ballerina-event-type: "synchronize"
+        payload:
+          $ref: '#/components/schemas/PullRequestEventWrapper'
+  pull-request-review:
+    subscribe:
+      message:
+        name: pull_request_review
+        title: PullRequestReviewEvent
+        summary: Activity related to pull request reviews.
+        x-ballerina-event-type: "created"
+        payload:
+          $ref: '#/components/schemas/PullRequestReviewEventWrapper'
+  push:
+    subscribe:
+      message:
+        name: push
+        title: PushEvent
+        summary: One or more commits are pushed to a repository branch or tag.
+        payload:
+          $ref: '#/components/schemas/PushEventWrapper'
+  release:
+    subscribe:
+      message:
+        name: release
+        title: ReleaseEvent
+        summary: Activity related to release.
+        x-ballerina-event-type: "published"
+        payload:
+          $ref: '#/components/schemas/ReleaseEventWrapper'
+  sponsorship:
+    subscribe:
+      message:
+        name: sponsorship
+        title: SponsorshipEvent
+        summary: Activity related to a sponsorship listing.
+        x-ballerina-event-type: "created"
+        payload:
+          $ref: '#/components/schemas/SponsorshipEventWrapper'
+  watch:
+    subscribe:
+      message:
+        name: watch
+        title: WatchEvent
+        summary: When someone stars a repository
+        x-ballerina-event-type: "started"
+        payload:
+          $ref: '#/components/schemas/WatchEventWrapper'
