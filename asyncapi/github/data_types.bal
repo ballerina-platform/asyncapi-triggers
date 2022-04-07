@@ -1291,10 +1291,10 @@ public type CreateEvent record {
 # + PROJECT_CARD_DELETED - Project card deleted
 public enum ProjectCardActions{
     PROJECT_CARD_CREATED = "created",
-    PROJECT_CARD_EDITED ="edited",
+    PROJECT_CARD_EDITED = "edited",
     PROJECT_CARD_MOVED = "moved",
-    PROJECT_CARD_CONVERTED="converted",
-    PROJECT_CARD_DELETED="deleted"
+    PROJECT_CARD_CONVERTED = "converted",
+    PROJECT_CARD_DELETED = "deleted"
 }
 
 # Represent issue event action types.
