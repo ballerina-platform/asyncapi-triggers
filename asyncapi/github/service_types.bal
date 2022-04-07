@@ -84,4 +84,11 @@ public type PushService service object {
     remote function onPush(PushEvent payload) returns error?;
 };
 
-public type GenericServiceType IssuesService|IssueCommentService|PullRequestService|PullRequestReviewService|PullRequestReviewCommentService|ReleaseService|LabelService|MilestoneService|PushService;
+public type ProjectCardService service object{
+    remote function onCreated(ProjectCardEvent payload) returns error?;
+    remote function onEdited(ProjectCardEvent payload) returns error?;
+    remote function onMoved(ProjectCardEvent payload) returns error?;
+    remote function onConverted(ProjectCardEvent payload) returns error?;
+    remote function onDeleted(ProjectCardEvent payload) returns error?;
+};
+public type GenericServiceType IssuesService|IssueCommentService|PullRequestService|PullRequestReviewService|PullRequestReviewCommentService|ReleaseService|LabelService|MilestoneService|PushService|ProjectCardService;
