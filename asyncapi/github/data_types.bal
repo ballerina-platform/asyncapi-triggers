@@ -1019,7 +1019,29 @@ public type HookLastResponse record {
     string status;
     string? message;
 };
-
+# Represent GitHub ProjectCard payload
+# + url - Project card URL
+# + project_url - Project URL
+# + column_url - Project column URL
+# + id -  ID
+# + node_id -Node ID
+# + note - Note of the  Project Card
+# + archived - Whether archieved
+# + created_at - Created date time
+# + updated_at - Updated date time
+# + creator - Author of the Project Card
+public type ProjectCard record{|
+    string url;
+    string project_url;
+    string column_url;
+    int id;
+    string node_id;
+    string note;
+    boolean archived;
+    string created_at;
+    string updated_at;
+    User creator;
+|};
 # Represent GitHub fork event.
 #
 # + forkee - Forkee repository
@@ -1068,7 +1090,19 @@ public type IssuesEvent record {|
     Repository repository;
     User sender;
 |};
-
+# Represent GitHub project_card event
+# 
+#  + action - Project_card event action
+#  + project_card - Project card itself
+#  + repository - Repository associated with
+#  + sender - Sender of the project_card event
+#   
+public type ProjectCardEvent record{|
+    ProjectCardActions action;
+    ProjectCard project_card;
+    Repository repository;
+    User sender;
+|};
 # Repesent GitHub label event.
 #
 # + action - Label event action
@@ -1248,6 +1282,20 @@ public type CreateEvent record {
     Organization organization?;
     User sender;
 };
+# Represent project card event action types
+# 
+# + PROJECT_CARD_CREATED - Project card created
+# + PROJECT_CARD_EDITED - Project card edited
+# + PROJECT_CARD_MOVED -  Project card moved
+# + PROJECT_CARD_CONVERTED - Project card converted
+# + PROJECT_CARD_DELETED - Project card deleted
+public enum ProjectCardActions{
+    PROJECT_CARD_CREATED = "created",
+    PROJECT_CARD_EDITED ="edited",
+    PROJECT_CARD_MOVED = "moved",
+    PROJECT_CARD_CONVERTED="converted",
+    PROJECT_CARD_DELETED="deleted"
+}
 
 # Represent issue event action types.
 #
@@ -1428,4 +1476,4 @@ public type Acknowledgement record {
 
 public type GenericDataType PingEvent|WatchEvent|ReleaseEvent|PushEvent|PullRequestReviewCommentEvent
                         |PullRequestReviewEvent|PullRequestEvent|ForkEvent|IssueCommentEvent|IssuesEvent|LabelEvent
-                        |MilestoneEvent|CreateEvent;
+                        |MilestoneEvent|CreateEvent|ProjectCardEvent;
