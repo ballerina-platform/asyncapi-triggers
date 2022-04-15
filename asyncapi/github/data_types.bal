@@ -1023,6 +1023,7 @@ public type HookLastResponse record {
 # + url - Project card URL
 # + project_url - Project URL
 # + column_url - Project column URL
+# + column_id - Project column id
 # + id -  ID
 # + node_id -Node ID
 # + note - Note of the  Project Card
@@ -1034,6 +1035,7 @@ public type ProjectCard record{|
     string url;
     string project_url;
     string column_url;
+    string column_id;
     int id;
     string node_id;
     string note;
