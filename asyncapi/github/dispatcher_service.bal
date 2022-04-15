@@ -15,6 +15,7 @@
 // under the License.
 
 import ballerina/http;
+import ballerina/log;
 import ballerinax/asyncapi.native.handler;
 
 service class DispatcherService {
@@ -44,6 +45,7 @@ service class DispatcherService {
     // We are not using the (@http:payload GenericEventWrapperEvent g) notation because of a bug in Ballerina.
     // Issue: https://github.com/ballerina-platform/ballerina-lang/issues/32859
     resource function post .(http:Caller caller, http:Request request) returns error? {
+        log:printInfo("dispatcher service: resource function triggered");
         json payload = check <@untainted>request.getJsonPayload();
         //byte [] binaryPay = <@untainted>  payload.toJsonString().toBytes();
         string eventName = check request.getHeader("X-GitHub-Event");
@@ -56,6 +58,7 @@ service class DispatcherService {
     }
 
     private function matchRemoteFunc(anydata genericDataType, string eventName) returns error? {
+        log:printInfo("dispatcher service: macthRemote function triggered",EventName=eventName);
         if (genericDataType is GenericDataType) {
             string actionName = genericDataType?.action.toString();
             match eventName {
@@ -241,6 +244,7 @@ service class DispatcherService {
     }
 
     private function executeRemoteFunc(GenericDataType genericEvent, string eventName, string serviceTypeStr, string eventFunction) returns error? {
+        log:printInfo("dispatcher service: executeRemote function triggered",EventName=eventName);
         GenericServiceType? genericService = self.services[serviceTypeStr];
         if genericService is GenericServiceType {
             check self.nativeHandler.invokeRemoteFunction(genericEvent, eventName, eventFunction, genericService);
