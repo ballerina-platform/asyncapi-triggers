@@ -15,7 +15,9 @@
 // under the License.
 
 import ballerina/http;
+import ballerina/log;
 import ballerinax/asyncapi.native.handler;
+import ballerina/crypto;
 
 service class DispatcherService {
     *http:Service;
@@ -44,15 +46,30 @@ service class DispatcherService {
     // We are not using the (@http:payload GenericEventWrapperEvent g) notation because of a bug in Ballerina.
     // Issue: https://github.com/ballerina-platform/ballerina-lang/issues/32859
     resource function post .(http:Caller caller, http:Request request) returns error? {
-        json payload = check <@untainted>request.getJsonPayload();
-        //byte [] binaryPay = <@untainted>  payload.toJsonString().toBytes();
-        string eventName = check request.getHeader("X-GitHub-Event");
-        if (self.listenerConfig.webhookSecret === DEFAULT_SECRET) {
-            // TODO: Validate secret with X-Hub-Signature-256 header for intent verification
-            // Return error if intent verification fails
+        json payload = check <@untainted> request.getJsonPayload();
+        byte [] binaryPay = <@untainted>  payload.toString().toBytes();
+        string eventName = check  request.getHeader("X-GitHub-Event");
+        string secret = check  request.getHeader("X-Hub-Signature-256");
+        string trimmedSecret = secret.substring(7, secret.length());
+        byte [] output = check crypto:hmacSha256(binaryPay, self.listenerConfig.webhookSecret.toBytes());
+        string computedDigest = output.toBase16();
+        if (trimmedSecret.length() != computedDigest.length() || trimmedSecret !== computedDigest) {
+            // Validate secret with X-Hub-Signature-256 header for intent verification
+            log:printError("Signature verification failure");
+            http:Response response = new;
+            response.statusCode = http:STATUS_UNAUTHORIZED;
+            response.setPayload("Signature verification failure");
+            check caller->respond(response);
+        } else {
+            GenericDataType|error genericDataType = payload.cloneWithType(GenericDataType);
+            if (genericDataType is error) {
+                log:printError("Unsupported Event Type : " + eventName);
+                return genericDataType;
+            } else {
+                check self.matchRemoteFunc(genericDataType, eventName);
+                check caller->respond("Event acknoledged successfully");
+            }
         }
-        check self.matchRemoteFunc(payload, eventName);
-        check caller->respond(http:STATUS_OK);
     }
 
     private function matchRemoteFunc(anydata genericDataType, string eventName) returns error? {
