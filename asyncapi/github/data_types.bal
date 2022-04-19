@@ -1023,25 +1023,29 @@ public type HookLastResponse record {
 # + url - Project card URL
 # + project_url - Project URL
 # + column_url - Project column URL
+# + column_id - Id of the column
 # + id -  ID
 # + node_id -Node ID
 # + note - Note of the  Project Card
 # + archived - Whether archieved
 # + created_at - Created date time
 # + updated_at - Updated date time
+# + content_url - Url of the issue
 # + creator - Author of the Project Card
-public type ProjectCard record{|
+public type ProjectCard record{
     string url;
     string project_url;
     string column_url;
+    int column_id;
     int id;
     string node_id;
-    string note;
+    string? note;
     boolean archived;
     string created_at;
     string updated_at;
+    string content_url;
     User creator;
-|};
+};
 # Represent GitHub fork event.
 #
 # + forkee - Forkee repository
@@ -1096,13 +1100,15 @@ public type IssuesEvent record {|
 #  + project_card - Project card itself
 #  + repository - Repository associated with
 #  + sender - Sender of the project_card event
-#   
-public type ProjectCardEvent record{|
+#  + changes - The changes to the project card if the action was edited or converted.
+
+public type ProjectCardEvent record{
     ProjectCardActions action;
     ProjectCard project_card;
     Repository repository;
+    Changes changes?;
     User sender;
-|};
+};
 # Repesent GitHub label event.
 #
 # + action - Label event action
@@ -1474,6 +1480,6 @@ public type Acknowledgement record {
     *CommonResponse;
 };
 
-public type GenericDataType PingEvent|WatchEvent|ReleaseEvent|PushEvent|PullRequestReviewCommentEvent
+public type GenericDataType PingEvent|ProjectCardEvent|WatchEvent|ReleaseEvent|PushEvent|PullRequestReviewCommentEvent
                         |PullRequestReviewEvent|PullRequestEvent|ForkEvent|IssueCommentEvent|IssuesEvent|LabelEvent
-                        |MilestoneEvent|CreateEvent|ProjectCardEvent;
+                        |MilestoneEvent|CreateEvent;
