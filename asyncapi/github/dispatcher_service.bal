@@ -237,19 +237,19 @@ service class DispatcherService {
                 "project_card" => {
                     match actionName {
                         "created" => {
-                            check self.executeRemoteFunc(genericDataType, "created", "ProjectCardService", "onCreate");
+                            check self.executeRemoteFunc(genericDataType, "created", "ProjectCardService", "onCreated");
                         }
                         "edited" => {
-                            check self.executeRemoteFunc(genericDataType, "edited", "ProjectCardService", "onEdit");
+                            check self.executeRemoteFunc(genericDataType, "edited", "ProjectCardService", "onEdited");
                         }
                         "moved" => {
-                            check self.executeRemoteFunc(genericDataType, "moved", "ProjectCardService", "onMove");
+                            check self.executeRemoteFunc(genericDataType, "moved", "ProjectCardService", "onMoved");
                         }
                         "converted" => {
-                            check self.executeRemoteFunc(genericDataType, "converted", "ProjectCardService", "onConvert");
+                            check self.executeRemoteFunc(genericDataType, "converted", "ProjectCardService", "onConverted");
                         }
                         "deleted" => {
-                            check self.executeRemoteFunc(genericDataType, "deleted", "ProjectCardService", "onDelete");
+                            check self.executeRemoteFunc(genericDataType, "deleted", "ProjectCardService", "onDeleted");
                         }
                     }
                 }
