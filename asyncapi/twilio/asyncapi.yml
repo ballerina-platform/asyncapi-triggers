@@ -186,9 +186,3 @@ channels:
           - x-ballerina-event-type: "read"
             payload:
               $ref: '#/components/schemas/SmsStatusChangeEventWrapper'
-    
-
-
-
-
-
