@@ -14,6 +14,8 @@
 // specific language governing permissions and limitations
 // under the License.
 
+# Actions related to an issue. The action can be one of opened, closed, 
+# reopened, assigned, unassigned, labeled or unlabeled.  
 public type IssuesService service object {
     remote function onOpened(IssuesEvent payload) returns error?;
     remote function onClosed(IssuesEvent payload) returns error?;
@@ -24,12 +26,16 @@ public type IssuesService service object {
     remote function onUnlabeled(IssuesEvent payload) returns error?;
 };
 
+# Actions related to an issue or pull request comment.
+# The action can be one of created, edited or deleted.   
 public type IssueCommentService service object {
     remote function onCreated(IssueCommentEvent payload) returns error?;
     remote function onEdited(IssueCommentEvent payload) returns error?;
     remote function onDeleted(IssueCommentEvent payload) returns error?;
 };
 
+# Actions related to pull requests. The action can be one of opened, closed, 
+# reopened, assigned, unassigned, review requested, review request removed, labeled, unlabeled or edited.
 public type PullRequestService service object {
     remote function onOpened(PullRequestEvent payload) returns error?;
     remote function onClosed(PullRequestEvent payload) returns error?;
@@ -43,19 +49,23 @@ public type PullRequestService service object {
     remote function onEdited(PullRequestEvent payload) returns error?;
 };
 
+# Actions related to pull request reviews. The action can be one of submitted, edited or dismissed.
 public type PullRequestReviewService service object {
     remote function onSubmitted(PullRequestReviewEvent payload) returns error?;
     remote function onEdited(PullRequestReviewEvent payload) returns error?;
     remote function onDismissed(PullRequestReviewEvent payload) returns error?;
 };
 
+# Actions related to pull request review comments in the pull request's unified diff. 
+# The action can be one of created, edited or deleted. 
 public type PullRequestReviewCommentService service object {
     remote function onCreated(PullRequestReviewCommentEvent payload) returns error?;
     remote function onEdited(PullRequestReviewCommentEvent payload) returns error?;
     remote function onDeleted(PullRequestReviewCommentEvent payload) returns error?;
 };
 
-
+# Actions related to a release. The action can be one of published, unpublished, 
+# created, edited, deleted, pre-released or released.
 public type ReleaseService service object {
     remote function onPublished(ReleaseEvent payload) returns error?;
     remote function onUnpublished(ReleaseEvent payload) returns error?;
@@ -66,12 +76,15 @@ public type ReleaseService service object {
     remote function onReleased(ReleaseEvent payload) returns error?;
 };
 
+# Actions related to a label. The action can be one of created, edited or deleted.
 public type LabelService service object {
     remote function onCreated(LabelEvent payload) returns error?;
     remote function onEdited(LabelEvent payload) returns error?;
     remote function onDeleted(LabelEvent payload) returns error?;
 };
 
+# Actions related to milestones. The action can be one of 
+# created, edited, deleted, closed or opened.
 public type MilestoneService service object {
     remote function onCreated(MilestoneEvent payload) returns error?;
     remote function onEdited(MilestoneEvent payload) returns error?;
@@ -80,15 +93,20 @@ public type MilestoneService service object {
     remote function onOpened(MilestoneEvent payload) returns error?;
 };
 
+# Actions related to push events. This will be triggered when one or 
+# more commits are pushed to a repository branch or tag.  
 public type PushService service object {
     remote function onPush(PushEvent payload) returns error?;
 };
 
-public type ProjectCardService service object{
+# Actions related to project cards. The action can be one of 
+# created, edited, moved, converted or deleted.
+public type ProjectCardService service object {
     remote function onCreated(ProjectCardEvent payload) returns error?;
     remote function onEdited(ProjectCardEvent payload) returns error?;
     remote function onMoved(ProjectCardEvent payload) returns error?;
     remote function onConverted(ProjectCardEvent payload) returns error?;
     remote function onDeleted(ProjectCardEvent payload) returns error?;
 };
+
 public type GenericServiceType IssuesService|IssueCommentService|PullRequestService|PullRequestReviewService|PullRequestReviewCommentService|ReleaseService|LabelService|MilestoneService|PushService|ProjectCardService;
