@@ -14,28 +14,28 @@
 // specific language governing permissions and limitations
 // under the License.
 
-# Salesforce event service object.
-public type StreamingEventService service object {
+# Actions related to Salesforce records. Available methods are onCreate, onUpdate, onDelete and onRestore
+public type RecordService service object {
     # Triggers on a new record create event.
-    # 
+    #
     # + payload - The information about the triggered event
     # + return - `()` on success else an `error`
     remote function onCreate(EventData payload) returns error?;
 
     # Triggers on a record update event.
-    # 
+    #
     # + payload - The information about the triggered event
     # + return - `()` on success else an `error` 
     remote function onUpdate(EventData payload) returns error?;
 
     # Triggers on a record delete event.
-    # 
+    #
     # + payload - The information about the triggered event
     # + return - `()` on success else an `error`
     remote function onDelete(EventData payload) returns error?;
 
     # Triggers on a record restore event.
-    # 
+    #
     # + payload - The information about the triggered event
     # + return - `()` on success else an `error`
     remote function onRestore(EventData payload) returns error?;

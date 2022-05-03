@@ -13,6 +13,8 @@
 // KIND, either express or implied.  See the License for the
 // specific language governing permissions and limitations
 // under the License.
+
+# Actions related to Google Calendar events. Available methods are onNewEvent, onEventUpdate and onEventDelete
 public type CalendarService service object {
     remote function onNewEvent(Event payload) returns error?;
     remote function onEventUpdate(Event payload) returns error?;

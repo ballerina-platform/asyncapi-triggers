@@ -1,4 +1,4 @@
-# The Azure service bus messaging service type.
+# Actions related to Azure service bus messaging. Available method is onMessage
 public type MessageService service object {
     # Triggers when a new message is received from Azure service bus
     # + message - The Azure service bus message recieved

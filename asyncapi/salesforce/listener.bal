@@ -29,7 +29,7 @@ public class Listener {
     # Gets invoked to initialize the `listener`.
     # The liatener initialization requires setting the credentials.
     # Create an [Salesforce Account](https://www.salesforce.com/ap/?ir=1) and obtain tokens by following [this guide](https://developer.salesforce.com/docs/atlas.en-us.api_streaming.meta/api_streaming/code_sample_java_add_source.htm).
-    # 
+    #
     # + listenerConfig - Salesforce Listener configuration
     public function init(ListenerConfig listenerConfig) {
         self.username = java:fromString(listenerConfig.username);
@@ -40,11 +40,11 @@ public class Listener {
     }
 
     # Attaches the service to the `sfdc:Listener` endpoint.
-    # 
+    #
     # + s - Type descriptor of the service
     # + name - Name of the service
     # + return - `()` or else a `error` upon failure to register the service
-    public function attach(StreamingEventService s, string[]|string? name) returns error? {
+    public function attach(RecordService s, string[]|string? name) returns error? {
         return attachService(self, s);
     }
 
@@ -59,7 +59,7 @@ public class Listener {
     #
     # + s - Type descriptor of the service
     # + return - `()` or else a `error` upon failure to detach the service
-    public function detach(StreamingEventService s) returns error? {
+    public function detach(RecordService s) returns error? {
         return detachService(self, s);
     }
 
@@ -78,27 +78,27 @@ public class Listener {
     }
 }
 
-function initListener(Listener instance, handle replayFrom, handle channelName) = 
+function initListener(Listener instance, handle replayFrom, handle channelName) =
 @java:Method {
     'class: "io.ballerina.sfdc.ListenerUtil"
 } external;
 
-function attachService(Listener instance, StreamingEventService s) returns error? =
+function attachService(Listener instance, RecordService s) returns error? =
 @java:Method {
     'class: "io.ballerina.sfdc.ListenerUtil"
 } external;
 
-function startListener(handle username, handle password, Listener instance) returns error? = 
+function startListener(handle username, handle password, Listener instance) returns error? =
 @java:Method {
     'class: "io.ballerina.sfdc.ListenerUtil"
 } external;
 
-function detachService(Listener instance, StreamingEventService s) returns error? =
+function detachService(Listener instance, RecordService s) returns error? =
 @java:Method {
     'class: "io.ballerina.sfdc.ListenerUtil"
 } external;
 
-function stopListener() returns error? = 
+function stopListener() returns error? =
 @java:Method {
     'class: "io.ballerina.sfdc.ListenerUtil"
 } external;
