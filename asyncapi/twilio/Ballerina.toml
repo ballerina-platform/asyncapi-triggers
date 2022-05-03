@@ -1,6 +1,6 @@
 [package]
 license = ["Apache-2.0"]
-keywords = ["Communication chat/voice", "Cost/Paid" , "Vendor/Twilio"]
+keywords = ["Communication chat/voice", "Cost/Freemium" , "Vendor/Twilio"]
 org = "ballerinax"
 name = "trigger.twilio"
 repository = "https://github.com/ballerina-platform/asyncapi-triggers"
