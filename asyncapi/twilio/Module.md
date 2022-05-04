@@ -10,7 +10,7 @@ This module supports [Twilio Basic API 2010-04-01](https://www.twilio.com/docs/a
 Before using this trigger in your Ballerina application, complete the following:
 
 * Sign up to twilio and create a Twilio account (https://support.twilio.com/hc/en-us/articles/360011177133-View-and-Create-New-Accounts-in-Twilio-Console).
-* Get a twilio phone number which needs to purchase through Twilio to sned messages or make phone calls using Twilio.
+* Get a twilio phone number which needs to purchase through Twilio to send messages or make phone calls using Twilio.
     1. Navigate to the Phone Numbers page in your console.
     2. Click Buy a Number to purchase your first Twilio number.
 * Register the request URL
@@ -47,28 +47,103 @@ listener twilio:Listener TwilioListener = new (8090);
 
 * Write a remote function to receive a particular event type. Implement your logic within that function as shown in the below sample.
 
-* Following is a one of event sample in SmsStatus events in twilo trigger.
+* Following are the event samples of SmsStatus events in twilo trigger.
 ```ballerina
 import ballerina/log;
 import ballerinax/trigger.twilio;
 listener twilio:Listener TwilioListener = new (8090);;
 service twilio:SmsStatusService on TwilioListener{
     remote function onAccepted(twilio:SmsStatusChangeEventWrapper event) returns error? {
-        log:printInfo("Message");
+        log:printInfo("Triggered onAccepted");
+        return;
+    }
+
+    remote function onDelivered(twilio:SmsStatusChangeEventWrapper event) returns error? {
+        log:printInfo("Triggered onDelivered");
+        return;
+    }
+
+    remote function onFailed(twilio:SmsStatusChangeEventWrapper event) returns error? {
+        log:printInfo("Triggered onFailed");
+        return;
+    }
+
+    remote function onQueued(twilio:SmsStatusChangeEventWrapper event) returns error? {
+        log:printInfo("Triggered onQueued");
+        return;
+    }
+
+    remote function onReceived(twilio:SmsStatusChangeEventWrapper event) returns error? {
+        log:printInfo("Triggered onReceived");
+        return;
+    }
+
+    remote function onReceiving(twilio:SmsStatusChangeEventWrapper event) returns error? {
+        log:printInfo("Triggered onReceiving");
+        return;
+    }
+
+    remote function onSending(twilio:SmsStatusChangeEventWrapper event) returns error? {
+        log:printInfo("Triggered onSending");
+        return;
+    }
+
+    remote function onSent(twilio:SmsStatusChangeEventWrapper event) returns error? {
+        log:printInfo("Triggered onSent");
+        return;
+    }
+
+    remote function onUndelivered(twilio:SmsStatusChangeEventWrapper event) returns error? {
+        log:printInfo("Triggered onUndelivered");
         return;
     }
 }
 ```
-* Following is a one of event sample in CallStatus events in twilo trigger.
+* Following are the event samples of  CallStatus events in twilo trigger.
 ```ballerina
 import ballerina/log;
 import ballerinax/trigger.twilio;
 listener twilio:Listener TwilioListener = new (8090);;
 service twilio:SmsStatusService on TwilioListener{
-    remote function onBusy(twilio:CallStatusEventWrapper event) returns error? {
-       log:printInfo("Message");
-       return;
-     }
+        remote function onBusy(twilio:CallStatusEventWrapper event) returns error? {
+        log:printInfo("Twilio call event  onBusy triggered");
+        return;
+    }
+
+    remote function onCanceled(twilio:CallStatusEventWrapper event) returns error? {
+        log:printInfo("Twilio call event  onCanceled triggered");
+        return;
+    }
+
+    remote function onCompleted(twilio:CallStatusEventWrapper event) returns error? {
+        log:printInfo("Twilio call event  onCompleted triggered");
+        return;
+    }
+
+    remote function onFailed(twilio:CallStatusEventWrapper event) returns error? {
+        log:printInfo("Twilio call event  onFailed triggered");
+        return;
+    }
+
+    remote function onInProgress(twilio:CallStatusEventWrapper event) returns error? {
+        log:printInfo("Twilio call event onInProgress triggered");
+        return;
+    }
+
+    remote function onNoAnswer(twilio:CallStatusEventWrapper event) returns error? {
+        log:printInfo("Twilio call event onNoAnswer triggered");
+        return;
+    }
+
+    remote function onQueued(twilio:CallStatusEventWrapper event) returns error? {
+        log:printInfo("Twilio call event onQueued triggered");
+        return;
+    }
+
+    remote function onRinging(twilio:CallStatusEventWrapper event) returns error? {
+        log:printInfo("Twilio call event onRinging triggered");
+        return;
+    }
 }
 ```
 2. Use `bal run` command to compile and run the Ballerina program.
