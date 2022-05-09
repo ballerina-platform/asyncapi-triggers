@@ -14,7 +14,8 @@
 // specific language governing permissions and limitations
 // under the License.
 
-# Actions related to Salesforce records. Available methods are onCreate, onUpdate, onDelete and onRestore
+# Triggers when a new event related to Salesforce records is received.
+# Available actions: onCreate, onUpdate, onDelete, and onRestore
 public type RecordService service object {
     # Triggers on a new record create event.
     #

@@ -9,7 +9,7 @@ service class DispatcherService {
     private ListenerConfig listenerConfig;
 
     public function init(ListenerConfig listenerConfig) {
-      self.listenerConfig = listenerConfig;
+        self.listenerConfig = listenerConfig;
     }
 
     isolated function addServiceRef(string serviceType, GenericServiceType genericService) returns error? {
@@ -49,202 +49,202 @@ service class DispatcherService {
     private function matchRemoteFunc(GenericDataType genericDataType) returns error? {
         match genericDataType.event.'type {
             "app_mention" => {
-                check self.executeRemoteFunc(genericDataType, "app_mention", "SlackEventsAppService", "onAppMention");
+                check self.executeRemoteFunc(genericDataType, "app_mention", "AppService", "onAppMention");
             }
             "app_rate_limited" => {
-                check self.executeRemoteFunc(genericDataType, "app_rate_limited", "SlackEventsAppService", "onAppRateLimited");
+                check self.executeRemoteFunc(genericDataType, "app_rate_limited", "AppService", "onAppRateLimited");
             }
             "app_uninstalled" => {
-                check self.executeRemoteFunc(genericDataType, "app_uninstalled", "SlackEventsAppService", "onAppUninstalled");
+                check self.executeRemoteFunc(genericDataType, "app_uninstalled", "AppService", "onAppUninstalled");
             }
             "channel_archive" => {
-                check self.executeRemoteFunc(genericDataType, "channel_archive", "SlackEventsChannelService", "onChannelArchive");
+                check self.executeRemoteFunc(genericDataType, "channel_archive", "ChannelService", "onChannelArchive");
             }
             "channel_created" => {
-                check self.executeRemoteFunc(genericDataType, "channel_created", "SlackEventsChannelService", "onChannelCreated");
+                check self.executeRemoteFunc(genericDataType, "channel_created", "ChannelService", "onChannelCreated");
             }
             "channel_deleted" => {
-                check self.executeRemoteFunc(genericDataType, "channel_deleted", "SlackEventsChannelService", "onChannelDeleted");
+                check self.executeRemoteFunc(genericDataType, "channel_deleted", "ChannelService", "onChannelDeleted");
             }
             "channel_history_changed" => {
-                check self.executeRemoteFunc(genericDataType, "channel_history_changed", "SlackEventsChannelService", "onChannelHistoryChanged");
+                check self.executeRemoteFunc(genericDataType, "channel_history_changed", "ChannelService", "onChannelHistoryChanged");
             }
             "channel_left" => {
-                check self.executeRemoteFunc(genericDataType, "channel_left", "SlackEventsChannelService", "onChannelLeft");
+                check self.executeRemoteFunc(genericDataType, "channel_left", "ChannelService", "onChannelLeft");
             }
             "channel_rename" => {
-                check self.executeRemoteFunc(genericDataType, "channel_rename", "SlackEventsChannelService", "onChannelRename");
+                check self.executeRemoteFunc(genericDataType, "channel_rename", "ChannelService", "onChannelRename");
             }
             "channel_unarchive" => {
-                check self.executeRemoteFunc(genericDataType, "channel_unarchive", "SlackEventsChannelService", "onChannelUnarchive");
+                check self.executeRemoteFunc(genericDataType, "channel_unarchive", "ChannelService", "onChannelUnarchive");
             }
             "dnd_updated" => {
-                check self.executeRemoteFunc(genericDataType, "dnd_updated", "SlackEventsDndService", "onDndUpdated");
+                check self.executeRemoteFunc(genericDataType, "dnd_updated", "DndService", "onDndUpdated");
             }
             "dnd_updated_user" => {
-                check self.executeRemoteFunc(genericDataType, "dnd_updated_user", "SlackEventsDndService", "onDndUpdatedUser");
+                check self.executeRemoteFunc(genericDataType, "dnd_updated_user", "DndService", "onDndUpdatedUser");
             }
             "email_domain_changed" => {
-                check self.executeRemoteFunc(genericDataType, "email_domain_changed", "SlackEventsEmailDomainChangedService", "onEmailDomainChanged");
+                check self.executeRemoteFunc(genericDataType, "email_domain_changed", "EmailDomainChangedService", "onEmailDomainChanged");
             }
             "emoji_changed" => {
-                check self.executeRemoteFunc(genericDataType, "emoji_changed", "SlackEventsEmojiChangedService", "onEmojiChanged");
+                check self.executeRemoteFunc(genericDataType, "emoji_changed", "EmojiChangedService", "onEmojiChanged");
             }
             "file_change" => {
-                check self.executeRemoteFunc(genericDataType, "file_change", "SlackEventsFileService", "onFileChange");
+                check self.executeRemoteFunc(genericDataType, "file_change", "FileService", "onFileChange");
             }
             "file_comment_added" => {
-                check self.executeRemoteFunc(genericDataType, "file_comment_added", "SlackEventsFileService", "onFileCommentAdded");
+                check self.executeRemoteFunc(genericDataType, "file_comment_added", "FileService", "onFileCommentAdded");
             }
             "file_comment_deleted" => {
-                check self.executeRemoteFunc(genericDataType, "file_comment_deleted", "SlackEventsFileService", "onFileCommentDeleted");
+                check self.executeRemoteFunc(genericDataType, "file_comment_deleted", "FileService", "onFileCommentDeleted");
             }
             "file_comment_edited" => {
-                check self.executeRemoteFunc(genericDataType, "file_comment_edited", "SlackEventsFileService", "onFileCommentEdited");
+                check self.executeRemoteFunc(genericDataType, "file_comment_edited", "FileService", "onFileCommentEdited");
             }
             "file_created" => {
-                check self.executeRemoteFunc(genericDataType, "file_created", "SlackEventsFileService", "onFileCreated");
+                check self.executeRemoteFunc(genericDataType, "file_created", "FileService", "onFileCreated");
             }
             "file_deleted" => {
-                check self.executeRemoteFunc(genericDataType, "file_deleted", "SlackEventsFileService", "onFileDeleted");
+                check self.executeRemoteFunc(genericDataType, "file_deleted", "FileService", "onFileDeleted");
             }
             "file_public" => {
-                check self.executeRemoteFunc(genericDataType, "file_public", "SlackEventsFileService", "onFilePublic");
+                check self.executeRemoteFunc(genericDataType, "file_public", "FileService", "onFilePublic");
             }
             "file_shared" => {
-                check self.executeRemoteFunc(genericDataType, "file_shared", "SlackEventsFileService", "onFileShared");
+                check self.executeRemoteFunc(genericDataType, "file_shared", "FileService", "onFileShared");
             }
             "file_unshared" => {
-                check self.executeRemoteFunc(genericDataType, "file_unshared", "SlackEventsFileService", "onFileUnshared");
+                check self.executeRemoteFunc(genericDataType, "file_unshared", "FileService", "onFileUnshared");
             }
             "grid_migration_finished" => {
-                check self.executeRemoteFunc(genericDataType, "grid_migration_finished", "SlackEventsGridMigrationService", "onGridMigrationFinished");
+                check self.executeRemoteFunc(genericDataType, "grid_migration_finished", "GridMigrationService", "onGridMigrationFinished");
             }
             "grid_migration_started" => {
-                check self.executeRemoteFunc(genericDataType, "grid_migration_started", "SlackEventsGridMigrationService", "onGridMigrationStarted");
+                check self.executeRemoteFunc(genericDataType, "grid_migration_started", "GridMigrationService", "onGridMigrationStarted");
             }
             "group_archive" => {
-                check self.executeRemoteFunc(genericDataType, "group_archive", "SlackEventsGroupService", "onGroupArchive");
+                check self.executeRemoteFunc(genericDataType, "group_archive", "GroupService", "onGroupArchive");
             }
             "group_close" => {
-                check self.executeRemoteFunc(genericDataType, "group_close", "SlackEventsGroupService", "onGroupClose");
+                check self.executeRemoteFunc(genericDataType, "group_close", "GroupService", "onGroupClose");
             }
             "group_history_changed" => {
-                check self.executeRemoteFunc(genericDataType, "group_history_changed", "SlackEventsGroupService", "onGroupHistoryChanged");
+                check self.executeRemoteFunc(genericDataType, "group_history_changed", "GroupService", "onGroupHistoryChanged");
             }
             "group_left" => {
-                check self.executeRemoteFunc(genericDataType, "group_left", "SlackEventsGroupService", "onGroupLeft");
+                check self.executeRemoteFunc(genericDataType, "group_left", "GroupService", "onGroupLeft");
             }
             "group_open" => {
-                check self.executeRemoteFunc(genericDataType, "group_open", "SlackEventsGroupService", "onGroupOpen");
+                check self.executeRemoteFunc(genericDataType, "group_open", "GroupService", "onGroupOpen");
             }
             "group_rename" => {
-                check self.executeRemoteFunc(genericDataType, "group_rename", "SlackEventsGroupService", "onGroupRename");
+                check self.executeRemoteFunc(genericDataType, "group_rename", "GroupService", "onGroupRename");
             }
             "group_unarchive" => {
-                check self.executeRemoteFunc(genericDataType, "group_unarchive", "SlackEventsGroupService", "onGroupUnarchive");
+                check self.executeRemoteFunc(genericDataType, "group_unarchive", "GroupService", "onGroupUnarchive");
             }
             "im_close" => {
-                check self.executeRemoteFunc(genericDataType, "im_close", "SlackEventsImService", "onImClose");
+                check self.executeRemoteFunc(genericDataType, "im_close", "ImService", "onImClose");
             }
             "im_created" => {
-                check self.executeRemoteFunc(genericDataType, "im_created", "SlackEventsImService", "onImCreated");
+                check self.executeRemoteFunc(genericDataType, "im_created", "ImService", "onImCreated");
             }
             "im_history_changed" => {
-                check self.executeRemoteFunc(genericDataType, "im_history_changed", "SlackEventsImService", "onImHistoryChanged");
+                check self.executeRemoteFunc(genericDataType, "im_history_changed", "ImService", "onImHistoryChanged");
             }
             "im_open" => {
-                check self.executeRemoteFunc(genericDataType, "im_open", "SlackEventsImService", "onImOpen");
+                check self.executeRemoteFunc(genericDataType, "im_open", "ImService", "onImOpen");
             }
             "link_shared" => {
-                check self.executeRemoteFunc(genericDataType, "link_shared", "SlackEventsLinkSharedService", "onLinkShared");
+                check self.executeRemoteFunc(genericDataType, "link_shared", "LinkSharedService", "onLinkShared");
             }
             "member_joined_channel" => {
-                check self.executeRemoteFunc(genericDataType, "member_joined_channel", "SlackEventsMemberService", "onMemberJoinedChannel");
+                check self.executeRemoteFunc(genericDataType, "member_joined_channel", "MemberService", "onMemberJoinedChannel");
             }
             "member_left_channel" => {
-                check self.executeRemoteFunc(genericDataType, "member_left_channel", "SlackEventsMemberService", "onMemberLeftChannel");
+                check self.executeRemoteFunc(genericDataType, "member_left_channel", "MemberService", "onMemberLeftChannel");
             }
             "message" => {
-                check self.executeRemoteFunc(genericDataType, "message", "SlackEventsMessageService", "onMessage");
+                check self.executeRemoteFunc(genericDataType, "message", "MessageService", "onMessage");
             }
             "message.app_home" => {
-                check self.executeRemoteFunc(genericDataType, "message.app_home", "SlackEventsMessageService", "onMessageAppHome");
+                check self.executeRemoteFunc(genericDataType, "message.app_home", "MessageService", "onMessageAppHome");
             }
             "message.channels" => {
-                check self.executeRemoteFunc(genericDataType, "message.channels", "SlackEventsMessageService", "onMessageChannels");
+                check self.executeRemoteFunc(genericDataType, "message.channels", "MessageService", "onMessageChannels");
             }
             "message.groups" => {
-                check self.executeRemoteFunc(genericDataType, "message.groups", "SlackEventsMessageService", "onMessageGroups");
+                check self.executeRemoteFunc(genericDataType, "message.groups", "MessageService", "onMessageGroups");
             }
             "message.im" => {
-                check self.executeRemoteFunc(genericDataType, "message.im", "SlackEventsMessageService", "onMessageIm");
+                check self.executeRemoteFunc(genericDataType, "message.im", "MessageService", "onMessageIm");
             }
             "message.mpim" => {
-                check self.executeRemoteFunc(genericDataType, "message.mpim", "SlackEventsMessageService", "onMessageMpim");
+                check self.executeRemoteFunc(genericDataType, "message.mpim", "MessageService", "onMessageMpim");
             }
             "pin_added" => {
-                check self.executeRemoteFunc(genericDataType, "pin_added", "SlackEventsPinService", "onPinAdded");
+                check self.executeRemoteFunc(genericDataType, "pin_added", "PinService", "onPinAdded");
             }
             "pin_removed" => {
-                check self.executeRemoteFunc(genericDataType, "pin_removed", "SlackEventsPinService", "onPinRemoved");
+                check self.executeRemoteFunc(genericDataType, "pin_removed", "PinService", "onPinRemoved");
             }
             "reaction_added" => {
-                check self.executeRemoteFunc(genericDataType, "reaction_added", "SlackEventsReactionService", "onReactionAdded");
+                check self.executeRemoteFunc(genericDataType, "reaction_added", "ReactionService", "onReactionAdded");
             }
             "reaction_removed" => {
-                check self.executeRemoteFunc(genericDataType, "reaction_removed", "SlackEventsReactionService", "onReactionRemoved");
+                check self.executeRemoteFunc(genericDataType, "reaction_removed", "ReactionService", "onReactionRemoved");
             }
             "resources_added" => {
-                check self.executeRemoteFunc(genericDataType, "resources_added", "SlackEventsResourcesService", "onResourcesAdded");
+                check self.executeRemoteFunc(genericDataType, "resources_added", "ResourcesService", "onResourcesAdded");
             }
             "resources_removed" => {
-                check self.executeRemoteFunc(genericDataType, "resources_removed", "SlackEventsResourcesService", "onResourcesRemoved");
+                check self.executeRemoteFunc(genericDataType, "resources_removed", "ResourcesService", "onResourcesRemoved");
             }
             "scope_denied" => {
-                check self.executeRemoteFunc(genericDataType, "scope_denied", "SlackEventsScopeService", "onScopeDenied");
+                check self.executeRemoteFunc(genericDataType, "scope_denied", "ScopeService", "onScopeDenied");
             }
             "scope_granted" => {
-                check self.executeRemoteFunc(genericDataType, "scope_granted", "SlackEventsScopeService", "onScopeGranted");
+                check self.executeRemoteFunc(genericDataType, "scope_granted", "ScopeService", "onScopeGranted");
             }
             "star_added" => {
-                check self.executeRemoteFunc(genericDataType, "star_added", "SlackEventsStarService", "onStarAdded");
+                check self.executeRemoteFunc(genericDataType, "star_added", "StarService", "onStarAdded");
             }
             "star_removed" => {
-                check self.executeRemoteFunc(genericDataType, "star_removed", "SlackEventsStarService", "onStarRemoved");
+                check self.executeRemoteFunc(genericDataType, "star_removed", "StarService", "onStarRemoved");
             }
             "subteam_created" => {
-                check self.executeRemoteFunc(genericDataType, "subteam_created", "SlackEventsSubteamService", "onSubteamCreated");
+                check self.executeRemoteFunc(genericDataType, "subteam_created", "SubteamService", "onSubteamCreated");
             }
             "subteam_members_changed" => {
-                check self.executeRemoteFunc(genericDataType, "subteam_members_changed", "SlackEventsSubteamService", "onSubteamMembersChanged");
+                check self.executeRemoteFunc(genericDataType, "subteam_members_changed", "SubteamService", "onSubteamMembersChanged");
             }
             "subteam_self_added" => {
-                check self.executeRemoteFunc(genericDataType, "subteam_self_added", "SlackEventsSubteamService", "onSubteamSelfAdded");
+                check self.executeRemoteFunc(genericDataType, "subteam_self_added", "SubteamService", "onSubteamSelfAdded");
             }
             "subteam_self_removed" => {
-                check self.executeRemoteFunc(genericDataType, "subteam_self_removed", "SlackEventsSubteamService", "onSubteamSelfRemoved");
+                check self.executeRemoteFunc(genericDataType, "subteam_self_removed", "SubteamService", "onSubteamSelfRemoved");
             }
             "subteam_updated" => {
-                check self.executeRemoteFunc(genericDataType, "subteam_updated", "SlackEventsSubteamService", "onSubteamUpdated");
+                check self.executeRemoteFunc(genericDataType, "subteam_updated", "SubteamService", "onSubteamUpdated");
             }
             "team_domain_change" => {
-                check self.executeRemoteFunc(genericDataType, "team_domain_change", "SlackEventsTeamService", "onTeamDomainChange");
+                check self.executeRemoteFunc(genericDataType, "team_domain_change", "TeamService", "onTeamDomainChange");
             }
             "team_join" => {
-                check self.executeRemoteFunc(genericDataType, "team_join", "SlackEventsTeamService", "onTeamJoin");
+                check self.executeRemoteFunc(genericDataType, "team_join", "TeamService", "onTeamJoin");
             }
             "team_rename" => {
-                check self.executeRemoteFunc(genericDataType, "team_rename", "SlackEventsTeamService", "onTeamRename");
+                check self.executeRemoteFunc(genericDataType, "team_rename", "TeamService", "onTeamRename");
             }
             "tokens_revoked" => {
-                check self.executeRemoteFunc(genericDataType, "tokens_revoked", "SlackEventsTokensRevokedService", "onTokensRevoked");
+                check self.executeRemoteFunc(genericDataType, "tokens_revoked", "TokensRevokedService", "onTokensRevoked");
             }
             "url_verification" => {
-                check self.executeRemoteFunc(genericDataType, "url_verification", "SlackEventsUrlVerificationService", "onUrlVerification");
+                check self.executeRemoteFunc(genericDataType, "url_verification", "UrlVerificationService", "onUrlVerification");
             }
             "user_change" => {
-                check self.executeRemoteFunc(genericDataType, "user_change", "SlackEventsUserChangeService", "onUserChange");
+                check self.executeRemoteFunc(genericDataType, "user_change", "UserChangeService", "onUserChange");
             }
         }
     }
@@ -257,9 +257,9 @@ service class DispatcherService {
     }
 
     isolated function verifyURL(http:Caller caller, json payload) returns @untainted error? {
-      http:Response response = new;
-      response.statusCode = http:STATUS_OK;
-      response.setPayload({challenge: check <@untainted>payload.challenge});
-      check caller->respond(response);
-  }
+        http:Response response = new;
+        response.statusCode = http:STATUS_OK;
+        response.setPayload({challenge: check <@untainted>payload.challenge});
+        check caller->respond(response);
+    }
 }

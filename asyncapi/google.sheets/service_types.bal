@@ -14,7 +14,8 @@
 // specific language governing permissions and limitations
 // under the License.
 
-# Actions related to Google Sheet events. Available methods are onAppendRow and onUpdateRow
+# Triggers when a new event related to Google Sheet is received.
+# Available actions: onAppendRow, and onUpdateRow
 public type SheetRowService service object {
     remote function onAppendRow(GSheetEvent payload) returns error?;
     remote function onUpdateRow(GSheetEvent payload) returns error?;

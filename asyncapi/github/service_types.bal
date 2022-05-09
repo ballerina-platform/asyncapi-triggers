@@ -14,8 +14,8 @@
 // specific language governing permissions and limitations
 // under the License.
 
-# Actions related to an issue. Available methods are onOpened, onClosed, 
-# onReopened, onAssigned, onUnassigned, onLabeled and onUnlabeled
+# Triggers when a new event related to a GitHub issue is received. 
+# Available actions: onOpened, onClosed, onReopened, onAssigned, onUnassigned, onLabeled, and onUnlabeled
 public type IssuesService service object {
     remote function onOpened(IssuesEvent payload) returns error?;
     remote function onClosed(IssuesEvent payload) returns error?;
@@ -26,17 +26,17 @@ public type IssuesService service object {
     remote function onUnlabeled(IssuesEvent payload) returns error?;
 };
 
-# Actions related to an issue or pull request comment.
-# Available methods are onCreated, onEdited and onDeleted
+# Triggers when a new event is fired upon receiving a comment on a pull request or a GitHub issue.
+# Available actions: onCreated, onEdited, and onDeleted
 public type IssueCommentService service object {
     remote function onCreated(IssueCommentEvent payload) returns error?;
     remote function onEdited(IssueCommentEvent payload) returns error?;
     remote function onDeleted(IssueCommentEvent payload) returns error?;
 };
 
-# Actions related to an issue or pull request comment. Available methods are onOpened, 
-# onClosed, onReopened, onAssigned, onUnassigned, onReviewRequested, onReviewRequestRemoved, 
-# onLabeled, onUnlabeled and onEdited
+# Triggers when a new event related to a GitHub pull request is received.
+# Available actions: onOpened, onClosed, onReopened, onAssigned, onUnassigned, 
+# onReviewRequested, onReviewRequestRemoved, onLabeled, onUnlabeled, and onEdited
 public type PullRequestService service object {
     remote function onOpened(PullRequestEvent payload) returns error?;
     remote function onClosed(PullRequestEvent payload) returns error?;
@@ -50,23 +50,24 @@ public type PullRequestService service object {
     remote function onEdited(PullRequestEvent payload) returns error?;
 };
 
-# Actions related to pull request reviews. Available methods are onSubmitted, onEdited and onDismissed
+# Triggers when Choreo recieved a new event from GitHub related to a pull request review.
+# Available actions: onSubmitted, onEdited, and onDismissed
 public type PullRequestReviewService service object {
     remote function onSubmitted(PullRequestReviewEvent payload) returns error?;
     remote function onEdited(PullRequestReviewEvent payload) returns error?;
     remote function onDismissed(PullRequestReviewEvent payload) returns error?;
 };
 
-# Actions related to pull request review comments in the pull request's unified diff. 
-# Available methods are onCreated, onEdited and onDeleted
+# Triggers when a new event is received from GitHub when a comment is added to a pull request review's unified diff view.
+# Available actions: onCreated, onEdited, and onDeleted
 public type PullRequestReviewCommentService service object {
     remote function onCreated(PullRequestReviewCommentEvent payload) returns error?;
     remote function onEdited(PullRequestReviewCommentEvent payload) returns error?;
     remote function onDeleted(PullRequestReviewCommentEvent payload) returns error?;
 };
 
-# Actions related to a release. Available methods are onPublished, onUnpublished, 
-# onCreated, onEdited, onDeleted, onPreReleased and onReleased
+# Triggers when a new event related to a GitHub release is received.
+# Available actions: onPublished, onUnpublished, onCreated, onEdited, onDeleted, onPreReleased, and onReleased
 public type ReleaseService service object {
     remote function onPublished(ReleaseEvent payload) returns error?;
     remote function onUnpublished(ReleaseEvent payload) returns error?;
@@ -77,14 +78,16 @@ public type ReleaseService service object {
     remote function onReleased(ReleaseEvent payload) returns error?;
 };
 
-# Actions related to a label. Available methods are onCreated, onEdited and onDeleted
+# Triggers when a new event related to labels is received.
+# Available actions: onCreated, onEdited, and onDeleted
 public type LabelService service object {
     remote function onCreated(LabelEvent payload) returns error?;
     remote function onEdited(LabelEvent payload) returns error?;
     remote function onDeleted(LabelEvent payload) returns error?;
 };
 
-# Actions related to milestones. Available methods are onCreated, onEdited, onDeleted, onClosed and onOpened
+# Triggers when a new event related to GitHub milestones is received.
+# Available actions: onCreated, onEdited, onDeleted, onClosed, and onOpened
 public type MilestoneService service object {
     remote function onCreated(MilestoneEvent payload) returns error?;
     remote function onEdited(MilestoneEvent payload) returns error?;
@@ -93,12 +96,14 @@ public type MilestoneService service object {
     remote function onOpened(MilestoneEvent payload) returns error?;
 };
 
-# Actions related to push events. Available methods is onPush
+# Triggers when a push event is received.
+# Available action: onPush
 public type PushService service object {
     remote function onPush(PushEvent payload) returns error?;
 };
 
-# Actions related to project cards. Available methods are onCreated, onEdited, onMoved, onConverted and onDeleted
+# Triggers when a new event related to project cards is received.
+# Available actions: onCreated, onEdited, onMoved, onConverted, and onDeleted
 public type ProjectCardService service object {
     remote function onCreated(ProjectCardEvent payload) returns error?;
     remote function onEdited(ProjectCardEvent payload) returns error?;
