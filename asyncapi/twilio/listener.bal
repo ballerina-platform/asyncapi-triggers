@@ -16,9 +16,7 @@
 
 import ballerina/http;
 
-@display {
-    label: ""
-}
+@display {label: "Twilio", iconPath: "docs/icon.png"}
 public class Listener {
     private http:Listener httpListener;
     private DispatcherService dispatcherService;
