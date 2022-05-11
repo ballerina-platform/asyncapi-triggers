@@ -15,7 +15,7 @@
 // under the License.
 
 // Listener related configurations should be included here
-public type ListenerConfigs record {
+public type ListenerConfig record {
 };
 
 public type SmsStatusChangeEventWrapper record {
