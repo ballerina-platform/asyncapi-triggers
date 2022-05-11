@@ -38,8 +38,12 @@ service class DispatcherService {
 
     resource function post .(http:Caller caller, http:Request request) returns error? {
         map<string> payload = check request.getFormParams();
-        check self.matchRemoteFunc(payload);
-        check caller->respond(http:STATUS_OK);
+        error? matchRemoteFuncResult = self.matchRemoteFunc(payload);
+        if matchRemoteFuncResult is error {
+            return matchRemoteFuncResult;
+        } else {
+            check caller->respond("Event acknowledged successfully");
+        }
     }
 
     private function matchRemoteFunc(map<string> payload) returns error? {
@@ -72,7 +76,7 @@ service class DispatcherService {
                     check self.executeRemoteFunc(eventPayload, "canceled", "CallStatusService", "onCanceled");
                 }
                 _ => {
-                    return error(" Invalid event type that twilio trigger currenlty does not support");
+                    return error("Invalid payload or an event type that twilio trigger currenlty does not support");
                 }
             }
             return;
