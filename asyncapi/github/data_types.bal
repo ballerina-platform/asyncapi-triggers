@@ -541,7 +541,7 @@ public type Organization record {|
     int id;
     string node_id;
     string url;
-    string name;
+    string name?;
     string repos_url;
     string events_url;
     string hooks_url;
@@ -1051,10 +1051,12 @@ public type ProjectCard record{
 # + forkee - Forkee repository
 # + repository - Fork repository
 # + sender - Fork send user
+# + organization - Webhook payloads contain the organization object when the webhook is configured for an organization or the event occurs from activity in a repository owned by an organization.
 public type ForkEvent record {|
     Repository forkee;
     Repository repository;
     User sender;
+    Organization organization?;
 |};
 
 # Repesent GitHub issue comment event.
@@ -1065,6 +1067,7 @@ public type ForkEvent record {|
 # + comment - Comment
 # + repository - Issue comment associated repository
 # + sender - Issue comment send user
+# + organization - Webhook payloads contain the organization object when the webhook is configured for an organization or the event occurs from activity in a repository owned by an organization.
 public type IssueCommentEvent record {|
     IssueCommentActions action;
     Issue issue;
@@ -1072,18 +1075,20 @@ public type IssueCommentEvent record {|
     IssueComment comment;
     Repository repository;
     User sender;
+    Organization organization?;
 |};
 
 # Represent GitHub issue event.
 #
-# + action -Issue event action
-# + issue - Issue associated 
-# + changes - Changes associated with the issue
-# + label - Label of the issue event
-# + assignee - assignee of the issue event
-# + milestone - Milestone associated with
-# + repository - Repository of the issue events
-# + sender - User associated with issue event
+# + action - Issue event action  
+# + issue - Issue associated  
+# + changes - Changes associated with the issue  
+# + label - Label of the issue event  
+# + assignee - assignee of the issue event  
+# + milestone - Milestone associated with  
+# + repository - Repository of the issue events  
+# + sender - User associated with issue event  
+# + organization - Webhook payloads contain the organization object when the webhook is configured for an organization or the event occurs from activity in a repository owned by an organization.
 public type IssuesEvent record {|
     IssuesActions action;
     Issue issue;
@@ -1093,6 +1098,7 @@ public type IssuesEvent record {|
     Milestone milestone?;
     Repository repository;
     User sender;
+    Organization organization?;
 |};
 # Represent GitHub project_card event
 # 
@@ -1101,13 +1107,14 @@ public type IssuesEvent record {|
 #  + repository - Repository associated with
 #  + sender - Sender of the project_card event
 #  + changes - The changes to the project card if the action was edited or converted.
-
+# + organization - Webhook payloads contain the organization object when the webhook is configured for an organization or the event occurs from activity in a repository owned by an organization.
 public type ProjectCardEvent record{
     ProjectCardActions action;
     ProjectCard project_card;
     Repository repository;
     Changes changes?;
     User sender;
+    Organization organization?;
 };
 # Repesent GitHub label event.
 #
@@ -1117,6 +1124,7 @@ public type ProjectCardEvent record{
 # + changes - Changes associated with
 # + repository - Repository associated with
 # + sender - Sender of the label event
+# + organization - Webhook payloads contain the organization object when the webhook is configured for an organization or the event occurs from activity in a repository owned by an organization.
 public type LabelEvent record {|
     LabelActions action;
     Label label;
@@ -1124,6 +1132,7 @@ public type LabelEvent record {|
     Changes changes?;
     Repository repository;
     User sender;
+    Organization organization?;
 |};
 
 # Represent GitHub milestone event.
@@ -1133,12 +1142,14 @@ public type LabelEvent record {|
 # + changes - Changes associated with 
 # + repository - Repository associated with
 # + sender - Sender of the label event
+# + organization - Webhook payloads contain the organization object when the webhook is configured for an organization or the event occurs from activity in a repository owned by an organization.
 public type MilestoneEvent record {|
     MilestoneActions action;
     Milestone milestone;
     Changes changes?;
     Repository repository;
     User sender;
+    Organization organization?;
 |};
 
 # Represent GitHub Pull request event
@@ -1152,6 +1163,7 @@ public type MilestoneEvent record {|
 # + requested_reviewer - Requested reviewer 
 # + repository - Repository associated with
 # + sender - Pull request sender
+# + organization - Webhook payloads contain the organization object when the webhook is configured for an organization or the event occurs from activity in a repository owned by an organization.
 public type PullRequestEvent record {
     PullRequestActions action;
     int number;
@@ -1162,6 +1174,7 @@ public type PullRequestEvent record {
     User requested_reviewer?;
     Repository repository;
     User sender;
+    Organization organization?;
 };
 
 # Represent GitHub pull request review event.
@@ -1172,6 +1185,7 @@ public type PullRequestEvent record {
 # + changes - Changes associated with
 # + repository - Repository associated with
 # + sender - Sender associated with
+# + organization - Webhook payloads contain the organization object when the webhook is configured for an organization or the event occurs from activity in a repository owned by an organization.
 public type PullRequestReviewEvent record {|
     PullRequestReviewActions action;
     Review review;
@@ -1179,6 +1193,7 @@ public type PullRequestReviewEvent record {|
     Changes changes?;
     Repository repository;
     User sender;
+    Organization organization?;
 |};
 
 # Represent GitHub pull request review comment event.
@@ -1189,6 +1204,7 @@ public type PullRequestReviewEvent record {|
 # + comment - Comments associated with
 # + repository - Repository associated with
 # + sender - Pull request review comment sender
+# + organization - Webhook payloads contain the organization object when the webhook is configured for an organization or the event occurs from activity in a repository owned by an organization.
 public type PullRequestReviewCommentEvent record {|
     string action;
     Changes changes?;
@@ -1196,6 +1212,7 @@ public type PullRequestReviewCommentEvent record {|
     PullRequestReviewComment comment;
     Repository repository;
     User sender;
+    Organization organization?;
 |};
 
 # Represent GitHub push event
@@ -1213,6 +1230,7 @@ public type PullRequestReviewCommentEvent record {|
 # + repository - The repository where the event occurred.
 # + pusher - The user who pushed the commits.
 # + sender - The user that triggered the event.
+# + organization - Webhook payloads contain the organization object when the webhook is configured for an organization or the event occurs from activity in a repository owned by an organization.
 public type PushEvent record {|
     string ref;
     string before;
@@ -1227,6 +1245,7 @@ public type PushEvent record {|
     Repository repository;
     CommitAuthor pusher;
     User sender;
+    Organization organization?;
 |};
 
 # Represent GitHub release event.
@@ -1236,12 +1255,14 @@ public type PushEvent record {|
 # + repository - The repository where the event occurred.
 # + sender - The user that triggered the event.
 # + changes - The previous version of the body if the action was edited.
+# + organization - Webhook payloads contain the organization object when the webhook is configured for an organization or the event occurs from activity in a repository owned by an organization.
 public type ReleaseEvent record {
     ReleaseActions action;
     Release release;
     Repository repository;
     User sender;
     Changes changes?;
+    Organization organization?;
 };
 
 # Represent GitHub watch event.
@@ -1249,10 +1270,12 @@ public type ReleaseEvent record {
 # + action - The action that was performed. Currently, can only be started.
 # + repository - The repository where the event occurred.
 # + sender - The user that triggered the event.
+# + organization - Webhook payloads contain the organization object when the webhook is configured for an organization or the event occurs from activity in a repository owned by an organization.
 public type WatchEvent record {|
     WatchActions action;
     Repository repository;
     User sender;
+    Organization organization?;
 |};
 
 # Represent GitHub ping event.
@@ -1262,12 +1285,14 @@ public type WatchEvent record {|
 # + hook - The webhook configuration.
 # + repository - The repository where the event occurred.
 # + sender - The user that triggered the event.
+# + organization - Webhook payloads contain the organization object when the webhook is configured for an organization or the event occurs from activity in a repository owned by an organization.
 public type PingEvent record {|
     string zen;
     int hook_id;
     Hook hook;
     Repository repository;
     User sender;
+    Organization organization?;
 |};
 
 # Represent GitHub create event.
