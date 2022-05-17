@@ -58,6 +58,9 @@ task codeBuild {
         println "Task: Building triggers..."
         for (String path : ballerinaPackages) {
             exec {
+                commandLine 'sh', '-c', "${ballerinaDistributionPath}/bin/bal test ${path}"
+            }
+            exec {
                 commandLine 'sh', '-c', "${ballerinaDistributionPath}/bin/bal pack ${path}"
             }
         }
