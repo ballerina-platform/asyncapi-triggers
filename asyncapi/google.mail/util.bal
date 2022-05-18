@@ -144,56 +144,8 @@ isolated function handleResponse(http:Response httpResponse) returns @tainted js
             return error(GMAIL_LISTENER_ERROR_CODE, message = conflictResponseJson);        
         } else {
             //If status is not 200 or 204, request is unsuccessful. Returns error.
-            string errorCode = let var code = jsonResponse.'error.code in code is int ? code.toString() : EMPTY_STRING;
-            string errorMessage = let var message = jsonResponse.'error.message in message is string ? message : 
-                EMPTY_STRING;
-
-            string errorMsg = STATUS_CODE + COLON_SYMBOL + errorCode + SEMICOLON_SYMBOL + WHITE_SPACE + MESSAGE 
-                + COLON_SYMBOL + WHITE_SPACE + errorMessage;
-            //Iterate the errors array in Gmail API error response and concat the error information to
-            //Gmail error message
-            json|error jsonErrors = jsonResponse.'error.errors;
-            if (jsonErrors is json) {
-                foreach json err in <json[]>jsonErrors {
-                    string reason = "";
-                    string message = "";
-                    string location = "";
-                    string locationType = "";
-                    string domain = "";
-                    map<json>|error errMap = err.cloneWithType(mapJson);
-                    if (errMap is map<json>) {
-                        if (errMap.hasKey("reason")) {
-                            reason = let var reasonStr = err.reason in reasonStr is string ? reasonStr : EMPTY_STRING;
-                        }
-                        if (errMap.hasKey("message")) {
-                            message = let var messageStr = err.message in messageStr is string ? messageStr : 
-                                EMPTY_STRING;
-                        }
-                        if (errMap.hasKey("location")) {
-                            location = let var locationStr = err.location in locationStr is string ? locationStr : 
-                                EMPTY_STRING;
-                        }
-                        if (errMap.hasKey("locationType")) {
-                            locationType = let var locationTypeStr = 
-                                err.locationType in locationTypeStr is string ? locationTypeStr : EMPTY_STRING;
-                        }
-                        if (errMap.hasKey("domain")) {
-                            domain = let var domainStr = err.domain in domainStr is string ? domainStr : EMPTY_STRING;
-                        }
-                    }
-                    errorMsg = errorMsg + NEW_LINE + ERROR + COLON_SYMBOL + WHITE_SPACE + NEW_LINE + DOMAIN
-                        + COLON_SYMBOL + WHITE_SPACE + domain + SEMICOLON_SYMBOL + WHITE_SPACE + REASON 
-                        + COLON_SYMBOL + WHITE_SPACE + reason + SEMICOLON_SYMBOL + WHITE_SPACE + MESSAGE 
-                        + COLON_SYMBOL + WHITE_SPACE + message + SEMICOLON_SYMBOL + WHITE_SPACE + LOCATION_TYPE 
-                        + COLON_SYMBOL + WHITE_SPACE + locationType + SEMICOLON_SYMBOL + WHITE_SPACE + LOCATION 
-                        + COLON_SYMBOL + WHITE_SPACE + location;
-                }
-                error err = error(GMAIL_LISTENER_ERROR_CODE, message = errorMsg);
-                return err;
-            } else {
-                error err = error(GMAIL_LISTENER_ERROR_CODE, message = jsonErrors);
-                return err;
-            }
+            error err = error(GMAIL_LISTENER_ERROR_CODE, message = jsonResponse);
+            return err;
         }
     } else {
         error err = error(GMAIL_LISTENER_ERROR_CODE, message = 
