@@ -25,7 +25,7 @@ boolean twilioSmsDeiveredNotified = false;
 boolean twilioSmsReceivedNotified = false;
 
 
-listener Listener twilioSmsStatusListener = new (listenerConfig = {}, listenOn = 8095);
+listener Listener twilioSmsStatusListener = new (listenOn = 8095);
 
 service SmsStatusService on twilioSmsStatusListener {
     remote function onSent(SmsStatusChangeEventWrapper event) returns error? {

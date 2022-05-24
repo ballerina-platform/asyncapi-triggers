@@ -25,7 +25,7 @@ boolean twilioCallRingingNotified = false;
 boolean twilioCallCompletedNotified = false;
 boolean twilioCallCancelledNotified = false;
 
-listener Listener twilioCallStatusListener = new (listenerConfig = {}, listenOn = 8096);
+listener Listener twilioCallStatusListener = new (listenOn = 8096);
 
 service CallStatusService on twilioCallStatusListener {
     remote function onRinging(CallStatusEventWrapper event) returns error? {
