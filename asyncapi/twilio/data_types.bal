@@ -14,10 +14,6 @@
 // specific language governing permissions and limitations
 // under the License.
 
-// Listener related configurations should be included here
-public type ListenerConfig record {
-};
-
 public type SmsStatusChangeEventWrapper record {
     # The 34 character id of the Messaging Service associated with the message.
     string MessagingServiceSid?;
