@@ -9,7 +9,7 @@ This package provides the capability to access Twilio Events API.
 ### Compatibility
 |                               | Version                        |
 |-------------------------------|--------------------------------|
-| Ballerina Language            | Ballerina Swan Lake 2201.0.1   |
+| Ballerina Language            | Ballerina Swan Lake 2201.0.4   |
 | Twilio Events API             | V1.0.0                         | 
 
 ## Report issues
