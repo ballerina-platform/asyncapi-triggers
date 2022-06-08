@@ -1,61 +1,69 @@
 ## Overview
 
-The Twilio Trigger allows you to listen to Twilio SMS and Call status change events.
-1. Listen to incoming message events and message status change callback events from the Twilio SMS.
-2. Listen to incoming call events and call status change callback events from the Twilio Voice Call.
+The Twilio trigger allows you to listen to Twilio SMS and call status change events similar to the following.
+- Incoming message events and message status change callback events from Twilio SMS.
+- Incoming call events and call status change callback events from Twilio voice call.
 
-This module supports [Twilio Basic API 2010-04-01](https://www.twilio.com/docs/all) version.
+This module supports the [Twilio Basic API 2010-04-01](https://www.twilio.com/docs/all) version.
 
 ## Prerequisites
 Before using this trigger in your Ballerina application, complete the following:
 
-* Sign up to Twilio and create a Twilio account (https://support.twilio.com/hc/en-us/articles/360011177133-View-and-Create-New-Accounts-in-Twilio-Console).
-* Get a twilio phone number which needs to purchase through Twilio to send messages or make phone calls using Twilio.
-    1. Navigate to the Phone Numbers page in your console.
-    2. Click `Buy a Number` to purchase your first Twilio number.
-* Register the request URL
-    1. Start ngrok on same port using the command 
-    ` ngrok http 8090`
-* Configure the TwilioML Calls 
-    1. Go to Active numbers in `Phone Numbers -> Manage -> Active Numbers`
+* Sign up to Twilio and create a Twilio account. For step-by-step instructions, see [View and Create New Accounts in Twilio](https://support.twilio.com/hc/en-us/articles/360011177133-View-and-Create-New-Accounts-in-Twilio-Console).
+* Follow the steps below to purchase a Twilio phone number to send messages and make phone calls using Twilio:
+    1. Go to **Phone Numbers -> Manage** on the left navigation pane under the **Develop** section.
+    2. Click **Buy a Number** and proceed to purchase.
+* Follow the steps below to register the request URL:
+    1. Run the following command to start ngrok on the same port: 
+    ```
+    ngrok http 8090
+    ``` 
+    2. Copy the **Forwarding URL** displayed in your terminal. You need this URL to configure **TwilioML SMS**.
+* Follow the steps below to configure TwilioML calls:
+    1. Go to **Phone Numbers -> Manage -> Active Numbers.**
     2. Click on your number
-    3. Under the `Voice & Fax` paste the `Forwarding` URL issued by ngrok under the `A CALL COMES IN` and select the type as `WEBHOOK` and `HTTP POST` as the protocol
-    4. Save the changes
-* Configure the TwilioML SMS 
-    1. Go to `Messaging -> Services`
-    2. Click on `Create a messaging service` to setup a messaging service.
-        1. Give a name to the messaging service that you are creating.
-        2. Add senders to the messaging service.
-        3. Click on `Send a webhook` at the **Integration** step.
-            1. Paste the **Forwarding** URL issued by the ngrok at `Request URL`
-        4. Complete the Messaging Service Setup.
+    3. Scroll to the **Voice & Fax** section, and paste the **Forwarding URL** you copied via ngrok under **A CALL COMES IN.** 
+    4. Select **WEBHOOK** as the type and **HTTP POST** as the protocol
+    5. Click **Save**
+* Follow the steps below to configure TwilioML SMS:
+    1. Go to **Messaging -> Services.**
+    2. Click **Create a messaging service** to set up a messaging service.
+    3. Enter an appropriate name for the messaging service.
+    4. Add senders to the messaging service.
+    5. In the **Set up integration** step, under **Incoming Messages**, select **Send a webhook**.
+    6. Paste the **Forwarding URL** you copied via ngrok as the **Request URL**.
+    7. Proceed with the next steps and click **Complete Messaging Service Setup**.
 
 ## Quickstart
-To use the Twiolio trigger in your Ballerina application, update the .bal file as follows:
+To use the Twilio trigger in your Ballerina application, update the `.bal` file as follows:
 
 ### Step 1: Import listener
-Import the `ballerinax/trigger.twilio` module as shown below.
+Import the **ballerinax/trigger.twilio** module as follows:
 ```ballerina
 import ballerinax/trigger.twilio;
 ```
 
 ### Step 2: Create a new listener instance
-Create a `twilio:Listener` using your port and initialize the trigger with it.
+Create a **twilio:Listener** using your port and initialize the trigger with it.
 ```ballerina
 listener twilio:Listener TwilioListener = new (8090);
 ```
 
-### Step 3: Implement a listener remote functions
-1. Now you can implement a Twilio remote function/s supported by the trigger.
+### Step 3: Implement listener remote functions
+You can implement one or more Twilio remote functions supported by the trigger.
 
-2. Write a remote function/s to receive a particular event type. Implement your logic within that function as shown in the below sample.
+To write a remote function to receive a particular event type, you can implement the logic within the function as shown in the following samples:
 
-* Following are the event samples of SmsStatus events in Twilo trigger.
+* Following is a sample of the `SmsStatus` event of the Twilio trigger:
+
 ```ballerina
 import ballerina/log;
 import ballerinax/trigger.twilio;
-listener twilio:Listener TwilioListener = new (8090);;
-service twilio:SmsStatusService on TwilioListener{
+
+listener twilio:Listener TwilioListener = new (8090);
+
+service twilio:SmsStatusService on TwilioListener {
+
     remote function onAccepted(twilio:SmsStatusChangeEventWrapper event) returns error? {
         log:printInfo("Triggered onAccepted");
         return;
@@ -102,12 +110,15 @@ service twilio:SmsStatusService on TwilioListener{
     }
 }
 ```
-* Following are the event samples of  CallStatus events in Twilo trigger.
+* Following is a sample of the `CallStatus` event of the Twilio trigger:
 ```ballerina
 import ballerina/log;
 import ballerinax/trigger.twilio;
-listener twilio:Listener TwilioListener = new (8090);;
+
+listener twilio:Listener TwilioListener = new (8090);
+
 service twilio:SmsStatusService on TwilioListener{
+
         remote function onBusy(twilio:CallStatusEventWrapper event) returns error? {
         log:printInfo("Twilio call event  onBusy triggered");
         return;
@@ -149,11 +160,10 @@ service twilio:SmsStatusService on TwilioListener{
     }
 }
 ```
-2. Use follwing command to compile and run the Ballerina program.
+You can use the following command to compile and run the Ballerina program:
 
 ```
 bal run
 ```
-
 ## Receiving events
-For receving the Twilio call/message events, use the active number to send a call/message.
+To try out receiving Twilio call/message events, you can use an active Twilio number to send a call/message.
