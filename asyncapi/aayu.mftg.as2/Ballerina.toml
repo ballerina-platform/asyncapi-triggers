@@ -1,0 +1,13 @@
+[package]
+license = ["Apache-2.0"]
+keywords = ["IT Operations/Gateway", "Cost/Paid", "Trigger"]
+org = "ballerinax"
+name = "trigger.aayu.mftg.as2"
+repository = "https://github.com/ballerina-platform/asyncapi-triggers"
+version = "0.6.0"
+distribution = "2201.0.2"
+icon = "docs/icon.png"
+authors = ["Ballerina"]
+
+[build-options]
+observabilityIncluded = true
