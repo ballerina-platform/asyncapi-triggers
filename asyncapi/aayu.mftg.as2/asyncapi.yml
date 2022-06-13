@@ -1,0 +1,253 @@
+asyncapi: 2.1.0
+x-ballerina-event-identifier:
+  type : "body"
+  path : "eventType"
+info:
+  title: Aayu MFTG Events API
+  version: 1.0.0
+  description: Webhook notifications for selected event types on MFTG by Aayu technologies
+  termsOfService: 'https://aayutechnologies.com/terms/'
+  contact:
+    name: MFT Gateway Support
+    url: 'https://mftgateway.com/contact/'
+externalDocs:
+  description: MFT Gateway API documentation
+  url: 'https://aayutechnologies.com/docs/product/mft-gateway/'
+components:
+  schemas:
+    MessageReceivedEvent:
+      additionalProperties: true
+      externalDocs:
+        description: 'Event documentation received message'
+        url: 'https://aayutechnologies.com/docs/product/mft-gateway/webhook-integration/#21-received-message'
+      required:
+        - to
+        - messageAS2ID
+        - messageSubject
+        - partnerAS2ID
+        - partnerName
+        - attachments
+        - stationAS2ID
+        - stationName
+        - bucketName
+        - tenantName
+        - tenantId
+        - tenantEmail
+        - eventType
+        - receivedAt
+      properties:
+        to:
+          type: string
+          description: Email address of the receiving party.
+        messageAS2ID:
+          type: string
+          description: AS2 identifier of the message.
+        messageSubject:
+          type: string
+          description: Subject of the message.
+        partnerAS2ID:
+          type: string
+          description: AS2 identifier of the Partner.
+        partnerName:
+          type: string
+          description: Name of the Partner.
+        stationAS2ID:
+          type: string
+          description: AS2 identifier of the Station.
+        stationName:
+          type: string
+          description: Name of the Station.
+        bucketName:
+          type: string
+          description: Name of the AWS.
+        tenantName:
+          type: string
+          description: Name of the tenant.
+        tenantId:
+          type: integer
+          description: ID of the tenant.
+        tenantEmail:
+          type: string
+          description: Email associated with tenant.
+        eventType:
+          type: string
+          description: Event type.
+        attachments:
+          type: array
+          items:
+            type: string
+          description: Path of attachments.
+        receivedAt:
+          type: integer
+          description: 'Timestamp of which message received.'
+    MessageSentEvent:
+      additionalProperties: true
+      externalDocs:
+        description: 'Event documentation sent message'
+        url: 'https://aayutechnologies.com/docs/product/mft-gateway/webhook-integration/#22-sent-message'
+      required:
+        - to
+        - messageAS2ID
+        - messageSubject
+        - partnerAS2ID
+        - partnerName
+        - stationAS2ID
+        - stationName
+        - bucketName
+        - tenantName
+        - tenantId
+        - tenantEmail
+        - eventType
+        - attachments
+        - sentAt  
+      properties:
+        to:
+          type: string
+          description: Email address of the receiving party.
+        messageAS2ID:
+          type: string
+          description: AS2 identifier of the message.
+        messageSubject:
+          type: string
+          description: Subject of the message.
+        partnerAS2ID:
+          type: string
+          description: AS2 identifier of the Partner.
+        partnerName:
+          type: string
+          description: Name of the Partner.
+        stationAS2ID:
+          type: string
+          description: AS2 identifier of the Station.
+        stationName:
+          type: string
+          description: Name of the Station.
+        bucketName:
+          type: string
+          description: Name of the AWS.
+        tenantName:
+          type: string
+          description: Name of the tenant.
+        tenantId:
+          type: integer
+          description: ID of the tenant.
+        tenantEmail:
+          type: string
+          description: Email associated with tenant.
+        eventType:
+          type: string
+          description: Event type.
+        attachments:
+          type: array
+          items:
+            type: string
+          description: Path of attachments.
+        sentAt:
+          type: integer
+          description: 'Timestamp of which message sent.'
+    MessageFailedEvent:
+      additionalProperties: true
+      externalDocs:
+        description: 'Event documentation failed message'
+        url: 'https://aayutechnologies.com/docs/product/mft-gateway/webhook-integration/#23-send-failure'
+      required:
+        - to
+        - messageAS2ID
+        - messageSubject
+        - partnerAS2ID
+        - partnerName
+        - stationAS2ID
+        - stationName
+        - bucketName
+        - tenantName
+        - tenantId.
+        - tenantEmail
+        - eventType
+        - attachments
+        - failureReason
+        - failures
+        - lastAttemptTime
+        - subject
+      properties:
+        to:
+          type: string
+          description: Email address of the receiving party.
+        messageAS2ID:
+          type: string
+          description: AS2 identifier of the message.
+        messageSubject:
+          type: string
+          description: Subject of the message.
+        partnerAS2ID:
+          type: string
+          description: AS2 identifier of the Partner.
+        partnerName:
+          type: string
+          description: Name of the Partner.
+        stationAS2ID:
+          type: string
+          description: AS2 identifier of the Station.
+        stationName:
+          type: string
+          description: Name of the Station.
+        bucketName:
+          type: string
+          description: Name of the AWS.
+        tenantName:
+          type: string
+          description: Name of the tenant.
+        tenantId:
+          type: integer
+          description: ID of the tenant.
+        tenantEmail:
+          type: string
+          description: Email associated with tenant.
+        eventType:
+          type: string
+          description: Event type.
+        attachments:
+          type: array
+          items:
+            type: string
+          description: Path of attachments.
+        failureReason:
+          type: string
+          description: 'SSL Handshake Exception.'
+        failures:
+          type: integer
+          description: 'No of fail events.'
+        lastAttemptTime:
+          type: integer 
+          description: 'Timestamp of which message failed.'
+        subject:
+          type: string
+          description: 'Subject of the failed message'
+channels:
+  received-message:
+    subscribe:
+      message:
+        name: received_message
+        title: ReceivedMessageEvent
+        summary: Message received event.
+        x-ballerina-event-type: "MESSAGE.RECEIVED.SUCCESS"
+        payload:
+          $ref: '#/components/schemas/MessageReceivedEvent'
+  sent-message:
+    subscribe:
+      message:
+        name: sent_message
+        title: SentMessage
+        summary: Message sent event.
+        x-ballerina-event-type: "MESSAGE.SEND.SUCCESS"
+        payload:
+            $ref: '#/components/schemas/MessageSentEvent'
+  failed-message:
+    subscribe:
+      message:
+        name: failed_message
+        title: FailedMessage
+        summary: Message failed event.
+        x-ballerina-event-type: "MESSAGE.SEND.FAILED"
+        payload:
+            $ref: '#/components/schemas/MessageFailedEvent'
+            
