@@ -16,7 +16,6 @@
 
 import ballerina/http;
 import ballerinax/asyncapi.native.handler;
-
 service class DispatcherService {
     *http:Service;
     private map<GenericServiceType> services = {};
@@ -46,17 +45,6 @@ service class DispatcherService {
     }
 
     private function matchRemoteFunc(GenericDataType genericDataType) returns error? {
-        match genericDataType.eventType {
-            "MESSAGE.RECEIVED.SUCCESS" => {
-                check self.executeRemoteFunc(genericDataType, "MESSAGE.RECEIVED.SUCCESS", "ReceivedMessageService", "onMessageReceivedSuccess");
-            }
-            "MESSAGE.SEND.SUCCESS" => {
-                check self.executeRemoteFunc(genericDataType, "MESSAGE.SEND.SUCCESS", "SentMessageService", "onMessageSendSuccess");
-            }
-            "MESSAGE.SEND.FAILED" => {
-                check self.executeRemoteFunc(genericDataType, "MESSAGE.SEND.FAILED", "FailedMessageService", "onMessageSendFailed");
-            }
-        }
         match genericDataType.eventType {
             "MESSAGE.RECEIVED.SUCCESS" => {
                 check self.executeRemoteFunc(genericDataType, "MESSAGE.RECEIVED.SUCCESS", "ReceivedMessageService", "onMessageReceivedSuccess");
