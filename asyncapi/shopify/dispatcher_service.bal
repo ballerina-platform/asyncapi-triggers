@@ -14,13 +14,20 @@
 // specific language governing permissions and limitations
 // under the License.
 
+import ballerina/crypto;
 import ballerina/http;
+import ballerina/log;
 import ballerinax/asyncapi.native.handler;
 
 service class DispatcherService {
     *http:Service;
     private map<GenericServiceType> services = {};
     private handler:NativeHandler nativeHandler = new ();
+    private ListenerConfig listenerConfig;
+
+    public function init(ListenerConfig listenerConfig) {
+        self.listenerConfig = listenerConfig;
+    }
 
     isolated function addServiceRef(string serviceType, GenericServiceType genericService) returns error? {
         if self.services.hasKey(serviceType) {
@@ -39,12 +46,25 @@ service class DispatcherService {
 
     // We are not using the (@http:payload GenericEventWrapperEvent g) notation because of a bug in Ballerina.
     // Issue: https://github.com/ballerina-platform/ballerina-lang/issues/32859
-    resource function post .(http:Caller caller, http:Request request) returns error? {
+    resource function post .(http:Caller caller, http:Request request) returns http:Response|error? {
+        byte[] binaryPayload = check request.getBinaryPayload();
         json payload = check request.getJsonPayload();
         string eventName = check request.getHeader("x-shopify-topic");
-        // GenericDataType genericDataType = check payload.cloneWithType(GenericDataType);
+        if request.hasHeader("X-Shopify-Hmac-SHA256") {
+            string hmacHeader = check request.getHeader("X-Shopify-Hmac-SHA256");
+            byte[] digest = check crypto:hmacSha256(binaryPayload, self.listenerConfig.apiSecretKey.toBytes());
+            string computedHmac = digest.toBase64();
+            if computedHmac != hmacHeader {
+                // Validate API secret key with X-Shopify-Hmac-SHA256 header for intent verification
+                log:printError("Signature verification failure!");
+                http:Response response = new;
+                response.statusCode = http:STATUS_UNAUTHORIZED;
+                response.setPayload("Signature verification failure");
+                return response;
+            }
+        }    
         check self.matchRemoteFunc(payload, eventName);
-        check caller->respond(http:STATUS_OK);
+        return caller->respond(http:STATUS_OK);
     }
 
     private function matchRemoteFunc(json payload, string eventName) returns error? {

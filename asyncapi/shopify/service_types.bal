@@ -14,6 +14,8 @@
 // specific language governing permissions and limitations
 // under the License.
 
+# Triggers when a new event related to Shopify orders is received.
+# Available actions: onOrdersCreate, onOrdersCancelled, onOrdersFulfilled, onOrdersPaid, onOrdersPartiallyFulfilled, and onOrdersUpdated
 public type OrdersService service object {
     remote function onOrdersCreate(OrderEvent event) returns error?;
     remote function onOrdersCancelled(OrderEvent event) returns error?;
@@ -23,6 +25,8 @@ public type OrdersService service object {
     remote function onOrdersUpdated(OrderEvent event) returns error?;
 };
 
+# Triggers when a new event related to Shopify customers is received.
+# Available actions: onCustomersCreate, onCustomersDisable, onCustomersEnable, onCustomersUpdate, and onCustomersMarketingConsentUpdate
 public type CustomersService service object {
     remote function onCustomersCreate(CustomerEvent event) returns error?;
     remote function onCustomersDisable(CustomerEvent event) returns error?;
@@ -31,11 +35,15 @@ public type CustomersService service object {
     remote function onCustomersMarketingConsentUpdate(CustomerEvent event) returns error?;
 };
 
+# Triggers when a new event related to Shopify products is received.
+# Available actions: onProductsCreate and onProductsUpdate
 public type ProductsService service object {
     remote function onProductsCreate(ProductEvent event) returns error?;
     remote function onProductsUpdate(ProductEvent event) returns error?;
 };
 
+# Triggers when a new event related to Shopify fulfillments is received.
+# Available actions: onFulfillmentsCreate and onFulfillmentsUpdate
 public type FulfillmentsService service object {
     remote function onFulfillmentsCreate(FulfillmentEvent event) returns error?;
     remote function onFulfillmentsUpdate(FulfillmentEvent event) returns error?;

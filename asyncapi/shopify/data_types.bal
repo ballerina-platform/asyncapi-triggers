@@ -15,7 +15,10 @@
 // under the License.
 
 // Listener related configurations should be included here
-public type ListenerConfigs record {
+@display {label: "Listener Config"}
+public type ListenerConfig record {
+    @display {label: "API Secret Key", "description": "The Shopify API secret key, viewable under `Webhooks` in the Shopify admin dashboard (if the webhook is created using the dashboard) or under `API credentials` in the Shopify App (if the webhook is created programatically)"}
+    string apiSecretKey;
 };
 
 public type Address record {

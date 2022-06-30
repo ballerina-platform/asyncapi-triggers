@@ -7,7 +7,6 @@ After you've subscribed to a webhook topic, your app can execute code immediatel
 Before using this trigger in your Ballerina application, complete the following:
 
 * Create a [Shopify](https://www.shopify.com) account
-* Subscribe to a webhook topic by following [this guide](https://shopify.dev/apps/webhooks/configuration/https). You can also use the [Ballerina Shopify Admin connector](https://central.ballerina.io/ballerinax/shopify.admin) to subscribe to a webhook topic.
 
 ## Quickstart
 To use the Shopify trigger in your Ballerina application, update the .bal file as follows:
@@ -19,14 +18,20 @@ First, import `ballerinax/trigger.shopify` module into the Ballerina project as 
 ```
 
 ### Step 2: Create a new trigger instance
-Initialize the trigger by providing the port number where your trigger will be running or by passing a http:Listener instance.
+Initialize the trigger by providing the Shopify API secret key in the listener config and the port number where your trigger will be running. You can also pass a http:Listener instance instead of the port number with the listener config. The Shopify API secret key is viewable under `Webhooks` in the Shopify admin dashboard (if the webhook is created using the dashboard) or under `API credentials` in the Shopify App (if the webhook is created programatically).
 ```ballerina
-listener shopify:Listener shopifyListener = new(8090);
+    shopify:ListenerConfig listenerConfig = {
+        apiSecretKey: "<SHOPIFY_API_SECRET_KEY>"
+    };
+    listener shopify:Listener shopifyListener = new(listenerConfig, 8090);
 ```
 
 If you don't provide a port it will use the default port which is 8090.
 ```ballerina
-    listener shopify:Listener shopifyListener = new;
+    shopify:ListenerConfig listenerConfig = {
+        apiSecretKey: "<SHOPIFY_API_SECRET_KEY>"
+    };
+    listener shopify:Listener shopifyListener = new(listenerConfig);
 ```
 
 ### Step 3: Run the trigger service
@@ -60,9 +65,9 @@ If you don't provide a port it will use the default port which is 8090.
 2. Use `bal run` command to compile and run the Ballerina program. 
 
 ### Step 4: Subscribe to a webhook topic with the URL of the service
-Subscribe to a webhook topic by following [this guide](https://shopify.dev/apps/webhooks/configuration/https). You can also use the [Ballerina Shopify Admin connector](https://central.ballerina.io/ballerinax/shopify.admin) to subscribe to a webhook topic. The ballerina service functions will be triggerred everytime a specific event (that you have subscribed) occurs in the shop that have your Shopify app installed.
+Subscribe to a webhook topic by following [this guide](https://shopify.dev/apps/webhooks/configuration/https). You can use the `createWebhook` operation of the [Ballerina Shopify Admin connector](https://central.ballerina.io/ballerinax/shopify.admin) to programatically subscribe to a webhook topic. You can also use the Shopify Admin dashboard to manually create a webhook. In your Shopify Admin dashboard, head to `Settings > Notifications` and scroll down to `Webhooks` to create a new webhook. The ballerina service functions will be triggerred everytime a specific event (that you have subscribed) occurs in the shop that have your Shopify app installed.
 
 > **Note**: 
 > - Locally, you can use [ngrok](https://ngrok.com/docs) to expose your web service to the internet and to obtain a public URL (For example: 'https://7745640c2478.ngrok.io'). 
-> - In Choreo, you can obtain this service URL after App deployment.
+> - In Choreo, you can obtain this service URL from the `Invoke URL` section of the `Configure and Deploy` form under `Deploy` view before App deployment.
 > - Add a trailing `/` to the end of public URL if it's not present. 

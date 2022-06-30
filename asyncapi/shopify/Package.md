@@ -1,4 +1,4 @@
-Listen to [Shopify Event API](https://shopify.dev/apps/webhooks) from Ballerina
+Listen to [Shopify Webhook API](https://shopify.dev/apps/webhooks) from Ballerina
 
 ## Package overview
 The `ballerinax/trigger.shopify` is a [Ballerina](https://ballerina.io/) trigger for Shopify.
@@ -8,7 +8,7 @@ This package provides the capability to listen to events in Shopify.
 |                               | Version                        |
 |-------------------------------|--------------------------------|
 | Ballerina Language            | Ballerina Swan Lake 2201.0.4   |
-| Shopify Admin API             | 2021-10                        |
+| Shopify Webhook API           | 2021-10                        |
 
 ## Report issues
 To report bugs, request new features, start new discussions, view project boards, etc., go to the [Ballerina Extended Library repository](https://github.com/ballerina-platform/ballerina-extended-library)
