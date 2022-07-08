@@ -14,7 +14,9 @@
 // specific language governing permissions and limitations
 // under the License.
 
-
+# Triggers when a new event related to Google Drive is received.
+# Available actions: onFileCreate, onFolderCreate, onFileUpdate, onFolderUpdate, 
+# onDelete, onFileTrash, and onFolderTrash
 public type DriveService service object {
     remote function onFileCreate(Change changeInfo) returns error?;
     remote function onFolderCreate(Change changeInfo) returns error?;

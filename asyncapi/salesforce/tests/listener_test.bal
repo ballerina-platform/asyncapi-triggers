@@ -36,17 +36,17 @@ isolated boolean isCreated = false;
 isolated boolean isDeleted = false;
 isolated boolean isRestored = false;
 
-service StreamingEventService on eventListener {
+service RecordService on eventListener {
     remote function onCreate(EventData payload) {
         string? eventType = payload.metadata?.changeType;
-        if (eventType is string && eventType == "CREATE") {       
+        if (eventType is string && eventType == "CREATE") {
             lock {
-                isCreated= true;
+                isCreated = true;
             }
             io:println("Created " + payload.toString());
         } else {
             io:println(payload.toString());
-        }    
+        }
     }
 
     remote isolated function onUpdate(EventData payload) {
@@ -60,7 +60,7 @@ service StreamingEventService on eventListener {
             io:println(payload.toString());
         }
     }
-        
+
     remote function onDelete(EventData payload) {
         string? eventType = payload.metadata?.changeType;
         if (eventType is string && eventType == "DELETE") {
@@ -80,7 +80,7 @@ service StreamingEventService on eventListener {
                 isRestored = true;
             }
             io:println("Restored " + payload.toString());
-        }  else {
+        } else {
             io:println(payload.toString());
         }
     }
@@ -107,7 +107,7 @@ sfdc:ConnectionConfig sfConfig = {
 sfdc:Client baseClient = check new (sfConfig);
 string testRecordId = "";
 
-@test:Config { 
+@test:Config {
     enable: true
 }
 function testCreateRecord() {
@@ -141,7 +141,7 @@ function testUpdateRecord() {
 
     if (response is error) {
         test:assertFail(msg = response.message());
-    } 
+    }
 }
 
 @test:Config {
@@ -155,7 +155,7 @@ function testDeleteRecord() {
 
     if (response is error) {
         test:assertFail(msg = response.message());
-    } 
+    }
 }
 
 @test:Config {

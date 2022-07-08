@@ -1,4 +1,4 @@
-# The Azure service bus messaging service type.
+# Triggers when Choreo recieves a new message from Azure service bus. Available action: onMessage
 public type MessageService service object {
     # Triggers when a new message is received from Azure service bus
     # + message - The Azure service bus message recieved

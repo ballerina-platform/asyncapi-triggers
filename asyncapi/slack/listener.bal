@@ -7,13 +7,13 @@ public class Listener {
     private DispatcherService dispatcherService;
 
     public function init(ListenerConfig listenerConfig, @cloud:Expose int|http:Listener listenOn = 8090) returns error? {
-       if listenOn is http:Listener {
-           self.httpListener = listenOn;
-       } else {
-           self.httpListener = check new (listenOn);
-       }
-       self.dispatcherService = new DispatcherService(listenerConfig);
-   }
+        if listenOn is http:Listener {
+            self.httpListener = listenOn;
+        } else {
+            self.httpListener = check new (listenOn);
+        }
+        self.dispatcherService = new DispatcherService(listenerConfig);
+    }
 
     public isolated function attach(GenericServiceType serviceRef, () attachPoint) returns @tainted error? {
         string serviceTypeStr = self.getServiceTypeStr(serviceRef);
@@ -39,50 +39,50 @@ public class Listener {
     }
 
     private isolated function getServiceTypeStr(GenericServiceType serviceRef) returns string {
-        if serviceRef is SlackEventsAppService {
-            return "SlackEventsAppService";
-        } else if serviceRef is SlackEventsChannelService {
-            return "SlackEventsChannelService";
-        } else if serviceRef is SlackEventsDndService {
-            return "SlackEventsDndService";
-        } else if serviceRef is SlackEventsEmailDomainChangedService {
-            return "SlackEventsEmailDomainChangedService";
-        } else if serviceRef is SlackEventsEmojiChangedService {
-            return "SlackEventsEmojiChangedService";
-        } else if serviceRef is SlackEventsFileService {
-            return "SlackEventsFileService";
-        } else if serviceRef is SlackEventsGridMigrationService {
-            return "SlackEventsGridMigrationService";
-        } else if serviceRef is SlackEventsGroupService {
-            return "SlackEventsGroupService";
-        } else if serviceRef is SlackEventsImService {
-            return "SlackEventsImService";
-        } else if serviceRef is SlackEventsLinkSharedService {
-            return "SlackEventsLinkSharedService";
-        } else if serviceRef is SlackEventsMemberService {
-            return "SlackEventsMemberService";
-        } else if serviceRef is SlackEventsMessageService {
-            return "SlackEventsMessageService";
-        } else if serviceRef is SlackEventsPinService {
-            return "SlackEventsPinService";
-        } else if serviceRef is SlackEventsReactionService {
-            return "SlackEventsReactionService";
-        } else if serviceRef is SlackEventsResourcesService {
-            return "SlackEventsResourcesService";
-        } else if serviceRef is SlackEventsScopeService {
-            return "SlackEventsScopeService";
-        } else if serviceRef is SlackEventsStarService {
-            return "SlackEventsStarService";
-        } else if serviceRef is SlackEventsSubteamService {
-            return "SlackEventsSubteamService";
-        } else if serviceRef is SlackEventsTeamService {
-            return "SlackEventsTeamService";
-        } else if serviceRef is SlackEventsTokensRevokedService {
-            return "SlackEventsTokensRevokedService";
-        } else if serviceRef is SlackEventsUrlVerificationService {
-            return "SlackEventsUrlVerificationService";
+        if serviceRef is AppService {
+            return "AppService";
+        } else if serviceRef is ChannelService {
+            return "ChannelService";
+        } else if serviceRef is DndService {
+            return "DndService";
+        } else if serviceRef is EmailDomainChangedService {
+            return "EmailDomainChangedService";
+        } else if serviceRef is EmojiChangedService {
+            return "EmojiChangedService";
+        } else if serviceRef is FileService {
+            return "FileService";
+        } else if serviceRef is GridMigrationService {
+            return "GridMigrationService";
+        } else if serviceRef is GroupService {
+            return "GroupService";
+        } else if serviceRef is ImService {
+            return "ImService";
+        } else if serviceRef is LinkSharedService {
+            return "LinkSharedService";
+        } else if serviceRef is MemberService {
+            return "MemberService";
+        } else if serviceRef is MessageService {
+            return "MessageService";
+        } else if serviceRef is PinService {
+            return "PinService";
+        } else if serviceRef is ReactionService {
+            return "ReactionService";
+        } else if serviceRef is ResourcesService {
+            return "ResourcesService";
+        } else if serviceRef is ScopeService {
+            return "ScopeService";
+        } else if serviceRef is StarService {
+            return "StarService";
+        } else if serviceRef is SubteamService {
+            return "SubteamService";
+        } else if serviceRef is TeamService {
+            return "TeamService";
+        } else if serviceRef is TokensRevokedService {
+            return "TokensRevokedService";
+        } else if serviceRef is UrlVerificationService {
+            return "UrlVerificationService";
         } else {
-            return "SlackEventsUserChangeService";
+            return "UserChangeService";
         }
     }
 }

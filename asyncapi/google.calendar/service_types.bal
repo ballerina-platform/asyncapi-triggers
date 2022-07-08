@@ -13,6 +13,9 @@
 // KIND, either express or implied.  See the License for the
 // specific language governing permissions and limitations
 // under the License.
+
+# Triggers when a new event related to Google Calendar is received.
+# Available actions: onNewEvent, onEventUpdate, and onEventDelete
 public type CalendarService service object {
     remote function onNewEvent(Event payload) returns error?;
     remote function onEventUpdate(Event payload) returns error?;

@@ -13,6 +13,9 @@
 // KIND, either express or implied.  See the License for the
 // specific language governing permissions and limitations
 // under the License.
+
+# Triggers when a new event related to Gmail is received.
+# Available actions: onNewEmail, onNewThread, onEmailLabelAdded, onEmailStarred, onEmailLabelRemoved, onEmailStarRemoved, and onNewAttachment
 public type GmailService service object {
     remote function onNewEmail(Message message) returns error?;
     remote function onNewThread(MailThread thread) returns error?;
