@@ -14,23 +14,19 @@
 // specific language governing permissions and limitations
 // under the License.
 
-import ballerina/http;
 import ballerina/log;
+import ballerina/websub;
 import ballerinax/asyncapi.native.handler;
-import ballerina/crypto;
 
 service class DispatcherService {
-    *http:Service;
+    *websub:SubscriberService;
     private map<GenericServiceType> services = {};
     private handler:NativeHandler nativeHandler = new ();
-    private ListenerConfig listenerConfig;
-
-    public function init(ListenerConfig listenerConfig) {
-        self.listenerConfig = listenerConfig;
-    }
+    public websub:SubscriberServiceConfiguration? config = ();
+    private string hookEndpoint = "";
 
     isolated function addServiceRef(string serviceType, GenericServiceType genericService) returns error? {
-        if (self.services.hasKey(serviceType)) {
+        if self.services.hasKey(serviceType) {
             return error("Service of type " + serviceType + " has already been attached");
         }
         self.services[serviceType] = genericService;
@@ -43,41 +39,29 @@ service class DispatcherService {
         _ = self.services.remove(serviceType);
     }
 
-    // We are not using the (@http:payload GenericEventWrapperEvent g) notation because of a bug in Ballerina.
-    // Issue: https://github.com/ballerina-platform/ballerina-lang/issues/32859
-    resource function post .(http:Caller caller, http:Request request) returns http:Response|error? {
-        json payload = check <@untainted> request.getJsonPayload();
-        byte [] binaryPay = <@untainted>  payload.toString().toBytes();
-        string eventName = check  request.getHeader("X-GitHub-Event");
-        if (request.hasHeader("X-Hub-Signature-256")) {
-            string secret = check  request.getHeader("X-Hub-Signature-256");
-            string trimmedSecret = secret.substring(7, secret.length());
-            byte [] output = check crypto:hmacSha256(binaryPay, self.listenerConfig.webhookSecret.toBytes());
-            string computedDigest = output.toBase16();
-            if (trimmedSecret.length() != computedDigest.length() || trimmedSecret !== computedDigest) {
-                // Validate secret with X-Hub-Signature-256 header for intent verification
-                log:printError("Signature verification failure");
-                http:Response response = new;
-                response.statusCode = http:STATUS_UNAUTHORIZED;
-                response.setPayload("Signature verification failure");
-                return response;
-            }
+    remote function onEventNotification(websub:ContentDistributionMessage event) returns
+    Acknowledgement|websub:SubscriptionDeletedError|error? {
+        json payload = check event.content.ensureType(json);
+        map<string|string[]>? headers = event.headers;
+        string eventName = "";
+        if headers is map<string|string[]> {
+            string|string[] events = headers.get("X-Github-Event");
+            eventName = events is string ? events : events[0];
         }
         GenericDataType|error genericDataType = payload.cloneWithType(GenericDataType);
-        if (genericDataType is error) {
+        if genericDataType is error {
             log:printError("Unsupported Event Type : " + eventName);
             return genericDataType;
         } else {
             check self.matchRemoteFunc(genericDataType, eventName);
-            http:Response response = new;
-            response.statusCode = http:STATUS_OK;
-            response.setPayload("Event acknoledged successfully");
-            return response;
+            return {
+                body: {"message": "Event acknowledged successfully"}
+            };
         }
     }
 
     private function matchRemoteFunc(anydata genericDataType, string eventName) returns error? {
-        if (genericDataType is GenericDataType) {
+        if genericDataType is GenericDataType {
             string actionName = genericDataType?.action.toString();
             match eventName {
                 "issues" => {
@@ -257,6 +241,10 @@ service class DispatcherService {
                         }
                     }
                 }
+                "ping" => {
+                    PingEvent event = check genericDataType.cloneWithType(PingEvent);
+                    self.hookEndpoint = string `/repos/${event.repository.full_name}/hooks/${event.hook_id.toString()}`;
+                }
             }
         }
     }
@@ -266,5 +254,9 @@ service class DispatcherService {
         if genericService is GenericServiceType {
             check self.nativeHandler.invokeRemoteFunction(genericEvent, eventName, eventFunction, genericService);
         }
+    }
+
+    isolated function getHookPath() returns string {
+        return self.hookEndpoint;
     }
 }
