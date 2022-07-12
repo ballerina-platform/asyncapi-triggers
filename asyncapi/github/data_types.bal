@@ -14,11 +14,19 @@
 // specific language governing permissions and limitations
 // under the License.
 
-// Listener related configurations should be included here
+# Listener Configuration.
+#
+# + topic - The URI to subscribe to. The format must be https://github.com/{owner}/{repo}/events/{event}.json"
+# + callbackURL - Public service url
+# + token - Bearer Token to access Github
 @display {label: "Listener Config"}
 public type ListenerConfig record {
-    @display {label: "Webhook Secret", "description": "Secret specified when adding the github webhook"}
-    string webhookSecret = DEFAULT_SECRET;
+    @display {label: "Topic", "description": "The URI to subscribe to. The format must be https://github.com/{owner}/{repo}/events/{event}.json"}
+    string topic;
+    @display {label: "Call Back URL", "description": "Callback service URL for webhook" }
+    string callbackURL;
+    @display {label: "Bearer Token", "description": "Bearer Token for Github"}
+    string token;
 };
 
 public type GenericEventWrapper record {
