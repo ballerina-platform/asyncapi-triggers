@@ -29,7 +29,7 @@ sfdc:ListenerConfig configuration = {
     password: "PASSWORD_SECURITY_TOKEN",
     channelName: "CHANNEL_NAME"
 };
-listener Listener sfdcListener = new (configuration);
+listener sfdc:Listener sfdcListener = new (configuration);
 ```
 
 ### Step 3: Implement a listener remote function
@@ -42,20 +42,20 @@ listener Listener sfdcListener = new (configuration);
 import ballerina/log;
 import ballerinax/trigger.salesforce as sfdc;
 
-service sfdc:StreamingEventService on sfdcListener {
-    isolated remote function onUpdate(sfdc:EventData event) returns error? {
+service sfdc:RecordService on sfdcListener {
+    remote function onUpdate(sfdc:EventData event) returns error? {
         log:printInfo(event.toString());
     }
 
-    isolated remote function onCreate(sfdc:EventData event) {
+    remote function onCreate(sfdc:EventData event) returns error? {
 
     }
         
-    isolated remote function onDelete(sfdc:EventData event) {
+    remote function onDelete(sfdc:EventData event) returns error? {
 
     }
 
-    isolated remote function onRestore(sfdc:EventData event) {
+    remote function onRestore(sfdc:EventData event) returns error? {
 
     }
 }

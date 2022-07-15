@@ -23,6 +23,10 @@
 #   - `-1` - Get all new events sent after subscription. This option is the default
 #   - `-2` - Get all new events sent after subscription and all past events within the retention window
 #   - `Specific number` - Get all events that occurred after the event with the specified replay ID
+# + environment - The type of salesforce environment
+#   - `PRODUCTION` - Production environment
+#   - `SANDBOX` - Sandbox environment
+#   - `DEVELOPER` - Developer environment
 @display{label: "Listener Config"}
 public type ListenerConfig record {|
     @display{label: "Username", "description": "Salesforce login username"}
@@ -33,7 +37,20 @@ public type ListenerConfig record {|
     string channelName;
     @display{label: "Replay ID", "description": "The replay ID to change the point in time when events are read"}
     int replayFrom = REPLAY_FROM_TIP;
+    @display{label: "Environment", "description": "The type of Salesforce environment"}
+    string environment = PRODUCTION;
+
 |};
+
+# The type of Salesforce environment
+# + PRODUCTION - Production environment
+# + SANDBOX - Sandbox environment
+# + DEVELOPER - Developer environment
+public enum Organization {
+    PRODUCTION = "Production",
+    DEVELOPER = "Developer",
+    SANDBOX = "Sandbox"
+}
 
 # Replay ID `-1` to get all new events sent after subscription. This option is the default
 public const REPLAY_FROM_TIP = -1;
