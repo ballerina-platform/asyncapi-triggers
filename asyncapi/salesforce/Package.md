@@ -7,7 +7,7 @@ This package provides the capability to access Salesforce Streaming API.
 ### Compatibility
 |                               | Version                      |
 |-------------------------------|------------------------------|
-| Ballerina Language            | Ballerina Swan Lake 2201.0.0 |
+| Ballerina Language            | Ballerina Swan Lake 2201.1.0 |
 | Salesforce Streaming API      | 43.0                         | 
 
 ## Report issues

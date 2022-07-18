@@ -27,6 +27,11 @@ public class Constants {
     public static final String REPLAY_FROM = "replay_from";
     public static final String CHANNEL_NAME = "channel_name";
 
+    public static final String ENVIRONMENT = "environment";
+    public static final String PRODUCTION = "Production";
+    public static final String SANDBOX = "Sandbox";
+    public static final String DEVELOPMENT = "Developer";
+    
     /* Event Record type names */
     public static final String EVENT_DATA_RECORD = "EventData";
     public static final String EVENT_METADATA_RECORD = "ChangeEventMetadata";
