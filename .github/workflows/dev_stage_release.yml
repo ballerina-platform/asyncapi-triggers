@@ -10,6 +10,14 @@ on:
           - STAGE
           - DEV
         required: true
+      bal_dist_version:
+        description: Ballerina Image Version
+        type: choice
+        options:
+          - STAGE
+          - DEV
+        required: true
+        default: 2201.0.1
 
 jobs:
   release:
@@ -17,7 +25,7 @@ jobs:
     env:
       BALLERINA_${{ github.event.inputs.bal_central_environment }}_CENTRAL: true
     container:
-      image: ballerina/ballerina:2201.0.1
+      image: ballerina/ballerina:${{ github.event.inputs.bal_dist_version }}
       options: --user root
     steps:
       - name: Install Git
