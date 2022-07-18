@@ -12,10 +12,6 @@ on:
         required: true
       bal_dist_version:
         description: Ballerina Image Version
-        type: choice
-        options:
-          - STAGE
-          - DEV
         required: true
         default: 2201.0.1
 
