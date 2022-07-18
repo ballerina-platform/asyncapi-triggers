@@ -17,7 +17,7 @@ on:
           - STAGE
           - DEV
         required: true
-        default: 2201.1.1
+        default: 2201.0.1
 
 jobs:
   release:
