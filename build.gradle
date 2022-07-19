@@ -46,10 +46,19 @@ if (project.hasProperty("release")){
     release = new Boolean(project.property("release").toString())
 }
 
-String asyncApiPackageDirPath = project.projectDir.absolutePath + "/asyncapi";
-def dir = new File(asyncApiPackageDirPath)
-dir.traverse (type: FileType.DIRECTORIES, maxDepth: 0) { file ->
-  ballerinaPackages.add( file )
+def specificTrigger = "";
+if (project.hasProperty("trigger")){
+    specificTrigger = project.property("trigger").toString()
+}
+
+if (specificTrigger?.trim()) {
+    ballerinaPackages.add( specificTrigger )
+} else {
+    String asyncApiPackageDirPath = project.projectDir.absolutePath + "/asyncapi";
+    def dir = new File(asyncApiPackageDirPath)
+    dir.traverse (type: FileType.DIRECTORIES, maxDepth: 0) { file ->
+        ballerinaPackages.add( file )
+    }
 }
 
 task codeBuild {
