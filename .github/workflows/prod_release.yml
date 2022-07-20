@@ -1,6 +1,11 @@
 name: Prod Release
 
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+    inputs:
+      specific_trigger:
+        description: Specific Trigger to Release
+        required: false
 
 jobs:
   container:
@@ -19,4 +24,4 @@ jobs:
           packageUser: ${{ secrets.BALLERINA_BOT_USERNAME }}
           packagePAT: ${{ secrets.BALLERINA_BOT_TOKEN }}
         run: |
-          ./gradlew build -Prelease=true
+          ./gradlew build -Prelease=true -Ptrigger=${{ github.event.inputs.specific_trigger }}
