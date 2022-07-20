@@ -51,10 +51,16 @@ if (project.hasProperty("trigger")){
     specificTrigger = project.property("trigger").toString()
 }
 
+String asyncApiPackageDirPath = project.projectDir.absolutePath + "/asyncapi";
 if (specificTrigger?.trim()) {
-    ballerinaPackages.add( specificTrigger )
+    String specificTriggerPath = asyncApiPackageDirPath + "/" + specificTrigger;
+    def specificTriggerDir = new File(specificTriggerPath);
+    if (specificTriggerDir.exists()) {
+        ballerinaPackages.add( asyncApiPackageDirPath + "/" + specificTrigger )
+    } else {
+        println "Trigger directory " + specificTrigger + " doesn't exist in " + asyncApiPackageDirPath; 
+    }
 } else {
-    String asyncApiPackageDirPath = project.projectDir.absolutePath + "/asyncapi";
     def dir = new File(asyncApiPackageDirPath)
     dir.traverse (type: FileType.DIRECTORIES, maxDepth: 0) { file ->
         ballerinaPackages.add( file )
