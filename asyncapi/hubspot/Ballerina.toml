@@ -1,0 +1,13 @@
+[package]
+license = ["Apache-2.0"]
+keywords = ["Sales & CRM/Customer Relationship Management", "Cost/Freemium", "Trigger"]
+org = "ballerinax"
+name = "trigger.hubspot"
+repository = "https://github.com/ballerina-platform/asyncapi-triggers"
+version = "0.6.0"
+distribution = "2201.1.1"
+icon = "docs/icon.png"
+authors = ["Ballerina"]
+
+[build-options]
+observabilityIncluded = true
