@@ -4,8 +4,8 @@ keywords = ["Communication/Team Chat", "Cost/Freemium", "Trigger"]
 org = "ballerinax"
 name = "trigger.google.drive"
 repository = "https://github.com/ballerina-platform/asyncapi-triggers"
-version = "0.6.10"
-distribution = "2201.0.1"
+version = "0.6.11"
+distribution = "2201.1.1"
 icon = "docs/icon.png"
 authors = ["Ballerina"]
 
