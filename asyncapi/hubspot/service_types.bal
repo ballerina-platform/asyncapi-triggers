@@ -1,4 +1,4 @@
-// Copyright (c) 2022, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+// Copyright (c) 2022, WSO2 LLC. (http://www.wso2.org) All Rights Reserved.
 //
 // WSO2 Inc. licenses this file to you under the Apache License,
 // Version 2.0 (the "License"); you may not use this file except
@@ -19,6 +19,7 @@
 public type CompanyService service object {
     remote function onCompanyCreation(WebhookEvent event) returns error?;
     remote function onCompanyDeletion(WebhookEvent event) returns error?;
+    remote function onCompanyPropertychange(PropertyChangeEvent event) returns error?;
 };
 
 # Triggers when a new event related to HubSpot Contact is received. 
@@ -26,6 +27,7 @@ public type CompanyService service object {
 public type ContactService service object {
     remote function onContactCreation(WebhookEvent event) returns error?;
     remote function onContactDeletion(WebhookEvent event) returns error?;
+    remote function onContactPropertychange(PropertyChangeEvent event) returns error?;
 };
 
 # Triggers when a new event related to HubSpot Conversation is received. 
@@ -33,12 +35,14 @@ public type ContactService service object {
 public type ConversationService service object {
     remote function onConversationCreation(WebhookEvent event) returns error?;
     remote function onConversationDeletion(WebhookEvent event) returns error?;
+    remote function onConversationPropertychange(PropertyChangeEvent event) returns error?;
 };
 # Triggers when a new event related to HubSpot Deal is received. 
 # Available actions: onDealCreation, onDealDeletion
 public type DealService service object {
-    remote function onDealCreation(WebhookEvent event) returns error?; 
+    remote function onDealCreation(WebhookEvent event) returns error?;
     remote function onDealDeletion(WebhookEvent event) returns error?;
+    remote function onDealPropertychange(PropertyChangeEvent event) returns error?;
 };
 
 # Generic Service Type

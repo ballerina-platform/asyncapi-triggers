@@ -1,4 +1,4 @@
-// Copyright (c) 2022, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+// Copyright (c) 2022, WSO2 LLC. (http://www.wso2.org) All Rights Reserved.
 //
 // WSO2 Inc. licenses this file to you under the Apache License,
 // Version 2.0 (the "License"); you may not use this file except
@@ -30,6 +30,10 @@ service CompanyService on hubspotWebhook {
     remote function onCompanyDeletion(WebhookEvent event) returns error? {
         io:println("Company deleted : ", event);
     }
+
+    remote function onCompanyPropertychange(PropertyChangeEvent event) returns error? {
+        io:println("Company updated : ", event);
+    }
 }
 
 service ContactService on hubspotWebhook {
@@ -40,6 +44,10 @@ service ContactService on hubspotWebhook {
 
     remote function onContactDeletion(WebhookEvent event) returns error? {
         io:println("Contact deleted : ", event);
+    }
+
+    remote function onContactPropertychange(PropertyChangeEvent event) returns error? {
+        io:println("Contact updated : ", event);
     }
 }
 
@@ -52,6 +60,10 @@ service DealService on hubspotWebhook {
     remote function onDealDeletion(WebhookEvent event) returns error? {
         io:println("Deal deleted : ", event);
     }
+
+    remote function onDealPropertychange(PropertyChangeEvent event) returns error? {
+        io:println("Deal updated : ", event);
+    }
 }
 
 service ConversationService on hubspotWebhook {
@@ -62,5 +74,9 @@ service ConversationService on hubspotWebhook {
 
     remote function onConversationDeletion(WebhookEvent event) returns error? {
         io:println("Conversation deleted : ", event);
+    }
+
+    remote function onConversationPropertychange(PropertyChangeEvent event) returns error? {
+        io:println("Conversation updated : ", event);
     }
 }
