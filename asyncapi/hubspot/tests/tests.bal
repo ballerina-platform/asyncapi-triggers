@@ -31,7 +31,7 @@ service CompanyService on hubspotWebhook {
         io:println("Company deleted : ", event);
     }
 
-    remote function onCompanyPropertychange(PropertyChangeEvent event) returns error? {
+    remote function onCompanyPropertychange(WebhookEvent event) returns error? {
         io:println("Company updated : ", event);
     }
 }
@@ -46,7 +46,7 @@ service ContactService on hubspotWebhook {
         io:println("Contact deleted : ", event);
     }
 
-    remote function onContactPropertychange(PropertyChangeEvent event) returns error? {
+    remote function onContactPropertychange(WebhookEvent event) returns error? {
         io:println("Contact updated : ", event);
     }
 }
@@ -61,7 +61,7 @@ service DealService on hubspotWebhook {
         io:println("Deal deleted : ", event);
     }
 
-    remote function onDealPropertychange(PropertyChangeEvent event) returns error? {
+    remote function onDealPropertychange(WebhookEvent event) returns error? {
         io:println("Deal updated : ", event);
     }
 }
@@ -76,7 +76,7 @@ service ConversationService on hubspotWebhook {
         io:println("Conversation deleted : ", event);
     }
 
-    remote function onConversationPropertychange(PropertyChangeEvent event) returns error? {
+    remote function onConversationPropertychange(WebhookEvent event) returns error? {
         io:println("Conversation updated : ", event);
     }
 }

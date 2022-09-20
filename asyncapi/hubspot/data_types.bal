@@ -25,11 +25,11 @@ public type ListenerConfig record {
     string callbackURL;
 };
 
-public type PropertyChangeEvent record {
+public type WebhookEvent record {
     # Starting at 0, which number attempt this is to notify your service of this event. If your service times-out or throws an error as describe in the Retries section below, HubSpot will attempt to send the notification again.
     decimal attemptNumber?;
     # The ID of the event that triggered this notification. This value is not guaranteed to be unique.
-    string eventId?;
+    decimal eventId;
     # The source of the change. This can be any of the change sources that appear in contact property histories.
     string changeSource?;
     # When this event occurred as a millisecond timestamp.
@@ -44,37 +44,16 @@ public type PropertyChangeEvent record {
     decimal appId?;
     # Then value of the property changed.
     string propertyValue?;
+    # Flag of the change.
+    string changeFlag?;
     # The ID of the subscription that triggered a notification about the event.
     decimal subscriptionId?;
     # The ID of the object that was created, changed, or deleted. For contacts this is the contact ID; for companies, the company ID; for deals, the deal ID; and for conversations the thread ID
     decimal objectId?;
 };
 
-@display {label: "Webhook Event"}
-public type WebhookEvent record {
-    # HubSpot will attempt to send the notification again in case of service timeout or error.
-    # Number of attempts are saved in this variable.
-    decimal attemptNumber?;
-    # The ID of the event that triggered this notification. This value is not guaranteed to be unique.
-    string eventId?;
-    # The source of the change. This can be any of the change sources that appear in contact property histories.
-    string changeSource?;
-    # When this event occurred as a millisecond timestamp.
-    decimal occurredAt?;
-    # Type of the event
-    string subscriptionType?;
-    # The customer's (HubSpot account ID)[https://knowledge.hubspot.com/account/manage-multiple-hubspot-accounts?_ga=2.56562472.2054080341.1656611011-2068059512.1656469161#check-your-current-account] where the event occurred.
-    decimal portalId?;
-    # Flag of the change.
-    string changeFlag?;
-    # The ID of the subscription that triggered a notification about the event.
-    decimal subscriptionId?;
-    # The ID of the object that was created, changed, or deleted. For contacts this is the contact ID; for companies, 
-    # the company ID; for deals, the deal ID; and for conversations the thread ID
-    decimal objectId?;
-};
+public type GenericDataType WebhookEvent;
 
-public type GenericDataType PropertyChangeEvent|WebhookEvent;
 final time:Seconds FIVE_MINUTES_IN_MILLISECONDS = 300000;
 
 final string eventValidationError = "Event validation failed";

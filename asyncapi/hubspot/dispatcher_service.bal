@@ -67,7 +67,7 @@ service class DispatcherService {
             error? matchRemoteFuncResult = self.matchRemoteFunc(genericDataType);
             if matchRemoteFuncResult is error {
                 WebhookEvent failedEvent = check genericDataType.ensureType(WebhookEvent);
-                log:printError(string `Error processing the event. EventID: ${<string>failedEvent.eventId}`);
+                log:printError(string `Error processing the event. EventID: ${failedEvent.eventId}`);
                 log:printError(matchRemoteFuncResult.toString());
             }
         }
