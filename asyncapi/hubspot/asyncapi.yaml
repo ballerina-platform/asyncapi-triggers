@@ -17,39 +17,11 @@ components:
   schemas:
     WebhookEvent:
       additionalProperties: true
+      required:
+        - eventId
       properties:
         eventId:
-          type: string
-          description: The ID of the event that triggered this notification. This value is not guaranteed to be unique.
-        subscriptionId:
           type: number
-          description: The ID of the subscription that triggered a notification about the event.
-        portalId:
-          type: number
-          description: The customer's (HubSpot account ID)[https://knowledge.hubspot.com/account/manage-multiple-hubspot-accounts?_ga=2.56562472.2054080341.1656611011-2068059512.1656469161#check-your-current-account] where the event occurred.
-        occurredAt:
-          type: number
-          description: When this event occurred as a millisecond timestamp.
-        subscriptionType:
-          type: string
-          description: Type of the event
-        attemptNumber:
-          type: number
-          description: Starting at 0, which number attempt this is to notify your service of this event. If your service times-out or throws an error as describe in the Retries section below, HubSpot will attempt to send the notification again.
-        objectId:
-          type: number
-          description: The ID of the object that was created, changed, or deleted. For contacts this is the contact ID; for companies, the company ID; for deals, the deal ID; and for conversations the thread ID
-        changeSource:
-          type: string
-          description: The source of the change. This can be any of the change sources that appear in contact property histories.
-        changeFlag:
-          type: string
-          description: Flag of the change.
-    PropertyChangeEvent:
-      additionalProperties: true
-      properties:
-        eventId:
-          type: string
           description: The ID of the event that triggered this notification. This value is not guaranteed to be unique.
         subscriptionId:
           type: number
@@ -72,16 +44,17 @@ components:
         objectId:
           type: number
           description: The ID of the object that was created, changed, or deleted. For contacts this is the contact ID; for companies, the company ID; for deals, the deal ID; and for conversations the thread ID
+        changeSource:
+          type: string
+          description: The source of the change. This can be any of the change sources that appear in contact property histories.
+        changeFlag:
+          type: string
+          description: Flag of the change.
         propertyName: 
           type: string
           description: The name of the property changed.
         propertyValue: 
           type: string
-          description: Then value of the property changed.
-        changeSource:
-          type: string
-          description: The source of the change. This can be any of the change sources that appear in contact property histories.
-    
 channels:
   company:
     subscribe:
@@ -95,7 +68,7 @@ channels:
               $ref: "#/components/schemas/WebhookEvent"
           - x-ballerina-event-type: "company.propertyChange"
             payload:
-              $ref: "#/components/schemas/PropertyChangeEvent"
+              $ref: "#/components/schemas/WebhookEvent"
   contact:
     subscribe:
       message:
@@ -108,7 +81,7 @@ channels:
               $ref: "#/components/schemas/WebhookEvent"
           - x-ballerina-event-type: "contact.propertyChange"
             payload:
-              $ref: "#/components/schemas/PropertyChangeEvent"
+              $ref: "#/components/schemas/WebhookEvent"
   conversation:
     subscribe:
       message:
@@ -121,7 +94,7 @@ channels:
               $ref: "#/components/schemas/WebhookEvent"
           - x-ballerina-event-type: "conversation.propertyChange"
             payload:
-              $ref: "#/components/schemas/PropertyChangeEvent"
+              $ref: "#/components/schemas/WebhookEvent"
   deal:
     subscribe:
       message:
@@ -134,4 +107,4 @@ channels:
               $ref: "#/components/schemas/WebhookEvent"
           - x-ballerina-event-type: "deal.propertyChange"
             payload:
-              $ref: "#/components/schemas/PropertyChangeEvent"
+              $ref: "#/components/schemas/WebhookEvent"
