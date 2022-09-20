@@ -1,4 +1,4 @@
-// Copyright (c) 2022, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+// Copyright (c) 2022, WSO2 LLC. (http://www.wso2.org) All Rights Reserved.
 //
 // WSO2 Inc. licenses this file to you under the Apache License,
 // Version 2.0 (the "License"); you may not use this file except
@@ -122,11 +122,17 @@ service class DispatcherService {
             "company.deletion" => {
                 check self.executeRemoteFunc(genericDataType, "company.deletion", "CompanyService", "onCompanyDeletion");
             }
+            "company.propertyChange" => {
+                check self.executeRemoteFunc(genericDataType, "company.propertyChange", "CompanyService", "onCompanyPropertychange");
+            }
             "contact.creation" => {
                 check self.executeRemoteFunc(genericDataType, "contact.creation", "ContactService", "onContactCreation");
             }
             "contact.deletion" => {
                 check self.executeRemoteFunc(genericDataType, "contact.deletion", "ContactService", "onContactDeletion");
+            }
+            "contact.propertyChange" => {
+                check self.executeRemoteFunc(genericDataType, "contact.propertyChange", "ContactService", "onContactPropertychange");
             }
             "conversation.creation" => {
                 check self.executeRemoteFunc(genericDataType, "conversation.creation", "ConversationService", "onConversationCreation");
@@ -134,11 +140,17 @@ service class DispatcherService {
             "conversation.deletion" => {
                 check self.executeRemoteFunc(genericDataType, "conversation.deletion", "ConversationService", "onConversationDeletion");
             }
+            "conversation.propertyChange" => {
+                check self.executeRemoteFunc(genericDataType, "conversation.propertyChange", "ConversationService", "onConversationPropertychange");
+            }
             "deal.creation" => {
                 check self.executeRemoteFunc(genericDataType, "deal.creation", "DealService", "onDealCreation");
             }
             "deal.deletion" => {
                 check self.executeRemoteFunc(genericDataType, "deal.deletion", "DealService", "onDealDeletion");
+            }
+            "deal.propertyChange" => {
+                check self.executeRemoteFunc(genericDataType, "deal.propertyChange", "DealService", "onDealPropertychange");
             }
         }
     }

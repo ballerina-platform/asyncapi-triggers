@@ -3,12 +3,16 @@
 The [Ballerina](https://ballerina.io/) listener for Hubspot allows you to listen to the following events in a HubSpot account.
 * `onCompanyCreation`
 * `onCompanyDeletion`
+* `onCompanyPropertyChange`
 * `onContactCreation`
 * `onContactDeletion`
+* `onContactPropertyChange`
 * `onConversationCreation`
 * `onConversationDeletion`
+* `onConversationPropertyChange`
 * `onDealCreation`
 * `onDealDeletion`
+* `onDealPropertyChange`
 
 ## Prerequisites
 
