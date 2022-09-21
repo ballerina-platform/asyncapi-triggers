@@ -1,0 +1,233 @@
+asyncapi: 2.2.0
+x-ballerina-event-identifier:
+  type: body
+  path: event
+info:
+  title: Asgardeo event service.
+  version: 1.0.0
+  description: Webhook notifications for subscribed topics in Asgardeo.
+channels:
+  Registrations:
+    subscribe:
+      message:
+        oneOf:
+          - x-ballerina-event-type: urn:ietf:params:registrations:addUser
+            payload:
+              $ref: '#/components/schemas/AddUserEvent'
+            title: New user was added to the organization.
+          - x-ballerina-event-type: urn:ietf:params:registrations:selfSignUpConfirm
+            payload:
+              $ref: "#/components/schemas/GenericEvent"
+            title: Self sign-up user confirmed account.
+          - x-ballerina-event-type: urn:ietf:params:registrations:askPasswordConfirm
+            payload:
+              $ref: '#/components/schemas/GenericEvent'
+            title: Invited user accepted the invitation.
+  User_Operations:
+    subscribe:
+      message:
+        oneOf:
+          - x-ballerina-event-type: urn:ietf:params:user-operations:lockUser
+            payload:
+              $ref: '#/components/schemas/GenericEvent'
+            title: User account was locked.
+          - x-ballerina-event-type: urn:ietf:params:user-operations:unlockUser
+            payload:
+              $ref: '#/components/schemas/GenericEvent'
+            title: User account was unlocked.
+          - x-ballerina-event-type: urn:ietf:params:user-operations:updateUserCredentials
+            payload:
+              $ref: '#/components/schemas/GenericEvent'
+            title: User credentilas were updated.
+          - x-ballerina-event-type: urn:ietf:params:user-operations:deleteUser
+            payload:
+              $ref: '#/components/schemas/GenericEvent'
+            title: User removed from the organization.
+          - x-ballerina-event-type: urn:ietf:params:user-operations:userGroupUpdate
+            payload:
+              $ref: '#/components/schemas/UserGroupUpdateEvent'
+            title: User list of the group was updated.
+  Logins:
+    subscribe:
+      message:
+        oneOf:
+          - x-ballerina-event-type: urn:ietf:params:logins:loginSuccess
+            payload:
+              $ref: '#/components/schemas/LoginSuccessEvent'
+            title: User login succesfull.
+components:
+  schemas:
+    GenericUserData:
+      type: object
+      properties:
+        ref:
+          type: string
+          example: >-
+            https://api.asg.io/t/myorg/scim2/Users/36a4541a-1055-4986-872c-cdf2faa7a468
+        organizationId:
+          type: int
+          example: '1234'
+        organizationName:
+          type: string
+          example: myorg
+        userId:
+          type: string
+          example: e3dca90f-e1e3-4f4b-83e4-5743ecce570f
+        userName:
+          type: string
+          example: john@gmail.com
+        userStoreName:
+          type: string
+          example: DEFAULT
+    GenericSecurityData:
+      type: object
+      properties:
+        iss:
+          type: string
+          description: Name of the issuer.
+          example: Asgardeo
+        jti:
+          type: string
+          description: Event id.
+          example: e3dca90f-e1e3-4f4b-83e4-5743ecce570d
+        iat:
+          type: int
+          description: Issued timestamp of the event.
+          example: 1659739261508
+        aud:
+          type: string
+          description: Audience of the event.
+          example: https://websubhub/topics/myorg/TOPIC
+    AddUserEvent:
+      type: object
+      properties:
+        securityData:
+          $ref: '#/components/schemas/GenericSecurityData'
+        eventData:
+          $ref: '#/components/schemas/AddUserData'
+    AddUserData:
+      type: object
+      properties:
+        ref:
+          type: string
+          example: >-
+            https://api.asg.io/t/myorg/scim2/Users/36a4541a-1055-4986-872c-cdf2faa7a468
+        organizationId:
+          type: int
+          example: '1234'
+        organizationName:
+          type: string
+          example: myorg
+        userId:
+          type: string
+          example: 36a4541a-1055-4986-872c-cdf2faa7a468
+        userName:
+          type: string
+          example: john@gmail.com
+        userStoreName:
+          type: string
+          example: DEFAULT
+        userOnboardMethod:
+          type: string
+          example: SELF_SIGNUP
+        roleList:
+          type: array
+          items:
+            type: string
+        userClaims:
+          type: array
+          items:
+            type: string
+          example:
+            firstName: John
+            lastName: Silva
+            birthday: '1990-01-12'
+            country: Australia
+            mobile: '0767070701'
+    GenericEvent:
+      type: object
+      properties:
+        securityData:
+          $ref: '#/components/schemas/GenericSecurityData'
+        eventData:
+          $ref: '#/components/schemas/GenericUserData'
+    UserGroupUpdateEvent:
+      type: object
+      properties:
+        securityData:
+          $ref: '#/components/schemas/GenericSecurityData'
+        eventData:
+          $ref: '#/components/schemas/UserGroupUpdateData'
+    UserGroupUpdateData:
+      type: object
+      properties:
+        ref:
+          type: string
+          example: >-
+            https://api.asg.io/t/myorg/scim2/Groups/96a4541a-1055-4986-872c-cdf2faa7a468
+        organizationId:
+          type: int
+          example: '1234'
+        organizationName:
+          type: string
+          example: myorg
+        groupId:
+          type: string
+          example: e3dca90f-e1e3-4f4b-83e4-5743ecce570f
+        groupName:
+          type: string
+          example: HRGroup
+        userStoreName:
+          type: string
+          example: DEFAULT
+        addedUsers:
+          type: array
+          description: A list of added users to the group.
+          items:
+            $ref: '#/components/schemas/user'
+        removedUsers:
+          type: array
+          description: A list of removed users from the group.
+          items:
+            $ref: '#/components/schemas/user'
+    LoginSuccessEvent:
+      type: object
+      properties:
+        securityData:
+          $ref: '#/components/schemas/GenericSecurityData'
+        eventData:
+          $ref: '#/components/schemas/LoginSuccessData'
+    LoginSuccessData:
+      type: object
+      properties:
+        ref:
+          type: string
+          example: >-
+            https://api.asg.io/t/myorg/scim2/Users/36a4541a-1055-4986-872c-cdf2faa7a468
+        organizationId:
+          type: int
+          example: '1234'
+        organizationName:
+          type: string
+          example: myorg
+        userId:
+          type: string
+          example: e3dca90f-e1e3-4f4b-83e4-5743ecce570f
+        userName:
+          type: string
+          example: john@gmail.com
+        userStoreName:
+          type: string
+          example: DEFAULT
+        serviceProvider:
+          type: string
+          example: My Account
+    user:
+      type: object
+      properties:
+        userId:
+          type: string
+          example: 22e46698-7fa7-4497-90fc-e12864e30b77
+        userName:
+          type: string
+          example: john@mailinator.com
