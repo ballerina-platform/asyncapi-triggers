@@ -1,0 +1,808 @@
+asyncapi: "2.4.0"
+x-ballerina-event-identifier:
+  type : "body"
+  path : "eventNotifications.dataChangeEvent."
+info:
+  title: QuickBook Webhooks
+  version: "1.0.0"
+  description: |
+    Use webhooks to receive event triggered callbacks for entities that your app needs to stay on top of.
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+
+defaultContentType: application/json
+
+externalDocs:
+    description: Common properties returned from Event
+    url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+
+channels:
+  Account:
+    subscribe:
+      message:
+        oneOf:
+          - x-ballerina-event-type: "Account/Create"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+          - x-ballerina-event-type: "Account/Update"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+          - x-ballerina-event-type: "Account/Delete"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+          - x-ballerina-event-type: "Account/Merge"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+  Bill:
+    subscribe:
+      message:
+        oneOf:
+          - x-ballerina-event-type: "Bill/Create"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+          - x-ballerina-event-type: "Bill/Update"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+          - x-ballerina-event-type: "Bill/Delete"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+  BillPayment:
+    subscribe:
+      message:
+        oneOf:
+          - x-ballerina-event-type: "BillPayment/Create"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+          - x-ballerina-event-type: "BillPayment/Update"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+          - x-ballerina-event-type: "BillPayment/Delete"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+          - x-ballerina-event-type: "BillPayment/Void"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+  Budget:
+    subscribe:
+      message:
+        oneOf:
+          - x-ballerina-event-type: "Budget/Create"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+          - x-ballerina-event-type: "Budget/Update"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+  Class:
+    subscribe:
+      message:
+        oneOf:
+          - x-ballerina-event-type: "Class/Create"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+          - x-ballerina-event-type: "Class/Update"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+          - x-ballerina-event-type: "Class/Delete"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+  CreditMemo:
+    subscribe:
+      message:
+        oneOf:
+          - x-ballerina-event-type: "CreditMemo/Create"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+          - x-ballerina-event-type: "CreditMemo/Update"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+          - x-ballerina-event-type: "CreditMemo/Delete"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+          - x-ballerina-event-type: "CreditMemo/Void"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+  Currency:
+    subscribe:
+      message:
+        oneOf:
+          - x-ballerina-event-type: "Currency/Create"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+          - x-ballerina-event-type: "Currency/Update"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+  Customer:
+    subscribe:
+      message:
+        oneOf:
+          - x-ballerina-event-type: "Customer/Create"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+          - x-ballerina-event-type: "Customer/Update"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+          - x-ballerina-event-type: "Customer/Delete"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+          - x-ballerina-event-type: "Customer/Merge"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+  Department:
+    subscribe:
+      message:
+        oneOf:
+          - x-ballerina-event-type: "Department/Create"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+          - x-ballerina-event-type: "Department/Update"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+          - x-ballerina-event-type: "Department/Merge"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+  Deposit:
+    subscribe:
+      message:
+        oneOf:
+          - x-ballerina-event-type: "Deposit/Create"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+          - x-ballerina-event-type: "Deposit/Update"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+          - x-ballerina-event-type: "Deposit/Delete"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+  Employee:
+    subscribe:
+      message:
+        oneOf:
+          - x-ballerina-event-type: "Employee/Create"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+          - x-ballerina-event-type: "Employee/Update"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+          - x-ballerina-event-type: "Employee/Delete"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+          - x-ballerina-event-type: "Employee/Merge"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+  Estimate:
+    subscribe:
+      message:
+        oneOf:
+          - x-ballerina-event-type: "Estimate/Create"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+          - x-ballerina-event-type: "Estimate/Update"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+          - x-ballerina-event-type: "Estimate/Delete"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+  Invoice:
+    subscribe:
+      message:
+        oneOf:
+          - x-ballerina-event-type: "Invoice/Create"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+          - x-ballerina-event-type: "Invoice/Update"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+          - x-ballerina-event-type: "Invoice/Delete"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+          - x-ballerina-event-type: "Invoice/Void"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+  Item:
+    subscribe:
+      message:
+        oneOf:
+          - x-ballerina-event-type: "Item/Create"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+          - x-ballerina-event-type: "Item/Update"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+          - x-ballerina-event-type: "Item/Delete"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+          - x-ballerina-event-type: "Item/Merge"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+  JournalCode:
+    subscribe:
+      message:
+        oneOf:
+          - x-ballerina-event-type: "JournalCode/Create"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+          - x-ballerina-event-type: "JournalCode/Update"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+  JournalEntry:
+    subscribe:
+      message:
+        oneOf:
+          - x-ballerina-event-type: "JournalEntry/Create"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+          - x-ballerina-event-type: "JournalEntry/Update"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+          - x-ballerina-event-type: "JournalEntry/Delete"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+  Payment:
+    subscribe:
+      message:
+        oneOf:
+          - x-ballerina-event-type: "Payment/Create"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+          - x-ballerina-event-type: "Payment/Update"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+          - x-ballerina-event-type: "Payment/Delete"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+          - x-ballerina-event-type: "Payment/Void"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+  PaymentMethod:
+    subscribe:
+      message:
+        oneOf:
+          - x-ballerina-event-type: "PaymentMethod/Create"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+          - x-ballerina-event-type: "PaymentMethod/Update"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+          - x-ballerina-event-type: "PaymentMethod/Merge"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+  Preferences:
+    subscribe:
+      message:
+        oneOf:
+          - x-ballerina-event-type: "Preferences/Update"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+  Purchase:
+    subscribe:
+      message:
+        oneOf:
+          - x-ballerina-event-type: "Purchase/Create"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+          - x-ballerina-event-type: "Purchase/Update"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+          - x-ballerina-event-type: "Purchase/Delete"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+          - x-ballerina-event-type: "Purchase/Void"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+  PurchaseOrder:
+    subscribe:
+      message:
+        oneOf:
+          - x-ballerina-event-type: "PurchaseOrder/Create"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+          - x-ballerina-event-type: "PurchaseOrder/Update"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+          - x-ballerina-event-type: "PurchaseOrder/Delete"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+  RefundReceipt:
+    subscribe:
+      message:
+        oneOf:
+          - x-ballerina-event-type: "RefundReceipt/Create"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+          - x-ballerina-event-type: "RefundReceipt/Update"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+          - x-ballerina-event-type: "RefundReceipt/Delete"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+          - x-ballerina-event-type: "RefundReceipt/Void"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+  SalesReceipt:
+    subscribe:
+      message:
+        oneOf:
+          - x-ballerina-event-type: "SalesReceipt/Create"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+          - x-ballerina-event-type: "SalesReceipt/Update"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+          - x-ballerina-event-type: "SalesReceipt/Delete"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+          - x-ballerina-event-type: "SalesReceipt/Void"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+  TaxAgency:
+    subscribe:
+      message:
+        oneOf:
+          - x-ballerina-event-type: "TaxAgency/Create"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+          - x-ballerina-event-type: "TaxAgency/Update"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+  Term:
+    subscribe:
+      message:
+        oneOf:
+          - x-ballerina-event-type: "Term/Create"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+          - x-ballerina-event-type: "Term/Update"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+  TimeActivity:
+    subscribe:
+      message:
+        oneOf:
+          - x-ballerina-event-type: "TimeActivity/Create"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+          - x-ballerina-event-type: "TimeActivity/Update"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+          - x-ballerina-event-type: "TimeActivity/Delete"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+  Transfer:
+    subscribe:
+      message:
+        oneOf:
+          - x-ballerina-event-type: "Transfer/Create"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+          - x-ballerina-event-type: "Transfer/Update"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+          - x-ballerina-event-type: "Transfer/Delete"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+          - x-ballerina-event-type: "Transfer/Void"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+  Vendor:
+    subscribe:
+      message:
+        oneOf:
+          - x-ballerina-event-type: "Vendor/Create"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+          - x-ballerina-event-type: "Vendor/Update"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+          - x-ballerina-event-type: "Vendor/Delete"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+          - x-ballerina-event-type: "Vendor/Merge"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+  VendorCredit:
+    subscribe:
+      message:
+        oneOf:
+          - x-ballerina-event-type: "VendorCredit/Create"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+          - x-ballerina-event-type: "VendorCredit/Update"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+          - x-ballerina-event-type: "VendorCredit/Delete"
+            externalDocs:
+              description: Webhook docs
+              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
+            payload:
+              $ref: "#/components/schemas/quickBookEvent"
+            summary: Subscribe only to the message events that mention your app
+
+components:
+  schemas:
+    quickBookEvent:
+      additionalProperties: true
+      properties:
+        name:
+          type: string
+          description: The name of the entity that changed (Customer, Invoice, etc.).
+        id:
+          type: string
+          description: The ID of the changed entity.
+        operation:
+          type: string
+          description: The type of the change.
+        lastUpdated:
+          type: string
+          description: The latest timestamp in UTC.
+        deletedID:
+          type: string
+          description: The ID of the deleted or merged entity (this only applies to merge events)

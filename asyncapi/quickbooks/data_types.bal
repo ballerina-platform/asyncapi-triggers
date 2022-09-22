@@ -1,6 +1,6 @@
-// Copyright (c) 2022, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+// Copyright (c) 2022, WSO2 LLC. (http://www.wso2.org) All Rights Reserved.
 //
-// WSO2 Inc. licenses this file to you under the Apache License,
+// WSO2 LLC. licenses this file to you under the Apache License,
 // Version 2.0 (the "License"); you may not use this file except
 // in compliance with the License.
 // You may obtain a copy of the License at
@@ -14,26 +14,27 @@
 // specific language governing permissions and limitations
 // under the License.
 
-# Listener related configurations.
-#
-# + realmIds - An array of company Ids to get the events
-public type ListenerConfigs record {
+@display {label: "Listener Config"}
+public type ListenerConfig record {
+    @display {label: "Verifier Token", "description": "App-specific verifier token to validate the webhook notifications from the callback are from Intuit"}
+    string verificationToken;
+    @display {label: "Realm IDs", "description": "An array of company IDs to get the events"}
     string[] realmIds;
 };
 
-# Record for QuickBook dataChange.
+# Record for QuickBook data change.
 #
 public type QuickBookEvent record {
     # The latest timestamp in UTC.
     string lastUpdated?;
     # The name of the entity that changed (customer, Invoice, etc.).
-    string name;
-    # The type of the change.
-    string operation;
+    string name?;
     # The ID of the deleted or merged entity (this only applies to merge events)
     string deletedID?;
     # The ID of the changed entity.
     string id?;
+    # The type of the change.
+    string operation?;
 };
 
 # Record for event notification for a company.
@@ -45,16 +46,16 @@ public type EventNotification record {
     DataChangeEvent dataChangeEvent;
 };
 
-# Record for set of changes
+# Record for set of QuickBook data changes
 #
-# + entities - Field Description
+# + entities - Set of QuickBook data changes
 public type DataChangeEvent record {
     QuickBookEvent[] entities;
 };
 
 # Record for set of event notification for all companies.
 #
-# + eventNotifications - Field Description
+# + eventNotifications - Set of event notification for all companies
 public type EventNotifications record {|
     EventNotification[] eventNotifications;
 |};
