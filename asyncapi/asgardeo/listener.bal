@@ -1,9 +1,7 @@
 import ballerina/websub;
 import ballerina/http;
 
-@display {
-    label: ""
-}
+@display {label: "Asgardeo", iconPath: "docs/icon.png"}
 public class Listener {
     private websub:Listener websubListener;
     private DispatcherService dispatcherService;
