@@ -27,17 +27,19 @@ service class DispatcherService {
     }
 
     public function onSubscriptionValidationDenied(websub:SubscriptionDeniedError msg) returns websub:Acknowledgement?|error {
-        log:printError("Subscription failed: " + msg.message() + ", error: " + (check msg.cause()).toJsonString());
+        log:printError("Subscription failed: " + msg.message() + ", error: " + (check msg.cause()).toJsonString() + " This may be due to an existing subscription. If so, please continue");
         return websub:ACKNOWLEDGEMENT;
     }
 
     public function onSubscriptionVerification(websub:SubscriptionVerification msg)
                         returns websub:SubscriptionVerificationSuccess|websub:SubscriptionVerificationError {
+        log:printInfo("Subscription successfull");
         return websub:SUBSCRIPTION_VERIFICATION_SUCCESS;
     }
 
     public function onUnsubscriptionVerification(websub:UnsubscriptionVerification msg)
                         returns websub:UnsubscriptionVerificationSuccess|websub:UnsubscriptionVerificationError {
+        log:printInfo("Unsubscription successfull");
         return websub:UNSUBSCRIPTION_VERIFICATION_SUCCESS;
     }
 
