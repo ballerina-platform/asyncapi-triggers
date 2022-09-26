@@ -1,5 +1,6 @@
 import ballerina/websub;
 import ballerina/http;
+import ballerina/cloud;
 
 @display {label: "Asgardeo", iconPath: "docs/icon.png"}
 public class Listener {
@@ -9,11 +10,11 @@ public class Listener {
     private http:ClientConfiguration httpConfig = {};
     private string[] topics = [];
 
-    public function init(ListenerConfig config, int|http:Listener listenOn = 8090) returns error? {
+    public function init(ListenerConfig listenerConfig, @cloud:Expose int|http:Listener listenOn = 8090) returns error? {
         self.websubListener = check new (listenOn);
-        self.config = config;
+        self.config = listenerConfig;
         self.dispatcherService = new DispatcherService();
-        string token = check self.fetchToken(config.tokenEndpointHost, config.clientId, config.clientSecret);
+        string token = check self.fetchToken(listenerConfig.tokenEndpointHost, listenerConfig.clientId, listenerConfig.clientSecret);
         http:ClientConfiguration httpConfig = {
             auth: {
                 token: token
