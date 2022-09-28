@@ -52,7 +52,9 @@ public class Listener {
         websub:SubscriberServiceConfiguration subConfig = {
             target: [self.config.hubURL, self.topics[0]],
             callback: self.config.callbackURL,
-            appendServicePath: false
+            appendServicePath: false,
+            secret: self.config.hubSecret,
+            httpConfig: self.httpConfig
         };
         check self.websubListener.attachWithConfig(self.dispatcherService, subConfig);
         return self.websubListener.'start();
