@@ -27,7 +27,7 @@ service class DispatcherService {
     }
 
     public function onSubscriptionValidationDenied(websub:SubscriptionDeniedError msg) returns websub:Acknowledgement?|error {
-        if (!msg.message().includes("already registered")){
+        if (msg.message().includes("already registered")){
             log:printInfo("Successfully subscribed to the event source");
         } else {
             log:printError("Subscription failed: " + msg.message());
