@@ -52,7 +52,9 @@ public class Listener {
         websub:SubscriberServiceConfiguration subConfig = {
             target: [self.config.hubURL, self.topics[0]],
             callback: self.config.callbackURL,
-            appendServicePath: false
+            appendServicePath: false,
+            secret: self.config.hubSecret,
+            httpConfig: self.httpConfig
         };
         check self.websubListener.attachWithConfig(self.dispatcherService, subConfig);
         return self.websubListener.'start();
@@ -67,10 +69,10 @@ public class Listener {
     }
 
     private isolated function getServiceTypeStr(GenericServiceType serviceRef) returns string {
-        if serviceRef is RegistrationsService {
-            return "RegistrationsService";
-        } else if serviceRef is UserOperationsService {
-            return "UserOperationsService";
+        if serviceRef is RegistrationService {
+            return "RegistrationService";
+        } else if serviceRef is UserOperationService {
+            return "UserOperationService";
         } else {
             return "LoginsService";
         }
@@ -78,9 +80,9 @@ public class Listener {
 
     private isolated function getTopic(GenericServiceType serviceRef) returns string {
         string base = string `${self.config.organization}-`;
-        if serviceRef is RegistrationsService {
+        if serviceRef is RegistrationService {
             return base + "REGISTRATIONS";
-        } else if serviceRef is UserOperationsService {
+        } else if serviceRef is UserOperationService {
             return base + "USER_OPERATIONS";
         } else {
             return base + "LOGINS";
