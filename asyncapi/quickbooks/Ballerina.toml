@@ -1,0 +1,13 @@
+[package]
+license = ["Apache-2.0"]
+keywords = ["Finance/Accounting", "Cost/Paid", "Trigger"]
+org = "ballerinax"
+name = "trigger.quickbooks"
+repository = "https://github.com/ballerina-platform/asyncapi-triggers"
+version = "1.0.0"
+distribution = "2201.1.1"
+icon = "docs/icon.png"
+authors = ["Ballerina"]
+
+[build-options]
+observabilityIncluded = true
