@@ -55,47 +55,47 @@ service class DispatcherService {
                 "urn:ietf:params:registrations:event:addUser" => {
                     AddUserData eventData = check eventMap.get(event).cloneWithType(AddUserData);
                     AddUserEvent addUserEvent = {securityData, eventData};
-                    check self.executeRemoteFunc(addUserEvent, "urn:ietf:params:registrations:event:addUser", "RegistrationsService", "onAddUser");
+                    check self.executeRemoteFunc(addUserEvent, "urn:ietf:params:registrations:event:addUser", "RegistrationService", "onAddUser");
                 }
                 "urn:ietf:params:registrations:event:selfSignUpConfirm" => {
                     GenericUserData eventData = check eventMap.get(event).cloneWithType(GenericUserData);
                     GenericEvent genericEvent = {securityData, eventData};
-                    check self.executeRemoteFunc(genericEvent, "urn:ietf:params:registrations:event:selfSignUpConfirm", "RegistrationsService", "onSelfSignupConfirm");
+                    check self.executeRemoteFunc(genericEvent, "urn:ietf:params:registrations:event:selfSignUpConfirm", "RegistrationService", "onSelfSignupConfirm");
                 }
                 "urn:ietf:params:registrations:event:askPasswordConfirm" => {
                     GenericUserData eventData = check eventMap.get(event).cloneWithType(GenericUserData);
                     GenericEvent genericEvent = {securityData, eventData};
-                    check self.executeRemoteFunc(genericEvent, "urn:ietf:params:registrations:event:askPasswordConfirm", "RegistrationsService", "onAskPasswordConfirm");
+                    check self.executeRemoteFunc(genericEvent, "urn:ietf:params:registrations:event:askPasswordConfirm", "RegistrationService", "onAskPasswordConfirm");
                 }
                 "urn:ietf:params:user-operations:event:lockUser" => {
                     GenericUserData eventData = check eventMap.get(event).cloneWithType(GenericUserData);
                     GenericEvent genericEvent = {securityData, eventData};
-                    check self.executeRemoteFunc(genericEvent, "urn:ietf:params:user-operations:event:lockUser", "UserOperationsService", "onLockUser");
+                    check self.executeRemoteFunc(genericEvent, "urn:ietf:params:user-operations:event:lockUser", "UserOperationService", "onLockUser");
                 }
                 "urn:ietf:params:user-operations:event:unlockUser" => {
                     GenericUserData eventData = check eventMap.get(event).cloneWithType(GenericUserData);
                     GenericEvent genericEvent = {securityData, eventData};
-                    check self.executeRemoteFunc(genericEvent, "urn:ietf:params:user-operations:event:unlockUser", "UserOperationsService", "onUnlockUser");
+                    check self.executeRemoteFunc(genericEvent, "urn:ietf:params:user-operations:event:unlockUser", "UserOperationService", "onUnlockUser");
                 }
                 "urn:ietf:params:user-operations:event:updateUserCredentials" => {
                     GenericUserData eventData = check eventMap.get(event).cloneWithType(GenericUserData);
                     GenericEvent genericEvent = {securityData, eventData};
-                    check self.executeRemoteFunc(genericEvent, "urn:ietf:params:user-operations:event:updateUserCredentials", "UserOperationsService", "onUpdateUserCredentials");
+                    check self.executeRemoteFunc(genericEvent, "urn:ietf:params:user-operations:event:updateUserCredentials", "UserOperationService", "onUpdateUserCredentials");
                 }
                 "urn:ietf:params:user-operations:event:deleteUser" => {
                     GenericUserData eventData = check eventMap.get(event).cloneWithType(GenericUserData);
                     GenericEvent genericEvent = {securityData, eventData};
-                    check self.executeRemoteFunc(genericEvent, "urn:ietf:params:user-operations:event:deleteUser", "UserOperationsService", "onDeleteUser");
+                    check self.executeRemoteFunc(genericEvent, "urn:ietf:params:user-operations:event:deleteUser", "UserOperationService", "onDeleteUser");
                 }
-                "urn:ietf:params:user-operations:event:userGroupUpdate" => {
+                "urn:ietf:params:user-operations:event:updateUserGroup" => {
                     UserGroupUpdateData eventData = check eventMap.get(event).cloneWithType(UserGroupUpdateData);
                     UserGroupUpdateEvent userGroupUpdateEvent = {securityData, eventData};
-                    check self.executeRemoteFunc(userGroupUpdateEvent, "urn:ietf:params:user-operations:event:userGroupUpdate", "UserOperationsService", "onUserGroupUpdate");
+                    check self.executeRemoteFunc(userGroupUpdateEvent, "urn:ietf:params:user-operations:event:updateUserGroup", "UserOperationService", "onUpdateUserGroup");
                 }
                 "urn:ietf:params:logins:event:loginSuccess" => {
                     LoginSuccessData eventData = check eventMap.get(event).cloneWithType(LoginSuccessData);
                     LoginSuccessEvent loginSuccessEvent = {securityData, eventData};
-                    check self.executeRemoteFunc(loginSuccessEvent, "urn:ietf:params:logins:event:loginSuccess", "LoginsService", "onLoginSuccess");
+                    check self.executeRemoteFunc(loginSuccessEvent, "urn:ietf:params:logins:event:loginSuccess", "LoginService", "onLoginSuccess");
                 }
             }
         }
