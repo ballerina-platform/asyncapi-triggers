@@ -40,7 +40,7 @@ jobs:
           packagePAT: ${{ secrets.BALLERINA_BOT_TOKEN }}
           specificTrigger: ${{ github.event.inputs.specific_trigger }}
         run: |
-          ./gradlew build -Prelease=true -Premote=true -Ptrigger=${{ github.event.inputs.specific_trigger }}
+          ./gradlew build -Prelease=false -Premote=true -Ptrigger=${{ github.event.inputs.specific_trigger }}
 
       - name: Push to Dev
         if: github.event.inputs.bal_central_environment == 'DEV'
@@ -50,4 +50,4 @@ jobs:
           packageUser: ${{ secrets.BALLERINA_BOT_USERNAME }}
           packagePAT: ${{ secrets.BALLERINA_BOT_TOKEN }}
         run: |
-          ./gradlew build -Prelease=true -Ptrigger=${{ github.event.inputs.specific_trigger }}
+          ./gradlew build -Prelease=false -Ptrigger=${{ github.event.inputs.specific_trigger }}
