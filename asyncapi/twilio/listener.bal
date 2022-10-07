@@ -15,23 +15,32 @@
 // under the License.
 
 import ballerina/http;
+import ballerina/log;
+import ballerina/mime;
+import ballerina/url;
+
+const string TWILIO_URL = "https://api.twilio.com";
 
 @display {label: "Twilio", iconPath: "docs/icon.png"}
 public class Listener {
     private http:Listener httpListener;
     private DispatcherService dispatcherService;
+    private ListenerConfig config;
+    private string serviceTypeStr = "";
 
-    public function init(int|http:Listener listenOn = 8090) returns error? {
+    public function init(ListenerConfig config, int|http:Listener listenOn = 8090) returns error? {
         if listenOn is http:Listener {
             self.httpListener = listenOn;
         } else {
             self.httpListener = check new (listenOn);
         }
         self.dispatcherService = new DispatcherService();
+        self.config = config;
     }
 
     public isolated function attach(GenericServiceType serviceRef, () attachPoint) returns @tainted error? {
         string serviceTypeStr = self.getServiceTypeStr(serviceRef);
+        self.serviceTypeStr = serviceTypeStr;
         check self.dispatcherService.addServiceRef(serviceTypeStr, serviceRef);
     }
 
@@ -41,6 +50,7 @@ public class Listener {
     }
 
     public isolated function 'start() returns error? {
+        check self.subscribe();
         check self.httpListener.attach(self.dispatcherService, ());
         return self.httpListener.'start();
     }
@@ -60,4 +70,20 @@ public class Listener {
             return "SmsStatusService";
         }
     }
+
+    private isolated function subscribe() returns error? {
+        http:Client twilioClient = check new (TWILIO_URL, {
+            auth: {
+                username: self.config.accountSId,
+                password: self.config.authToken
+            }
+        });
+        string url = self.serviceTypeStr == "CallStatusService" ? "VoiceUrl" : "SmsUrl";
+        string body = url + "=" + check url:encode(self.config.callbackURL, "UTF8");
+        string path =
+        string `/2010-04-01/Accounts/${self.config.accountSId}/IncomingPhoneNumbers/${self.config.phoneNumberSid}.json`;
+        record {} _ = check twilioClient->post(path, body, mediaType = mime:APPLICATION_FORM_URLENCODED);
+        log:printInfo("Webhook subscribed");
+    }
+
 }

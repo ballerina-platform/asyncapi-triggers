@@ -19,20 +19,6 @@ Before using this trigger in your Ballerina application, complete the following:
     ngrok http 8090
     ``` 
     2. Copy the **Forwarding URL** displayed in your terminal. You need this URL to configure **TwilioML SMS**.
-* Follow the steps below to configure TwilioML calls:
-    1. Go to **Phone Numbers -> Manage -> Active Numbers.**
-    2. Click on your number
-    3. Scroll to the **Voice & Fax** section, and paste the **Forwarding URL** you copied via ngrok under **A CALL COMES IN.** 
-    4. Select **WEBHOOK** as the type and **HTTP POST** as the protocol
-    5. Click **Save**
-* Follow the steps below to configure TwilioML SMS:
-    1. Go to **Messaging -> Services.**
-    2. Click **Create a messaging service** to set up a messaging service.
-    3. Enter an appropriate name for the messaging service.
-    4. Add senders to the messaging service.
-    5. In the **Set up integration** step, under **Incoming Messages**, select **Send a webhook**.
-    6. Paste the **Forwarding URL** you copied via ngrok as the **Request URL**.
-    7. Proceed with the next steps and click **Complete Messaging Service Setup**.
 
 ## Quickstart
 To use the Twilio trigger in your Ballerina application, update the `.bal` file as follows:
