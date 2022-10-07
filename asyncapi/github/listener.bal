@@ -15,20 +15,33 @@
 // under the License.
 
 import ballerina/cloud;
-import ballerina/http;
+import ballerina/uuid;
+import ballerina/websub;
+
+const string GITHUB_REST_API_BASE_URL = "https://api.github.com";
+const string HUB = "https://api.github.com/hub";
 
 @display {label: "GitHub", iconPath: "docs/icon.png"}
 public class Listener {
-    private http:Listener httpListener;
     private DispatcherService dispatcherService;
+    private websub:Listener websubListener;
+    private websub:SubscriberServiceConfiguration websubConfig = {};
+    private string token;
 
-    public function init(ListenerConfig listenerConfig = { webhookSecret: DEFAULT_SECRET }, @cloud:Expose int|http:Listener listenOn = 8090) returns error? {
-        if listenOn is http:Listener {
-            self.httpListener = listenOn;
-        } else {
-            self.httpListener = check new (listenOn);
-        }
-        self.dispatcherService = new DispatcherService(listenerConfig);
+    public function init(ListenerConfig config, @cloud:Expose int listenOn = 8090) returns error? {
+        self.websubListener = check new (listenOn);
+        self.dispatcherService = new DispatcherService();
+        self.websubConfig = {
+            target: [HUB, config.topic],
+            callback: config.callbackURL,
+            secret: uuid:createType1AsString(),
+            httpConfig: {
+                auth: {
+                    token: config.token
+                }
+            }
+        };
+        self.token = config.token;
     }
 
     public isolated function attach(GenericServiceType serviceRef, () attachPoint) returns @tainted error? {
@@ -42,16 +55,16 @@ public class Listener {
     }
 
     public isolated function 'start() returns error? {
-        check self.httpListener.attach(self.dispatcherService, ());
-        return self.httpListener.'start();
+        check self.websubListener.attachWithConfig(self.dispatcherService, self.websubConfig);
+        return self.websubListener.'start();
     }
 
     public isolated function gracefulStop() returns @tainted error? {
-        return self.httpListener.gracefulStop();
+        return self.websubListener.gracefulStop();
     }
 
     public isolated function immediateStop() returns error? {
-        return self.httpListener.immediateStop();
+        return self.websubListener.immediateStop();
     }
 
     private isolated function getServiceTypeStr(GenericServiceType serviceRef) returns string {
@@ -78,6 +91,7 @@ public class Listener {
         }
 
     }
+
 }
 
 const string DEFAULT_SECRET = "";

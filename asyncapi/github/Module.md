@@ -17,33 +17,28 @@ Before using this trigger in your Ballerina application, complete the following:
 To use the GitHub Trigger in your Ballerina application, update the  .bal file as follows:
 
 ### Step 1: Import the GitHub Webhook Ballerina library
-First, import the ballerinax/github.webhook and ballerina/websub modules into the Ballerina project as follows.
+First, import the ballerinax/trigger.github module into the Ballerina project as follows.
 
 ```ballerina
     import ballerinax/trigger.github;
 ```
 
 ### Step 2: Initialize the GitHub Webhook Listener
-Initialize the Trigger by providing the listener config & port number/httpListener object.
+Initialize the Trigger by providing `github:ListenerConfig` & port number.
 
 ```ballerina
-    configurable github:ListenerConfig userInput = {
-        secret: "xxxxxx"
+    github:ListenerConfig config = {
+        topic: "",
+        callbackURL = "",
+        token = ""
     };
-    listener github:Listener webhookListener = new (userInput, 8090);
-```
 
-Listener config is not mandatory If you haven't setup secret in webhook page we can omit it and initialize as follows.
-
-```ballerina
-    listener github:Listener webhookListener = new (listenOn = 8090);
+    listener github:Listener webhookListener = new (config, 8090);
 ```
 
 If you don't provide a port it will use the default port which is 8090.
 
-```ballerina
-    listener github:Listener webhookListener = new ();
-```
+Topic represents the URI of the GitHub repository to subscribe to. The URI must be in the format of `https://github.com/{owner}/{repo}/events/{event}.json`.
 
 ### Step 3: Use the correct service type to implement the service
 Use the correct service type for the corresponding channel when implementing the service.
@@ -93,13 +88,6 @@ The remote functions can be provided as follows.
 ### Step 5: Run the service 
 Use `bal run` command to compile and run the Ballerina program.  
 
-### Step 5: Configure Github webhook with the URL of the service
-- Create a webhook in github following [github documentation](https://docs.github.com/en/developers/webhooks-and-events/webhooks/creating-webhooks)
-- Provide the public URL of the started service as the Payload URL (Add a trailing / to the URL if its not present). 
-- Provide application/json for the content type. 
-- Support for secret field will be available in the next github trigger releases. 
-- Select the list of events you need to subscribe to and click on Add webhook.
 
-This will add a subscription to github event api and the ballerina service functions will be triggerred once an event is fired.
+This will add a subscription to github event api and the ballerina service functions will be triggered once an event is fired.
 
-**[You can find a list of samples here](https://github.com/ballerina-platform/module-ballerinax-github/tree/master/github/samples/listener)**
