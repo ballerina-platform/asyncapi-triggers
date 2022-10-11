@@ -4,9 +4,9 @@ keywords = ["Communication chat/voice", "Cost/Freemium" , "Vendor/Twilio"]
 org = "ballerinax"
 name = "trigger.twilio"
 repository = "https://github.com/ballerina-platform/asyncapi-triggers"
-version = "0.7.1"
+version = "0.8.0"
 icon = "docs/icon.png"
-distribution = "2201.1.1"
+distribution = "2201.2.1"
 authors = ["Ballerina"]
 
 [build-options]
