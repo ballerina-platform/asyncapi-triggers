@@ -1328,6 +1328,24 @@ public enum ProjectCardActions{
     PROJECT_CARD_DELETED = "deleted"
 }
 
+# Represent GitHub meta event.
+#
+# + action - Action of the meta event
+# + hook_id - The ID of the webhook that triggered the ping.
+# + hook - The webhook configuration.
+# + repository - The repository where the event occurred.
+# + sender - The user that triggered the event.
+# + organization - Webhook payloads contain the organization object when the webhook is configured for an organization or the event occurs from activity in a repository owned by an organization.
+public type MetaEvent record {|
+    string action;
+    int hook_id;
+    Hook hook;
+    Repository repository;
+    User sender;
+    Organization organization?;
+|};
+
+
 # Represent issue event action types.
 #
 # + ISSUE_OPENED - Issue opened
@@ -1507,4 +1525,4 @@ public type Acknowledgement record {
 
 public type GenericDataType PingEvent|ProjectCardEvent|WatchEvent|ReleaseEvent|PushEvent|PullRequestReviewCommentEvent
                         |PullRequestReviewEvent|PullRequestEvent|ForkEvent|IssueCommentEvent|IssuesEvent|LabelEvent
-                        |MilestoneEvent|CreateEvent;
+                        |MilestoneEvent|CreateEvent|MetaEvent;
