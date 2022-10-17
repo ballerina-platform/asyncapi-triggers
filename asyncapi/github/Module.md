@@ -101,5 +101,3 @@ Use `bal run` command to compile and run the Ballerina program.
 - Select the list of events you need to subscribe to and click on Add webhook.
 
 This will add a subscription to github event api and the ballerina service functions will be triggerred once an event is fired.
-
-**[You can find a list of samples here](https://github.com/ballerina-platform/module-ballerinax-github/tree/master/github/samples/listener)**
