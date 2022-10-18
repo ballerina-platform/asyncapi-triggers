@@ -6,7 +6,7 @@ name = "trigger.asgardeo"
 repository = "https://github.com/ballerina-platform/asyncapi-triggers"
 version = "0.1.1"
 distribution = "2201.1.1"
-icon = "docs/icon.png"
+# icon = "docs/icon.png" // commenting this temporarily, since there is a bug in Ballerina DEV central, can't push modules with icons
 authors = ["Ballerina"]
 
 [build-options]
