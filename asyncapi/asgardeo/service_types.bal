@@ -1,7 +1,7 @@
 public type RegistrationService service object {
     remote function onAddUser(AddUserEvent event) returns error?;
-    remote function onSelfSignupConfirm(GenericEvent event) returns error?;
-    remote function onAskPasswordConfirm(GenericEvent event) returns error?;
+    remote function onConfirmSelfSignup(GenericEvent event) returns error?;
+    remote function onAcceptUserInvite(GenericEvent event) returns error?;
 };
 
 public type UserOperationService service object {
