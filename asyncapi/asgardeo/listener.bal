@@ -74,7 +74,7 @@ public class Listener {
         } else if serviceRef is UserOperationService {
             return "UserOperationService";
         } else {
-            return "LoginsService";
+            return "LoginService";
         }
     }
 
