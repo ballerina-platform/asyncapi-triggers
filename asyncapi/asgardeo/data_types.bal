@@ -53,7 +53,7 @@ public type AddUserData record {
     string userName?;
     string[] roleList?;
     string userId?;
-    map<string> userClaims?;
+    map<string> claims?;
 };
 
 public type AddUserEvent record {
