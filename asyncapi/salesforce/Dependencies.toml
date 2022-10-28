@@ -395,7 +395,7 @@ modules = [
 [[package]]
 org = "ballerinax"
 name = "trigger.salesforce"
-version = "0.7.0"
+version = "0.8.0"
 dependencies = [
 	{org = "ballerina", name = "io"},
 	{org = "ballerina", name = "jballerina.java"},

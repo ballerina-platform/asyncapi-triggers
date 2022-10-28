@@ -305,7 +305,7 @@ modules = [
 [[package]]
 org = "ballerinax"
 name = "trigger.hubspot"
-version = "0.7.0"
+version = "0.8.0"
 dependencies = [
 	{org = "ballerina", name = "crypto"},
 	{org = "ballerina", name = "http"},

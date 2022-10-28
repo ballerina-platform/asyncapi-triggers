@@ -293,7 +293,7 @@ modules = [
 [[package]]
 org = "ballerinax"
 name = "trigger.aayu.mftg.as2"
-version = "0.7.0"
+version = "0.8.0"
 dependencies = [
 	{org = "ballerina", name = "http"},
 	{org = "ballerinai", name = "observe"},
