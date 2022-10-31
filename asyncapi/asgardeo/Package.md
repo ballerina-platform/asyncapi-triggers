@@ -1,7 +1,7 @@
-Listen to Asgardeo Events API from Ballerina
+Listen to [Asgardeo](https://wso2.com/asgardeo/) Events API from Ballerina
 
 ## Package overview
-The `ballerinax/trigger.asgardeo` is a [Ballerina](https://ballerina.io/) trigger for Asgardeo.
+The `ballerinax/trigger.asgardeo` is a [Ballerina](https://ballerina.io/) trigger for [Asgardeo](https://wso2.com/asgardeo/).
 This package provides the capability to access Asgaredo Events API.
 
 ### Compatibility
