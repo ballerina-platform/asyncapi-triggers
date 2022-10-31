@@ -290,7 +290,7 @@ function testWebhookNotificationOnIssueCreation() {
     if (issueCreationPayload is error) {
         test:assertFail(msg = "Issue creation failed: " + issueCreationPayload.message());
     } else {
-        test:assertTrue(issueCreationPayload.statusCode === 200, msg = "expected a 200 status code. Found " + issueCreationPayload.statusCode.toBalString());
+        test:assertTrue(issueCreationPayload.statusCode === 200 || issueCreationPayload.statusCode === 201, msg = "expected a 200/201 status code. Found " + issueCreationPayload.statusCode.toBalString());
         test:assertEquals(issueCreationPayload.getTextPayload(), "Event acknoledged successfully", msg = "");
     }
 
@@ -566,7 +566,7 @@ function testWebhookNotificationOnIssueLabeling() {
     if (issueLabelledPayload is error) {
         test:assertFail(msg = "Issue creation failed: " + issueLabelledPayload.message());
     } else {
-        test:assertTrue(issueLabelledPayload.statusCode === 200, msg = "expected a 200 status code. Found " + issueLabelledPayload.statusCode.toBalString());
+        test:assertTrue(issueLabelledPayload.statusCode === 200 || issueLabelledPayload.statusCode === 201, msg = "expected a 200/201 status code. Found " + issueLabelledPayload.statusCode.toBalString());
         test:assertEquals(issueLabelledPayload.getTextPayload(), "Event acknoledged successfully", msg = "");
     }
 
@@ -837,7 +837,7 @@ function testWebhookNotificationOnIssueAssignment() {
     if (issueAssignmentPayload is error) {
         test:assertFail(msg = "Issue creation failed: " + issueAssignmentPayload.message());
     } else {
-        test:assertTrue(issueAssignmentPayload.statusCode === 200, msg = "expected a 200 status code. Found " + issueAssignmentPayload.statusCode.toBalString());
+        test:assertTrue(issueAssignmentPayload.statusCode === 200 || issueAssignmentPayload.statusCode === 201, msg = "expected a 200/201 status code. Found " + issueAssignmentPayload.statusCode.toBalString());
         test:assertEquals(issueAssignmentPayload.getTextPayload(), "Event acknoledged successfully", msg = "");
     }
 

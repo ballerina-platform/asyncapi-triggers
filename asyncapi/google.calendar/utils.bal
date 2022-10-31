@@ -17,6 +17,7 @@
 import ballerina/http;
 import ballerina/log;
 import ballerina/uuid;
+import ballerinax/'client.config;
 import ballerinax/googleapis.calendar;
 
 # Create subscription to get notification.
@@ -94,7 +95,8 @@ isolated function toEventResponse(json payload) returns calendar:EventResponse|e
 }
 
 isolated function getClient(calendar:ConnectionConfig config) returns http:Client|error {
-    return check new (BASE_URL, config);
+    http:ClientConfiguration httpClientConfig = check config:constructHTTPClientConfig(config);
+    return check new (BASE_URL, httpClientConfig);
 }
 
 # Prepare URL.

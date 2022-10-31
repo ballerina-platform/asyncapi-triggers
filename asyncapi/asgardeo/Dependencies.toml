@@ -315,7 +315,7 @@ modules = [
 [[package]]
 org = "ballerinax"
 name = "trigger.asgardeo"
-version = "0.0.7"
+version = "0.1.0"
 dependencies = [
 	{org = "ballerina", name = "cloud"},
 	{org = "ballerina", name = "http"},

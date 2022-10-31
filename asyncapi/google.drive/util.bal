@@ -20,6 +20,7 @@ import ballerina/log;
 import ballerina/time;
 import ballerina/url;
 import ballerina/uuid;
+import ballerinax/'client.config;
 
 # Subscribes to all the changes or specific fileId.
 # + callbackURL - Registered callback URL of the 
@@ -425,7 +426,8 @@ isolated function stopChannelRequest(http:Client httpClient, string path, json j
 isolated function getClient(drive:ConnectionConfig driveConfig) returns http:Client|error {
     drive:ConnectionConfig connectionConfig = driveConfig;
     connectionConfig.http1Settings = {chunking: http:CHUNKING_NEVER};
-    return check new (BASE_URL, connectionConfig);
+    http:ClientConfiguration httpClientConfig = check config:constructHTTPClientConfig(connectionConfig);
+    return check new (BASE_URL, httpClientConfig);
 }
 
 isolated function listChanges(drive:ConnectionConfig driveConfig, string pageToken) returns @tainted ChangesListResponse|error {

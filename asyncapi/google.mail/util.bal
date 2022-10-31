@@ -17,6 +17,7 @@
 import ballerina/log;
 import ballerina/uuid;
 import ballerina/http;
+import ballerinax/'client.config;
 import ballerinax/googleapis.gmail as gmail;
 
 type mapJson map<json>;
@@ -174,7 +175,8 @@ isolated function stop(http:Client gmailHttpClient, string userId) returns @tain
 }
 
 isolated function getClient(gmail:ConnectionConfig config) returns http:Client|error {
-    return check new (gmail:BASE_URL, config);
+    http:ClientConfiguration httpClientConfig = check config:constructHTTPClientConfig(config);
+    return check new (gmail:BASE_URL, httpClientConfig);
 }
 
 # Retrieves whether the particular remote method is available.

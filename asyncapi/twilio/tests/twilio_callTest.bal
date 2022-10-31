@@ -112,7 +112,7 @@ function testTwilioCallRinging() {
     if (callRingingPayload is error) {
         test:assertFail(msg = "Call ringing failed" + callRingingPayload.message());
     } else {
-        test:assertTrue(callRingingPayload.statusCode === 200, msg = "Expected a 200 status code. Found" + callRingingPayload.statusCode.toString());
+        test:assertTrue(callRingingPayload.statusCode === 200 || callRingingPayload.statusCode === 201, msg = "Expected a 200/201 status code. Found" + callRingingPayload.statusCode.toString());
         test:assertEquals(callRingingPayload.getTextPayload(), "Event acknowledged successfully", msg = "Expected payload not received");
     }
 
@@ -135,7 +135,7 @@ function testTwilioCallCompleted() {
     if (callCompletedPayload is error) {
         test:assertFail(msg = "Call completion failed" + callCompletedPayload.message());
     } else {
-        test:assertTrue(callCompletedPayload.statusCode === 200, msg = "Expected a 200 status code. Found" + callCompletedPayload.statusCode.toString());
+        test:assertTrue(callCompletedPayload.statusCode === 200 || callCompletedPayload.statusCode === 201, msg = "Expected a 200/201 status code. Found" + callCompletedPayload.statusCode.toString());
         test:assertEquals(callCompletedPayload.getTextPayload(), "Event acknowledged successfully", msg = "Expected payload not received");
     }
     int counter = 10;
@@ -157,7 +157,7 @@ function testTwilioCallCanceled() {
     if (callCanceledPayload is error) {
         test:assertFail(msg = "Call cancellation failed" + callCanceledPayload.message());
     } else {
-        test:assertTrue(callCanceledPayload.statusCode === 200, msg = "Expected a 200 status code. Found" + callCanceledPayload.statusCode.toString());
+        test:assertTrue(callCanceledPayload.statusCode === 200 || callCanceledPayload.statusCode === 201, msg = "Expected a 200/201 status code. Found" + callCanceledPayload.statusCode.toString());
         test:assertEquals(callCanceledPayload.getTextPayload(), "Event acknowledged successfully", msg = "Expected payload not received");
     }
 

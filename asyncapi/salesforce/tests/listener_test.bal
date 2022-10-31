@@ -96,7 +96,7 @@ configurable string & readonly baseUrl = os:getEnv("EP_URL");
 // Using direct-token config for client configuration
 sfdc:ConnectionConfig sfConfig = {
     baseUrl: baseUrl,
-    clientConfig: {
+    auth: {
         clientId: clientId,
         clientSecret: clientSecret,
         refreshToken: refreshToken,
