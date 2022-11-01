@@ -2,7 +2,6 @@
 public type ListenerConfig record {
     string clientId;
     string clientSecret;
-    string hubSecret;
     string organization;
     string tokenEndpointHost;
     string callbackURL;
