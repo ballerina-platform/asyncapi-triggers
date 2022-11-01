@@ -1,6 +1,7 @@
 import ballerina/websub;
 import ballerina/http;
 import ballerina/cloud;
+import ballerina/crypto;
 
 @display {label: "Asgardeo", iconPath: "docs/icon.png"}
 public class Listener {
@@ -21,6 +22,12 @@ public class Listener {
             }
         };
         self.httpConfig = httpConfig;
+    }
+
+    private isolated function getMd5Hash(string str) returns string {
+        byte[] input = str.toBytes();
+        byte[] output = crypto:hashMd5(input);
+        return output.toBase16();
     }
 
     private isolated function fetchToken(string tokenEndpoint, string clientId, string clientSecret) returns string|error {
@@ -49,11 +56,12 @@ public class Listener {
     }
 
     public isolated function 'start() returns error? {
+        string hubSecret = self.getMd5Hash(self.config.callbackURL);
         websub:SubscriberServiceConfiguration subConfig = {
             target: [self.config.hubURL, self.topics[0]],
             callback: self.config.callbackURL,
             appendServicePath: false,
-            secret: self.config.hubSecret,
+            secret: hubSecret,
             httpConfig: self.httpConfig
         };
         check self.websubListener.attachWithConfig(self.dispatcherService, subConfig);
