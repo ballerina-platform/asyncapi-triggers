@@ -59,7 +59,7 @@ channels:
     subscribe:
       message:
         oneOf:
-          - x-ballerina-event-type: urn:ietf:params:notifications:notificationEvent
+          - x-ballerina-event-type: urn:ietf:params:notifications:smsOtp
             payload:
               $ref: '#/components/schemas/SMSOTPNotificationEvent'
             title: SMS OTP Notification event.
