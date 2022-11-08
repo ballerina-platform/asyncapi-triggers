@@ -61,8 +61,8 @@ channels:
         oneOf:
           - x-ballerina-event-type: urn:ietf:params:notifications:notificationEvent
             payload:
-              $ref: '#/components/schemas/NotificationEvent'
-            title: Notification event.
+              $ref: '#/components/schemas/SMSOTPNotificationEvent'
+            title: SMS OTP Notification event.
 components:
   schemas:
     GenericUserData:
@@ -239,30 +239,31 @@ components:
         userName:
           type: string
           example: john@mailinator.com
-    NotificationEvent:
-      type: object
-      properties:
-        securityData:
-          $ref: '#/components/schemas/GenericSecurityData'
-        eventData:
-          $ref: '#/components/schemas/NotificationEventData'    
-    NotificationEventData:
-      type: object
-      properties:
-        organizationId:
-          type: string
-          example: '1234'
-        organizationName:
-          type: string
-          example: myorg
-        notificationType:
-          type: string
-          example: SMS OTP
-        eventPayload:
-          type: object
-          additionalProperties:
-            type: string
-          example:
-            sendTo: '12345678'
-            messageBody: >-
-              Your one-time password for the sms_otp_singlepage_App is 341304. This expires in 5 minutes.
+    SMSOTPNotificationEvent:
+     type: object
+     properties:
+       securityData:
+         $ref: '#/components/schemas/GenericSecurityData'
+       eventData:
+         $ref: '#/components/schemas/SMSOTPNotificationEventData'   
+    SMSOTPNotificationEventData:
+     type: object
+     properties:
+       organizationId:
+         type: string
+         example: '1234'
+       organizationName:
+         type: string
+         example: myorg
+       userId:
+         type: string
+         example: e3dca90f-e1e3-4f4b-83e4-5743ecce570f
+       userName:
+         type: string
+         example: john@gmail.com
+       sendTo:
+         type: string
+         example: '12345678'
+       messageBody:
+         type: string
+         example: Your one-time password for the sms_otp_singlepage_App is 341304. This expires in 5 minutes.
