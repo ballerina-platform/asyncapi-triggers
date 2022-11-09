@@ -4,9 +4,9 @@ keywords = ["Sales & CRM/Customer Relationship Management", "Cost/Freemium"]
 org = "ballerinax"
 name = "trigger.salesforce"
 repository = "https://github.com/ballerina-platform/asyncapi-triggers"
-version = "0.8.0"
+version = "0.8.1"
 icon="docs/icon.png"
-distribution = "2201.2.1"
+distribution = "2201.2.3"
 authors = ["Ballerina"]
 
 [build-options]
