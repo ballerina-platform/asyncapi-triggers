@@ -1,8 +1,8 @@
 ## Overview
 
-The `ballerinax/trigger.asgardeo` module provides a Listener to grasp events triggered from your [Asgardeo](https://wso2.com/asgardeo/) Organization. This functionality is provided by Asgardeo Events API.
+The `ballerinax/trigger.asgardeo` module provides a Listener to grasp events triggered from your [Asgardeo](https://wso2.com/asgardeo/) organization. This functionality is provided by the [Asgardeo Events API.](https://wso2.com/asgardeo/docs/references/asgardeo-events/)
 
-The Asgardeo Trigger module allows you to listen to following events occur in your Asgardeo organization.
+The Asgardeo Trigger module allows you to listen to the following events when they occur in your Asgardeo organization:
 
 - Registration Events
    - Add User Event
@@ -17,16 +17,20 @@ The Asgardeo Trigger module allows you to listen to following events occur in yo
 - Login Events
    - Login Success Event
 
+Learn more about Asgardeo events from [here.](https://wso2.com/asgardeo/docs/references/asgardeo-events/#configure-asgardeo-to-publish-events)
+
+
 ## Prerequisites
 - An organization in Asgardeo. Learn how to sign up and create an organization from [here](https://wso2.com/asgardeo/docs/get-started/create-asgardeo-account/#sign-up).
-- An organization in Choreo created with the same email address and under the same name that was used to create the organization in Asgardeo.
-- Enable event publishing in your Asgardeo Organization.
+- An organization in [Choreo](https://wso2.com/choreo/) created with the same email address and under the same name that was used to create the organization in Asgardeo.
+- Enable event publishing in your Asgardeo Organization. Learn how to enable from [here.](https://wso2.com/asgardeo/docs/references/asgardeo-events/#configure-asgardeo-to-publish-events)
 
 ## Quickstart
 
 ### Step 1: Create a webhook in Choreo to receive Asgardeo events
 
-- To use the Asgardeo listener, please go the [Choreo Console](https://console.choreo.dev) and create a webhook.
+To use the Asgardeo listener, go to the [Choreo Console](https://console.choreo.dev) and create a webhook  with **Asgardeo** as the trigger type.
+Learn more about how to develop a webhook from [here.](https://wso2.com/choreo/docs/webhook/#develop-a-webhook)
 
 ### Step 2: Program a logic to trigger for Asgardeo events
 
@@ -63,4 +67,4 @@ The Asgardeo Trigger module allows you to listen to following events occur in yo
     ```
 
 ### Step 3: Deploy the Webhook in Choreo
-- Then navigate to the deploy tab and click on the Config & Deploy button to start the deploy process.
+- Then navigate to the deploy tab and click on the Config & Deploy button to start the deploy process. Learn more about how to deploy a webhook from [here.](https://wso2.com/choreo/docs/webhook/#deploy-a-webhook)
