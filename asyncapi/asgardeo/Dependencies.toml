@@ -9,7 +9,7 @@ dependencies-toml-version = "2"
 [[package]]
 org = "ballerina"
 name = "auth"
-version = "2.3.0"
+version = "2.3.1"
 dependencies = [
 	{org = "ballerina", name = "crypto"},
 	{org = "ballerina", name = "jballerina.java"},
@@ -32,7 +32,7 @@ dependencies = [
 [[package]]
 org = "ballerina"
 name = "cloud"
-version = "2.2.0"
+version = "2.2.1"
 modules = [
 	{org = "ballerina", packageName = "cloud", moduleName = "cloud"}
 ]
@@ -44,6 +44,9 @@ version = "2.2.2"
 dependencies = [
 	{org = "ballerina", name = "jballerina.java"},
 	{org = "ballerina", name = "time"}
+]
+modules = [
+	{org = "ballerina", packageName = "crypto", moduleName = "crypto"}
 ]
 
 [[package]]
@@ -62,7 +65,7 @@ dependencies = [
 [[package]]
 org = "ballerina"
 name = "http"
-version = "2.3.0"
+version = "2.3.1"
 dependencies = [
 	{org = "ballerina", name = "auth"},
 	{org = "ballerina", name = "cache"},
@@ -106,7 +109,7 @@ version = "0.0.0"
 [[package]]
 org = "ballerina"
 name = "jwt"
-version = "2.3.0"
+version = "2.3.1"
 dependencies = [
 	{org = "ballerina", name = "cache"},
 	{org = "ballerina", name = "crypto"},
@@ -208,7 +211,7 @@ dependencies = [
 [[package]]
 org = "ballerina"
 name = "oauth2"
-version = "2.3.0"
+version = "2.3.1"
 dependencies = [
 	{org = "ballerina", name = "cache"},
 	{org = "ballerina", name = "crypto"},
@@ -315,9 +318,10 @@ modules = [
 [[package]]
 org = "ballerinax"
 name = "trigger.asgardeo"
-version = "0.1.1"
+version = "0.3.0"
 dependencies = [
 	{org = "ballerina", name = "cloud"},
+	{org = "ballerina", name = "crypto"},
 	{org = "ballerina", name = "http"},
 	{org = "ballerina", name = "log"},
 	{org = "ballerina", name = "websub"},
