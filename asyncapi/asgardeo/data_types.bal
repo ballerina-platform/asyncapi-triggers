@@ -2,7 +2,6 @@
 public type ListenerConfig record {
     string clientId;
     string clientSecret;
-    string hubSecret;
     string organization;
     string tokenEndpointHost;
     string callbackURL;
@@ -53,7 +52,7 @@ public type AddUserData record {
     string userName?;
     string[] roleList?;
     string userId?;
-    map<string> userClaims?;
+    map<string> claims?;
 };
 
 public type AddUserEvent record {
