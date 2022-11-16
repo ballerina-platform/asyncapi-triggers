@@ -15,6 +15,7 @@ public type GenericUserData record {
     string userStoreName?;
     string userName?;
     string userId?;
+    map<string> claims?;
 };
 
 public type GenericSecurityData record {
