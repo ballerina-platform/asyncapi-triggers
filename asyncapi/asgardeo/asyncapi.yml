@@ -255,12 +255,6 @@ components:
        organizationName:
          type: string
          example: myorg
-       userId:
-         type: string
-         example: e3dca90f-e1e3-4f4b-83e4-5743ecce570f
-       userName:
-         type: string
-         example: john@gmail.com
        sendTo:
          type: string
          example: '12345678'
