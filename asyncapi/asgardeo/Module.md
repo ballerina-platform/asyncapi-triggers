@@ -1,23 +1,22 @@
 ## Overview
 
-The `ballerinax/trigger.asgardeo` module provides a Listener to grasp events triggered from your [Asgardeo](https://wso2.com/asgardeo/) organization. This functionality is provided by the [Asgardeo Events API.](https://wso2.com/asgardeo/docs/references/asgardeo-events/)
-
+The `ballerinax/trigger.asgardeo` module provides a Listener to grasp events triggered from your [Asgardeo](https://wso2.com/asgardeo/) organization. This functionality is provided by the [Asgardeo Events API](https://wso2.com/asgardeo/docs/references/asgardeo-events/).
 The Asgardeo Trigger module allows you to listen to the following events when they occur in your Asgardeo organization:
 
-- Registration Events
+- **Registration Events**
    - Add User Event
    - Accept User Invite Event
    - Confirm Self Sign Up Event
-- User Operation Events
+- **User Operation Events**
    - User Account Lock Event
    - User Account Unlock Event
    - User Credential Update Event
    - User Delete Event
    - User Group Update Event
-- Login Events
+- **Login Events**
    - Login Success Event
 
-Learn more about Asgardeo events from [here.](https://wso2.com/asgardeo/docs/references/asgardeo-events/#configure-asgardeo-to-publish-events)
+Learn more about [Asgardeo events](https://wso2.com/asgardeo/docs/references/asgardeo-events/#configure-asgardeo-to-publish-events).
 
 
 ## Prerequisites
@@ -27,16 +26,17 @@ Learn more about Asgardeo events from [here.](https://wso2.com/asgardeo/docs/ref
 
 ## Quickstart
 
+Follow the steps given below to try out the Asgardeo listener.
 ### Step 1: Create a webhook in Choreo to receive Asgardeo events
 
 To use the Asgardeo listener, go to the [Choreo Console](https://console.choreo.dev) and create a webhook  with **Asgardeo** as the trigger type.
-Learn more about how to develop a webhook from [here.](https://wso2.com/choreo/docs/webhook/#develop-a-webhook)
+Learn more about [how to develop a webhook](https://wso2.com/choreo/docs/webhook/#develop-a-webhook).
 
 ### Step 2: Program a logic to trigger for Asgardeo events
 
-- Now you can implement listener remote functions supported by this connector.
-- Write a remote function to receive a particular event type. 
-- Implement your logic within that function as shown in the below sample. This is an example of logging Asgardeo events in the Choreo console.
+Now you can implement listener remote functions supported by this connector.
+1. Write a remote function to receive a particular event type. 
+2. Implement your logic within that function as shown in the below sample. This is an example of logging Asgardeo events in the Choreo console.
 
     ```ballerina
     import ballerinax/trigger.asgardeo;
@@ -67,4 +67,4 @@ Learn more about how to develop a webhook from [here.](https://wso2.com/choreo/d
     ```
 
 ### Step 3: Deploy the Webhook in Choreo
-- Then navigate to the deploy tab and click on the Config & Deploy button to start the deploy process. Learn more about how to deploy a webhook from [here.](https://wso2.com/choreo/docs/webhook/#deploy-a-webhook)
+Once you have created the webhook, go to the **Deploy** tab on the Choreo Console and click on **Config & Deploy** button to start the deployment process. Learn more about how to deploy a webhook from [here.](https://wso2.com/choreo/docs/webhook/#deploy-a-webhook).
