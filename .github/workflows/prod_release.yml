@@ -6,6 +6,13 @@ on:
       specific_trigger:
         description: Specific Trigger to Release
         required: false
+      release_build:
+        description: Do a Release
+        type: choice
+        options:
+          - 'true'
+          - 'false'
+        required: true
 
 jobs:
   container:
@@ -24,4 +31,4 @@ jobs:
           packageUser: ${{ secrets.BALLERINA_BOT_USERNAME }}
           packagePAT: ${{ secrets.BALLERINA_BOT_TOKEN }}
         run: |
-          ./gradlew build -Prelease=true -Ptrigger=${{ github.event.inputs.specific_trigger }}
+          ./gradlew build -Prelease=${{ github.event.inputs.release_build }} -Ptrigger=${{ github.event.inputs.specific_trigger }}
