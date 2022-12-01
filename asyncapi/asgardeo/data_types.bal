@@ -89,4 +89,16 @@ public type UserGroupUpdateData record {
     User[] addedUsers?;
 };
 
-public type GenericDataType GenericEvent|UserGroupUpdateEvent|LoginSuccessEvent|AddUserEvent;
+public type SmsOtpNotificationData record {
+    int organizationId?;
+    string organizationName?;
+    string sendTo?;
+    string messageBody?;
+};
+
+public type SmsOtpNotificationEvent record {
+    SmsOtpNotificationData eventData?;
+    GenericSecurityData securityData?;
+};
+
+public type GenericDataType GenericEvent|UserGroupUpdateEvent|LoginSuccessEvent|AddUserEvent|SmsOtpNotificationEvent;

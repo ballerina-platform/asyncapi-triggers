@@ -97,6 +97,11 @@ service class DispatcherService {
                     LoginSuccessEvent loginSuccessEvent = {securityData, eventData};
                     check self.executeRemoteFunc(loginSuccessEvent, "urn:ietf:params:logins:loginSuccess", "LoginService", "onLoginSuccess");
                 }
+                "urn:ietf:params:notifications:smsOtp" => {
+                    SmsOtpNotificationData eventData = check eventMap.get(event).cloneWithType(SmsOtpNotificationData);
+                    SmsOtpNotificationEvent smsOtpNotificationEvent = {securityData, eventData};
+                    check self.executeRemoteFunc(smsOtpNotificationEvent, "urn:ietf:params:notifications:smsOtp", "NotificationService", "onSmsOtp");
+                }
             }
         }
     }
