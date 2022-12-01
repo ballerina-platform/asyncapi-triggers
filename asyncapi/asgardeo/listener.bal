@@ -81,6 +81,8 @@ public class Listener {
             return "RegistrationService";
         } else if serviceRef is UserOperationService {
             return "UserOperationService";
+        } else if serviceRef is NotificationService {
+            return "NotificationService";
         } else {
             return "LoginService";
         }
@@ -92,6 +94,8 @@ public class Listener {
             return base + "REGISTRATIONS";
         } else if serviceRef is UserOperationService {
             return base + "USER_OPERATIONS";
+        } else if serviceRef is NotificationService {
+            return base + "NOTIFICATIONS";
         } else {
             return base + "LOGINS";
         }

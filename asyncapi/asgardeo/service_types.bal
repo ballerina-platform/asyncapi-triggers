@@ -16,4 +16,8 @@ public type LoginService service object {
     remote function onLoginSuccess(LoginSuccessEvent event) returns error?;
 };
 
-public type GenericServiceType RegistrationService|UserOperationService|LoginService;
+public type NotificationService service object {
+    remote function onSmsOtp(SmsOtpNotificationEvent event) returns error?;
+};
+
+public type GenericServiceType RegistrationService|UserOperationService|LoginService|NotificationService;
