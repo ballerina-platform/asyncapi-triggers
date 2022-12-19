@@ -1,0 +1,13 @@
+[package]
+license = ["Apache-2.0"]
+keywords = ["Cost/Freemium" , "Vendor/Twitter", "Trigger"]
+org = "ballerinax"
+name = "trigger.twitter"
+repository = "https://github.com/ballerina-platform/asyncapi-triggers"
+version = "1.0.0"
+distribution = "2201.0.4"
+icon = "docs/icon.png"
+authors = ["Ballerina"]
+
+[build-options]
+observabilityIncluded = true
