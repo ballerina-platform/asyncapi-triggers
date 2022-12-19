@@ -14,6 +14,24 @@
 // specific language governing permissions and limitations
 // under the License.
 
+# Listener Configuration.
+#
+# + accountSId - Twilio account SID  
+# + authToken - The authentication token of the account 
+# + phoneNumberSid - The Twilio-provided string that uniquely identifies the phone number
+# + callbackURL - Callback service URL for webhook
+@display {label: "Listener Config"}
+public type ListenerConfig record {
+    @display {label: "Account SID", "description": "Twilio account SID"}
+    string accountSId;
+    @display {label: "Auth Token", "description": "The authentication token of the account"}
+    string authToken;
+    @display {label: "Phone Number SID", "description": "The Twilio-provided string that uniquely identifies the phone number"}
+    string phoneNumberSid;
+    @display {label: "Callback URL", "description": "Callback service URL for webhook"}
+    string callbackURL;
+};
+
 public type SmsStatusChangeEventWrapper record {
     # The 34 character id of the Messaging Service associated with the message.
     string MessagingServiceSid?;

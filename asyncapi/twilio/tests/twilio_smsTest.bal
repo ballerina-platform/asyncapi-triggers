@@ -19,13 +19,22 @@ import ballerina/http;
 import ballerina/log;
 import ballerina/mime;
 import ballerina/lang.runtime;
+import ballerina/url;
 
 boolean twilioSmsSentNotified = false;
 boolean twilioSmsDeiveredNotified = false;
 boolean twilioSmsReceivedNotified = false;
 
+configurable ListenerConfig listenerConfig = ?;
 
-listener Listener twilioSmsStatusListener = new (listenOn = 8095);
+configurable string fromNo = ?;
+configurable string toNo = ?;
+configurable string message = ?;
+
+configurable string senderSid = ?;
+configurable string senderAuthToken = ?;
+
+listener Listener twilioSmsStatusListener = new (listenerConfig, listenOn = 8095);
 
 service SmsStatusService on twilioSmsStatusListener {
     remote function onSent(SmsStatusChangeEventWrapper event) returns error? {
@@ -68,102 +77,38 @@ service SmsStatusService on twilioSmsStatusListener {
     }
 }
 
-http:Client clientEndpoint = check new ("http://localhost:8095");
-
-# Tests for Twilio SmsStaus Events
-# + smsStatus - Type of the SmsStatus field
-# + return - SmsStatusChange event payload object
-
-function getTwiliSmsRecord(string smsStatus) returns map<string> {
-    return (
-        {
-        ToCountry: "US",
-        ToState: "TX",
-        SmsMessageSid: "SMSMessageSID",
-        NumMedia: "0",
-        ToCity: "RAYMONDVILLE",
-        FromZip: "34669",
-        SmsSid: "SMSSid",
-        FromState: "FL",
-        SmsStatus: smsStatus,
-        FromCity: "HUDSON",
-        Body: "[WSO2 Choreo Demo] Twilio First Test MSG",
-        FromCountry: "US",
-        To: "+12345678910",
-        MessagingServiceSid: "ServiceSID",
-        ToZip: "78580",
-        NumSegments: "1",
-        ReferralNumMedia: "0",
-        MessageSid: "MessageSID",
-        AccountSid: "AccountSID",
-        From: "+123456789",
-        ApiVersion: "2010-04-01"
+@test:Config {
+    enable: false
+}
+function testTwilioSmsSent() returns error? {
+    runtime:sleep(5);
+    http:Client twilioClient = check new (TWILIO_URL, {
+        auth: {
+            username: senderSid,
+            password: senderAuthToken
+        }
     });
-}
+    string requestBody = "";
+    requestBody = check createUrlEncodedRequestBody(requestBody, "From", fromNo);
+    requestBody = check createUrlEncodedRequestBody(requestBody, "To", fromNo);
+    requestBody = check createUrlEncodedRequestBody(requestBody, "Body", message);
+    http:Response _ = check twilioClient->post(string `/2010-04-01/Accounts/${senderSid}/Messages.json`, requestBody,
+    mediaType = mime:APPLICATION_FORM_URLENCODED);
 
-@test:Config {
-    enable: true
-}
-function testTwilioSmsSent() {
-    map<string> smsSentRecord = getTwiliSmsRecord("sent");
-    http:Response|error smsSentPayload = clientEndpoint->post("/", smsSentRecord, mediaType = mime:APPLICATION_FORM_URLENCODED);
-
-    if (smsSentPayload is error) {
-        test:assertFail(msg = "Sms sending failed" + smsSentPayload.message());
-    } else {
-        test:assertTrue(smsSentPayload.statusCode === 200, msg = "Expected a 200 status code. Found" + smsSentPayload.statusCode.toString());
-        test:assertEquals(smsSentPayload.getTextPayload(), "Event acknowledged successfully", msg = "Expected payload not received");
-    }
-
-    int counter = 10;
+    int counter = 20;
     while (!twilioSmsSentNotified && counter >= 0) {
-        runtime:sleep(1);
+        runtime:sleep(3);
         counter -= 1;
     }
-    test:assertTrue(twilioSmsSentNotified, msg = "Expected a call ringing notification");
+    test:assertTrue(twilioSmsSentNotified, msg = "Expected a sent message notification");
 
 }
 
-@test:Config {
-    enable: true,
-    dependsOn: [testTwilioSmsSent]
-}
-function testTwilioSmsDelivered() {
-    map<string> smsDeliveredRecord = getTwiliSmsRecord("delivered");
-    http:Response|error smsDeliveredPayload = clientEndpoint->post("/", smsDeliveredRecord, mediaType = mime:APPLICATION_FORM_URLENCODED);
-    if (smsDeliveredPayload is error) {
-        test:assertFail(msg = "Sms delivery failed" + smsDeliveredPayload.message());
-    } else {
-        test:assertTrue(smsDeliveredPayload.statusCode === 200, msg = "expected a 200 status code. Found" + smsDeliveredPayload.statusCode.toString());
-        test:assertEquals(smsDeliveredPayload.getTextPayload(), "Event acknowledged successfully", msg = "Expected payload not received");
+isolated function createUrlEncodedRequestBody(string requestBody, string key, string value) returns string|error {
+    string encodedString = check url:encode(value, "UTF8");
+    string body = "";
+    if (requestBody != "") {
+        body = requestBody + "&";
     }
-
-    int counter = 10;
-    while (!twilioSmsDeiveredNotified && counter >= 0) {
-        runtime:sleep(1);
-        counter -= 1;
-    }
-    test:assertTrue(twilioSmsDeiveredNotified, msg = "Expected a call ringing notification");
-}
-
-@test:Config {
-    enable: true,
-    dependsOn: [testTwilioSmsDelivered]
-}
-function testTwilioSmsReceived() {
-    map<string> smsReceivedRecord = getTwiliSmsRecord("received");
-    http:Response|error smsReceivedPayload = clientEndpoint->post("/", smsReceivedRecord, mediaType = mime:APPLICATION_FORM_URLENCODED);
-    if (smsReceivedPayload is error) {
-        test:assertFail(msg = "Sms receving failed" + smsReceivedPayload.message());
-    } else {
-        test:assertTrue(smsReceivedPayload.statusCode === 200, msg = "Expected a 200 status code. Found" + smsReceivedPayload.statusCode.toString());
-        test:assertEquals(smsReceivedPayload.getTextPayload(), "Event acknowledged successfully", msg = "Expected payload not received");
-    }
-
-    int counter = 10;
-    while (!twilioSmsReceivedNotified && counter >= 0) {
-        runtime:sleep(1);
-        counter -= 1;
-    }
-    test:assertTrue(twilioSmsReceivedNotified, msg = "Expected a call ringing notification");
+    return body + key + "=" + encodedString;
 }
