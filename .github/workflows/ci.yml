@@ -8,7 +8,7 @@ jobs:
     env:
       BALLERINA_DEV_CENTRAL: true
     container:
-      image: ballerina/ballerina:2201.2.1
+      image: ballerina/ballerina:2201.3.1
       options: --user root
     steps:
       - uses: actions/checkout@v1
