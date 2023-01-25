@@ -66,7 +66,7 @@ task codeBuild {
     doLast {
         println "Task: Building triggers..."
         for (String path : ballerinaPackages) {
-            if (!(path.contains("asb") || path.contains("salesforce"))) {
+            if (!(path.contains("asb") || path.contains("salesforce") || path.contains("asgardeo"))) {
                 exec {
                     commandLine 'sh', '-c', "${ballerinaDistributionPath}/bin/bal test ${path}"
                 }
