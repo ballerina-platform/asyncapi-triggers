@@ -11,3 +11,9 @@ authors = ["Ballerina"]
 
 [build-options]
 observabilityIncluded = true
+
+[[platform.java11.dependency]]
+groupId = "io.crypto"
+artifactId = "decryption-native"
+version = "1.0-SNAPSHOT"
+path = "../../native/asgardeo/build/libs/asgardeo-0.0.6.jar"

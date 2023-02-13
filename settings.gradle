@@ -1,2 +1,2 @@
 rootProject.name = 'asyncapi-triggers'
-include ':native:sfdc', ':native:asb'
+include ':native:sfdc', ':native:asb', ':native:asgardeo'
