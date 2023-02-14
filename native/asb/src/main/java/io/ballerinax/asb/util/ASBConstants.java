@@ -36,8 +36,8 @@ public class ASBConstants {
     public static final String INT_CONTENT_ERROR = "Error while retrieving the int content of the message. ";
     public static final String FLOAT_CONTENT_ERROR = "Error while retrieving the float content of the message. ";
     // Message receive modes
-    public static final String PEEKLOCK = "PEEKLOCK";
-    public static final String RECEIVEANDDELETE = "RECEIVEANDDELETE";
+    public static final String PEEK_LOCK = "PEEKLOCK";
+    public static final String RECEIVE_AND_DELETE = "RECEIVEANDDELETE";
     // listener constant fields
     public static final String CONSUMER_SERVICES = "consumer_services";
     public static final String ASB_CALLER = "asb_caller";
@@ -45,7 +45,6 @@ public class ASBConstants {
     public static final String FUNC_ON_MESSAGE = "onMessage";
     public static final String FUNC_ON_ERROR = "onError";
     public static final String DISPATCH_ERROR = "Error occurred while dispatching the message. ";
-    public static final BString QUEUE_NAME = StringUtils.fromString("entityPath");
+    public static final BString QUEUE_NAME = StringUtils.fromString("entity");
     public static final String UNCHECKED = "unchecked";
-    
 }

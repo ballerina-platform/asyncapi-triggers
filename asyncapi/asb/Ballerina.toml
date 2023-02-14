@@ -1,20 +1,21 @@
 [package]
 org = "ballerinax"
 name = "trigger.asb"
-version = "0.5.1"
+version = "1.0.0"
 license= ["Apache-2.0"]
 authors = ["Ballerina"]
 keywords = ["IT Operations/Message Brokers", "Cost/Paid", "Vendor/Microsoft"]
 icon = "docs/icon.png"
 repository = "https://github.com/ballerina-platform/asyncapi-triggers"
-distribution = "2201.2.3"
+distribution = "2202.3.1"
 
 [build-options]
 observabilityIncluded = true
 
 [[platform.java11.dependency]]
-path = "../../native/asb/build/libs/asb-0.3.3.jar"
+path = "../../native/asb/build/libs/asb-1.0.0.jar"
 groupId = "org.ballerinax"
 artifactId = "asb"
 module = "asb" 
-version = "0.3.3"
+version = "1.0.0"
+

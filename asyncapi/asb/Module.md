@@ -1,7 +1,7 @@
 ## Overview
 
-The `ballerinax/trigger.asb` module supports asynchronous message listening capabilities from the [Azure Service Bus](https://docs.microsoft.com/en-us/azure/service-bus-messaging/) via the Ballerina language. 
-This module supports [Service Bus SDK 3.5.1 version](https://docs.microsoft.com/en-us/java/api/overview/azure/servicebus/client?view=azure-java-stable&preserve-view=true). 
+The `ballerinax/trigger.asb` module supports asynchronous message listening capabilities from the [Azure Service Bus](https://learn.microsoft.com/en-us/java/api/com.azure.messaging.servicebus?view=azure-java-stable) via the Ballerina language. 
+This module supports [Service Bus SDK 7.13.1 version](https://learn.microsoft.com/en-us/java/api/com.azure.messaging.servicebus?view=azure-java-stable). 
 The source code on GitHub is located [here](https://github.com/Azure/azure-sdk-for-java/tree/main/sdk/servicebus/microsoft-azure-servicebus). 
 The primary wire protocol for Service Bus is Advanced Messaging Queueing Protocol (AMQP) 1.0, an open ISO/IEC standard.
 
@@ -25,7 +25,6 @@ Before using this connector in your Ballerina application, complete the followin
 
   Shared Access Signature (SAS) Authentication Credentials are required to communicate with the Azure Service Bus.
     * Connection String
-    * Entity Path
 
   Obtain the authorization credentials:
     * For Service Bus Queues
@@ -34,8 +33,9 @@ Before using this connector in your Ballerina application, complete the followin
 
         2. [Get the connection string](https://docs.microsoft.com/en-us/azure/service-bus-messaging/service-bus-quickstart-portal#get-the-connection-string)
 
-        3. [Create a queue in the Azure portal & get Entity Path](https://docs.microsoft.com/en-us/azure/service-bus-messaging/service-bus-quickstart-portal#create-a-queue-in-the-azure-portal)
-           . It is in the format ‘queueName’.
+        3. [Create a queue in the Azure portal](https://docs.microsoft.com/en-us/azure/service-bus-messaging/service-bus-quickstart-portal#create-a-queue-in-the-azure-portal)
+           
+           It is in the format ‘queueName’.
 
     * For Service Bus Topics and Subscriptions
 
@@ -43,11 +43,13 @@ Before using this connector in your Ballerina application, complete the followin
 
         2. [Get the connection string](https://docs.microsoft.com/en-us/azure/service-bus-messaging/service-bus-quickstart-portal#get-the-connection-string)
 
-        3. [Create a topic in the Azure portal & get Entity Path](https://docs.microsoft.com/en-us/azure/service-bus-messaging/service-bus-quickstart-topics-subscriptions-portal#create-a-topic-using-the-azure-portal)
-           . It's in the format ‘topicName‘.
+        3. [Create a topic in the Azure portal](https://docs.microsoft.com/en-us/azure/service-bus-messaging/service-bus-quickstart-topics-subscriptions-portal#create-a-topic-using-the-azure-portal)
+           
+           It's in the format ‘topicName‘.
 
-        4. [Create a subscription in the Azure portal & get Entity Path](https://docs.microsoft.com/en-us/azure/service-bus-messaging/service-bus-quickstart-topics-subscriptions-portal#create-subscriptions-to-the-topic)
-           . It’s in the format ‘topicName/subscriptions/subscriptionName’.
+        4. [Create a subscription in the Azure portal](https://docs.microsoft.com/en-us/azure/service-bus-messaging/service-bus-quickstart-topics-subscriptions-portal#create-subscriptions-to-the-topic)
+           
+           It’s in the format ‘topicName/subscriptions/subscriptionName’.
 
 ## Quickstart
 
@@ -64,11 +66,20 @@ import ballerinax/trigger.asb;
 ```ballerina
 asb:ListenerConfig configuration = {
     connectionString: "CONNECTION_STRING",
-    entityPath: "QUEUE_NAME_OR_SUBSCRIPTION_PATH",
-    receiveMode: "PEEKLOCK_OR_RECEIVEANDDELETE"
+    entityConfig: {
+        topicName: "TOPIC NAME",
+        subscriptionName: "SUBCRIPTION NAME"
+    },
+    receiveMode: "asb:PEEK_LOCK OR asb:RECEIVE_AND_DELETE"
 };
 
 listener asb:Listener asbListener = new (configuration);
+```
+To listen to a queue, change the entity Config as follows,
+```ballerina
+entityConfig: {
+  queueName: "QUEUE_NAME"
+}
 ```
 
 ### Step 3: Implement a listener remote function
@@ -83,11 +94,6 @@ listener asb:Listener asbListener = new (configuration);
 
    Listen to Messages from the Azure Service Bus
 
-   **!!! NOTE:**
-   When configuring the listener, the entity path for a Queue is the entity name (Eg: "myQueueName") and the entity path
-   for a subscription is in the following format `<topicName>/subscriptions/<subscriptionName>`
-   (Eg: "myTopicName/subscriptions/mySubscriptionName").
-
     ```ballerina
     import ballerina/lang.value; 
     import ballerina/log;
@@ -95,8 +101,10 @@ listener asb:Listener asbListener = new (configuration);
 
     asb:ListenerConfig configuration = {
         connectionString: "CONNECTION_STRING",
-        entityPath: "QUEUE_NAME_OR_SUBSCRIPTION_PATH",
-        receiveMode: asb:PEEKLOCK
+        entityConfig: {
+          queueName: "QUEUE_NAME"
+        },
+        receiveMode: asb:PEEK_LOCK
     };
 
     listener asb:Listener asbListener = new (configuration);
@@ -106,23 +114,6 @@ listener asb:Listener asbListener = new (configuration);
             // Write your logic here
             log:printInfo("Azure service bus message as byte[] which is the standard according to the AMQP protocol" + 
             message.toString());
-            string|xml|json|byte[] received = message.body;
-
-            match message?.contentType {
-                asb:JSON => {
-                    string stringMessage = check string:fromBytes(<byte[]> received);
-                    json jsonMessage = check value:fromJsonString(stringMessage);
-                    log:printInfo("The message received: " + jsonMessage.toJsonString());
-                }
-                asb:XML => {
-                    string stringMessage = check 'string:fromBytes(<byte[]> received);
-                    xml xmlMessage = check 'xml:fromString(stringMessage);
-                    log:printInfo("The message received: " + xmlMessage.toString());
-                }
-                asb:TEXT => {
-                    string stringMessage = check 'string:fromBytes(<byte[]> received);
-                    log:printInfo("The message received: " + stringMessage);
-                }
             }
 
             _ = check caller.complete(message);
@@ -131,10 +122,6 @@ listener asb:Listener asbListener = new (configuration);
     ```
 
    **!!! NOTE:**
-   In the ASB listener we receive the message body as byte[] which is the standard according to the AMQP protocol. 
-   We haven't re-engineered the listener. Rather we provide the message body as a standard byte[]. 
-   So the user must do the conversion based on the content type of the message. 
-   We have provided a sample code segment above, where you can do the conversion easily.
-   You can also complete, abandon, deadLetter, defer, renewLock, and setPrefetchCount using the `asb:Caller` instance.
+   You can complete, abandon, deadLetter, defer, renewLock using the `asb:Caller` instance.
 
 2. Use `bal run` command to compile and run the Ballerina program.
