@@ -18,108 +18,104 @@
 
 package io.ballerinax.asb;
 
-import com.microsoft.azure.servicebus.IMessage;
-import com.microsoft.azure.servicebus.IMessageReceiver;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+
+import com.azure.core.amqp.models.AmqpAnnotatedMessage;
+import com.azure.core.amqp.models.AmqpMessageBodyType;
+import com.azure.messaging.servicebus.ServiceBusClientBuilder.ServiceBusProcessorClientBuilder;
+import com.azure.messaging.servicebus.ServiceBusErrorContext;
+import com.azure.messaging.servicebus.ServiceBusException;
+import com.azure.messaging.servicebus.ServiceBusFailureReason;
+import com.azure.messaging.servicebus.ServiceBusProcessorClient;
+import com.azure.messaging.servicebus.ServiceBusReceivedMessage;
+import com.azure.messaging.servicebus.ServiceBusReceivedMessageContext;
+
 import io.ballerina.runtime.api.PredefinedTypes;
 import io.ballerina.runtime.api.Runtime;
 import io.ballerina.runtime.api.async.Callback;
 import io.ballerina.runtime.api.async.StrandMetadata;
 import io.ballerina.runtime.api.creators.ValueCreator;
 import io.ballerina.runtime.api.types.MethodType;
-import io.ballerina.runtime.api.types.Type;
 import io.ballerina.runtime.api.utils.StringUtils;
 import io.ballerina.runtime.api.values.BError;
 import io.ballerina.runtime.api.values.BMap;
 import io.ballerina.runtime.api.values.BObject;
 import io.ballerina.runtime.api.values.BString;
+import io.ballerinax.asb.util.ASBConstants;
 import io.ballerinax.asb.util.ASBUtils;
 import io.ballerinax.asb.util.ModuleUtils;
-import io.ballerinax.asb.util.ASBConstants;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-import static io.ballerinax.asb.listener.MessageListener.isServiceAttached;
 
 /**
  * Handles and dispatched messages with data binding.
  */
 public class MessageDispatcher {
-    private static final Logger log = LoggerFactory.getLogger(MessageDispatcher.class);
+    private static final Logger log = Logger.getLogger(MessageDispatcher.class);
 
     private BObject service;
     private BObject caller;
-    private String queueName;
     private Runtime runtime;
-    private IMessageReceiver receiver;
+    private ServiceBusProcessorClientBuilder builder;
+    private ServiceBusProcessorClient processorClient;
 
     /**
      * Initialize the Message Dispatcher.
      *
-     * @param service          Ballerina service instance.
-     * @param runtime          Ballerina runtime instance.
-     * @param iMessageReceiver Asb MessageReceiver instance.
+     * @param service       Ballerina service instance.
+     * @param runtime       Ballerina runtime instance.
+     * @param clientBuilder Asb MessageReceiver instance.
      */
-    public MessageDispatcher(BObject service, BObject caller, Runtime runtime, IMessageReceiver iMessageReceiver) {
+    public MessageDispatcher(BObject service, BObject caller, Runtime runtime,
+            ServiceBusProcessorClientBuilder clientBuilder, Level logLevel) {
         this.service = service;
         this.caller = caller;
-        this.queueName = iMessageReceiver.getEntityPath();
         this.runtime = runtime;
-        this.receiver = iMessageReceiver;
+        this.builder = clientBuilder;
+        log.setLevel(logLevel);
+    }
+
+    public ServiceBusProcessorClient getProcessorClient() {
+        return processorClient;
     }
 
     /**
-     * Start receiving messages asynchronously and dispatch the messages to the attached service.
+     * Start receiving messages asynchronously and dispatch the messages to the
+     * attached service.
      *
      * @param listener Ballerina listener object.
      * @return IllegalArgumentException if failed.
      */
     public void receiveMessages(BObject listener) {
         try {
-            ExecutorService executorService = Executors.newSingleThreadExecutor();
-            this.pumpMessage(receiver, executorService);
-        } catch (IllegalArgumentException e) {
-            ASBUtils.returnErrorValue(e.getMessage());
-        }
-
-        ArrayList<BObject> startedServices =
-                (ArrayList<BObject>) listener.getNativeData(ASBConstants.STARTED_SERVICES);
-        startedServices.add(service);
-        service.addNativeData(ASBConstants.QUEUE_NAME.getValue(), queueName);
-    }
-
-    /**
-     * Asynchronously pump messages from the Azure service bus.
-     *
-     * @param receiver        Ballerina listener object.
-     * @param executorService Thread executor for processing the messages.
-     */
-    public void pumpMessage(IMessageReceiver receiver, ExecutorService executorService) {
-        if (isServiceAttached()) {
-            CompletableFuture<IMessage> receiveMessageFuture = receiver.receiveAsync();
-
-            receiveMessageFuture.handleAsync((message, receiveEx) -> {
-                if (receiveEx != null) {
-                    if (log.isDebugEnabled()) {
-                        log.debug("Receiving message from entity failed.");
-                    }
-                    pumpMessage(receiver, executorService);
-                } else if (message == null) {
-                    if (log.isDebugEnabled()) {
-                        log.debug("Receive from entity returned no messages.");
-                    }
-                    pumpMessage(receiver, executorService);
-                } else {
-                    handleDispatch(message);
-                    pumpMessage(receiver, executorService);
-                    return null;
+            processorClient = this.builder.processMessage(t -> {
+                try {
+                    this.processMessage(t);
+                } catch (IOException e) {
+                    log.error("IOException occurred when processing the message", e);
+                    throw new RuntimeException(e);
                 }
-                return null;
-            }, executorService);
+            }).processError(context -> {
+                try {
+                    processError(context);
+                } catch (Exception e) {
+                    log.error("IOException while processing the error found when processing the message", e);
+                }
+            }).buildProcessorClient();
+            processorClient.start();
+            if (log.isDebugEnabled()) {
+                log.debug("(Message Dispatcher)Receiving started, identifier: " + processorClient.getIdentifier());
+            }
+        } catch (IllegalArgumentException e) {
+            log.error("Error in receiving messages: ", e);
+            ASBUtils.createErrorValue("Error in receiving messages", e);
+        } catch (Exception e) {
+            ASBUtils.createErrorValue("Error in receiving messages", e);
         }
     }
 
@@ -127,18 +123,46 @@ public class MessageDispatcher {
      * Handle the dispatch of message to the service.
      *
      * @param message Received azure service bus message instance.
+     * @throws IOException
      */
-    private void handleDispatch(IMessage message) {
-        MethodType[] attachedFunctions = service.getType().getMethods();
-        MethodType onMessageFunction;
-        if (ASBConstants.FUNC_ON_MESSAGE.equals(attachedFunctions[0].getName())) {
-            onMessageFunction = attachedFunctions[0];
-        } else {
+    public void processMessage(ServiceBusReceivedMessageContext context) throws IOException {
+        MethodType method = this.getFunction(0, ASBConstants.FUNC_ON_MESSAGE);
+        if (method == null) {
             return;
         }
-        Type[] paramTypes = onMessageFunction.getParameterTypes();
-        int paramSize = paramTypes.length;
-        dispatchMessage(message);
+        this.caller.addNativeData(context.getMessage().getLockToken(), context);
+        dispatchMessage(context.getMessage());
+    }
+
+    private MethodType getFunction(int index, String functionName) {
+        MethodType[] attachedFunctions = service.getType().getMethods();
+        MethodType onMessageFunction = null;
+        if (functionName.equals(attachedFunctions[index].getName())) {
+            onMessageFunction = attachedFunctions[0];
+        }
+        return onMessageFunction;
+    }
+
+    public void processError(ServiceBusErrorContext context) throws IOException {
+        MethodType method = this.getFunction(1, ASBConstants.FUNC_ON_ERROR);
+        if (method == null) {
+            return;
+        }
+        ServiceBusException exception = (ServiceBusException) context.getException();
+        ServiceBusFailureReason reason = exception.getReason();
+        if (reason == ServiceBusFailureReason.MESSAGING_ENTITY_DISABLED
+                || reason == ServiceBusFailureReason.MESSAGING_ENTITY_NOT_FOUND
+                || reason == ServiceBusFailureReason.UNAUTHORIZED) {
+            log.error("An error occurred when processing with reason: " + reason + " message: "
+                    + exception.getMessage());
+        }
+
+        Exception e = (Exception) context.getException();
+        BError error = ASBUtils.createErrorValue(e.getClass().getTypeName(), e);
+        BMap<BString, Object> messageBObject = null;
+        messageBObject = getErrorMessage(context);
+        Callback callback = new ASBResourceCallback();
+        executeResourceOnError(callback, messageBObject, true, error, true);
     }
 
     /**
@@ -146,80 +170,164 @@ public class MessageDispatcher {
      *
      * @param message Received azure service bus message instance.
      * @return BError if failed to dispatch.
+     * @throws IOException
      */
-    private void dispatchMessage(IMessage message) {
-        try {
-            Callback callback = new ASBResourceCallback();
-            BMap<BString, Object> messageBObject = getMessageRecord(message);
-            executeResourceOnMessage(callback, messageBObject, true, this.caller, true);
-        } catch (BError exception) {
-            ASBUtils.returnErrorValue("Error occur while dispatching the message to the service " +
-                    exception.getMessage());
-            handleError(message);
+    private void dispatchMessage(ServiceBusReceivedMessage message) throws IOException {
+        Callback callback = new ASBResourceCallback();
+        BMap<BString, Object> messageBObject = getReceivedMessage(message);
+        executeResourceOnMessage(callback, messageBObject, true, this.caller, true);
+    }
+
+    public Object convertAMQPToJava(String messageId, Object amqpValue) {
+        if (log.isDebugEnabled()) {
+            log.debug("Type of amqpValue object of received message " + messageId + " is " + amqpValue.getClass());
+        }
+        Class<?> clazz = amqpValue.getClass();
+        switch (clazz.getSimpleName()) {
+            case "Integer":
+                return (Integer) amqpValue;
+            case "Long":
+                return (Long) amqpValue;
+            case "Float":
+                return (Float) amqpValue;
+            case "Double":
+                return (Double) amqpValue;
+            case "String":
+                return (String) amqpValue;
+            case "Boolean":
+                return (Boolean) amqpValue;
+            case "Byte":
+                return (Byte) amqpValue;
+            case "Short":
+                return (Short) amqpValue;
+            case "Character":
+                return (Character) amqpValue;
+            case "BigDecimal":
+                return (BigDecimal) amqpValue;
+            case "Date":
+                return (java.util.Date) amqpValue;
+            case "UUID":
+                return (UUID) amqpValue;
+            default:
+                if (log.isDebugEnabled()) {
+                    log.debug("The type of amqpValue object- " + clazz.toString() + " is not supported");
+                }
+                return null;
         }
     }
 
     /**
-     * Handle error when dispatching message to the service.
-     *
-     * @param message Received azure service bus message instance.
-     * @return BError if failed to execute.
+     * Prepares the message body content
+     * 
+     * @param receivedMessage ASB received message
+     * @return
+     * @throws IOException
      */
-    private void handleError(IMessage message) {
-        BError error = ASBUtils.returnErrorValue(ASBConstants.DISPATCH_ERROR);
-        BMap<BString, Object> messageBObject = getMessageRecord(message);
-        try {
-            Callback callback = new ASBResourceCallback();
-            executeResourceOnError(callback, messageBObject, true, error, true);
-        } catch (BError exception) {
-            throw ASBUtils.returnErrorValue("Error occurred in ASB service. ");
+    private Object getMessageContent(ServiceBusReceivedMessage receivedMessage) throws IOException {
+        AmqpAnnotatedMessage rawAmqpMessage = receivedMessage.getRawAmqpMessage();
+        AmqpMessageBodyType bodyType = rawAmqpMessage.getBody().getBodyType();
+        switch (bodyType) {
+            case DATA:
+                return rawAmqpMessage.getBody().getFirstData();
+            case VALUE:
+                Object amqpValue = rawAmqpMessage.getBody().getValue();
+                if (log.isDebugEnabled()) {
+                    log.debug("Received a message with messageId: "
+                            + receivedMessage.getMessageId()
+                            + " AMQPMessageBodyType: {}"
+                            + bodyType);
+                }
+                amqpValue = convertAMQPToJava(receivedMessage.getMessageId(), amqpValue);
+                return amqpValue;
+            default:
+                throw new RuntimeException("Invalid message body type: " + receivedMessage.getMessageId());
         }
     }
 
     /**
-     * Get the ballerina Message record from the azure service bus message object.
-     *
-     * @param message Received azure service bus message instance.
+     * @param endpointClient  Ballerina client object
+     * @param receivedMessage Received Message
+     * @return
+     * @throws IOException
      */
-    private BMap<BString, Object> getMessageRecord(IMessage message) {
-        Object[] values = new Object[14];
-        values[0] = ValueCreator.createArrayValue(message.getMessageBody().getBinaryData().get(0));
-        values[1] = StringUtils.fromString(message.getContentType());
-        values[2] = StringUtils.fromString(message.getMessageId());
-        values[3] = StringUtils.fromString(message.getTo());
-        values[4] = StringUtils.fromString(message.getReplyTo());
-        values[5] = StringUtils.fromString(message.getReplyToSessionId());
-        values[6] = StringUtils.fromString(message.getLabel());
-        values[7] = StringUtils.fromString(message.getSessionId());
-        values[8] = StringUtils.fromString(message.getCorrelationId());
-        values[9] = StringUtils.fromString(message.getPartitionKey());
-        values[10] = message.getTimeToLive().getSeconds();
-        values[11] = message.getSequenceNumber();
-        values[12] = StringUtils.fromString(message.getLockToken().toString());
-        BMap<BString, Object> applicationProperties =
-                ValueCreator.createRecordValue(ModuleUtils.getModule(), ASBConstants.APPLICATION_PROPERTIES);
-        Object[] propValues = new Object[1];
-        propValues[0] = ASBUtils.toBMap(message.getProperties());
-        values[13] = ValueCreator.createRecordValue(applicationProperties, propValues);
-        BMap<BString, Object> messageRecord =
-                ValueCreator.createRecordValue(ModuleUtils.getModule(), ASBConstants.MESSAGE_RECORD);
-        return ValueCreator.createRecordValue(messageRecord, values);
+    private BMap<BString, Object> getReceivedMessage(ServiceBusReceivedMessage receivedMessage)
+            throws IOException {
+        Map<String, Object> map = new HashMap<>();
+        Object body = getMessageContent(receivedMessage);
+        if (body instanceof byte[]) {
+            byte[] bodyA = (byte[]) body;
+            map.put("body", ValueCreator.createArrayValue(bodyA));
+        } else {
+            map.put("body", body);
+        }
+        if (receivedMessage.getContentType() != null) {
+            map.put("contentType", StringUtils.fromString(receivedMessage.getContentType()));
+        }
+        map.put("messageId", StringUtils.fromString(receivedMessage.getMessageId()));
+        map.put("to", StringUtils.fromString(receivedMessage.getTo()));
+        map.put("replyTo", StringUtils.fromString(receivedMessage.getReplyTo()));
+        map.put("replyToSessionId", StringUtils.fromString(receivedMessage.getReplyToSessionId()));
+        map.put("label", StringUtils.fromString(receivedMessage.getSubject()));
+        map.put("sessionId", StringUtils.fromString(receivedMessage.getSessionId()));
+        map.put("correlationId", StringUtils.fromString(receivedMessage.getCorrelationId()));
+        map.put("partitionKey", StringUtils.fromString(receivedMessage.getPartitionKey()));
+        map.put("timeToLive", (int) receivedMessage.getTimeToLive().getSeconds());
+        map.put("sequenceNumber", (int) receivedMessage.getSequenceNumber());
+        map.put("lockToken", StringUtils.fromString(receivedMessage.getLockToken()));
+        map.put("deliveryCount", (int) receivedMessage.getDeliveryCount());
+        map.put("enqueuedTime", StringUtils.fromString(receivedMessage.getEnqueuedTime().toString()));
+        map.put("enqueuedSequenceNumber", (int) receivedMessage.getEnqueuedSequenceNumber());
+        map.put("deadLetterErrorDescription", StringUtils.fromString(receivedMessage.getDeadLetterErrorDescription()));
+        map.put("deadLetterReason", StringUtils.fromString(receivedMessage.getDeadLetterReason()));
+        map.put("deadLetterSource", StringUtils.fromString(receivedMessage.getDeadLetterSource()));
+        map.put("state", StringUtils.fromString(receivedMessage.getState().toString()));
+        BMap<BString, Object> applicationProperties = ValueCreator.createRecordValue(ModuleUtils.getModule(),
+                ASBConstants.APPLICATION_PROPERTIES);
+        Object appProperties = ASBUtils.toBMap(receivedMessage.getApplicationProperties());
+        map.put("applicationProperties", ValueCreator.createRecordValue(applicationProperties, appProperties));
+        BMap<BString, Object> createRecordValue = ValueCreator.createRecordValue(ModuleUtils.getModule(),
+                ASBConstants.MESSAGE_RECORD, map);
+        return createRecordValue;
+    }
+
+    /**
+     * @param endpointClient  Ballerina client object
+     * @param receivedMessage Received Message
+     * @return
+     * @throws IOException
+     */
+    private BMap<BString, Object> getErrorMessage(ServiceBusErrorContext context)
+            throws IOException {
+        Map<String, Object> map = new HashMap<>();
+        map.put("entityPath", StringUtils.fromString(context.getEntityPath()));
+        map.put("className", StringUtils.fromString(context.getClass().getSimpleName()));
+        map.put("namespace", StringUtils.fromString(context.getFullyQualifiedNamespace()));
+        map.put("errorSource", StringUtils.fromString(context.getErrorSource().toString()));
+        ServiceBusException exception = (ServiceBusException) context.getException();
+        ServiceBusFailureReason reason = exception.getReason();
+        map.put("reason",StringUtils.fromString(reason.toString()));
+        BMap<BString, Object> createRecordValue = ValueCreator.createRecordValue(ModuleUtils.getModule(),
+                "ErrorContext", map);
+        return createRecordValue;
     }
 
     private void executeResourceOnMessage(Callback callback, Object... args) {
         StrandMetadata metaData = new StrandMetadata(ModuleUtils.getModule().getOrg(),
-                ModuleUtils.getModule().getName(), ModuleUtils.getModule().getMajorVersion(), ASBConstants.FUNC_ON_MESSAGE);
+                ModuleUtils.getModule().getName(), ModuleUtils.getModule().getMajorVersion(),
+                ASBConstants.FUNC_ON_MESSAGE);
         executeResource(ASBConstants.FUNC_ON_MESSAGE, callback, metaData, args);
     }
 
     private void executeResourceOnError(Callback callback, Object... args) {
         StrandMetadata metaData = new StrandMetadata(ModuleUtils.getModule().getOrg(),
-                ModuleUtils.getModule().getName(), ModuleUtils.getModule().getMajorVersion(), ASBConstants.FUNC_ON_ERROR);
+                ModuleUtils.getModule().getName(), ModuleUtils.getModule().getMajorVersion(),
+                ASBConstants.FUNC_ON_ERROR);
         executeResource(ASBConstants.FUNC_ON_ERROR, callback, metaData, args);
     }
 
     private void executeResource(String function, Callback callback, StrandMetadata metaData,
-                                 Object... args) {
-        runtime.invokeMethodAsyncSequentially(service, function, null, metaData, callback, null, PredefinedTypes.TYPE_NULL, args);
+            Object... args) {
+        runtime.invokeMethodAsyncSequentially(service, function, null, metaData, callback, null,
+                PredefinedTypes.TYPE_NULL, args);
     }
 }

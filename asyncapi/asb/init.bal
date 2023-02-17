@@ -16,10 +16,12 @@
 
 import ballerina/jballerina.java;
 
-function init() {
-    setModule();
+configurable Options options = {};
+
+function init() returns error? {
+    check setModule();
 }
 
-function setModule() = @java:Method {
+function setModule() returns error? = @java:Method {
     'class: "io.ballerinax.asb.util.ModuleUtils"
 } external;

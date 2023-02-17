@@ -1,4 +1,4 @@
-Listen to [Microsoft Azure Service Bus](https://docs.microsoft.com/en-us/java/api/overview/azure/servicebus/client?view=azure-java-stable&preserve-view=true) from Ballerina.
+Listen to [Microsoft Azure Messaging Service Bus](https://learn.microsoft.com/en-us/java/api/com.azure.messaging.servicebus?view=azure-java-stable) from Ballerina.
 
 ## Package overview
 
@@ -7,10 +7,10 @@ This package provides the capability to access Microsoft Azure Service Bus messa
 
 ### Compatibility
 
-|                            | Version                      |
-|----------------------------|------------------------------|
-| Ballerina Language         | Ballerina Swan Lake 2201.0.0 |
-| Azure Service Bus SDK      | 3.5.1                        |
+|                                   | Version                      |
+|---------------------------------- |------------------------------|
+| Ballerina Language                | Ballerina Swan Lake 2202.3.1 |
+| Azure Messaging Service Bus SDK   | 7.13.1                       |
 
 ## Report issues
 
