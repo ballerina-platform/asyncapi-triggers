@@ -20,6 +20,7 @@ package io.ballerinax.asb;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -30,6 +31,8 @@ import org.apache.log4j.Logger;
 import com.azure.core.amqp.models.AmqpAnnotatedMessage;
 import com.azure.core.amqp.models.AmqpMessageBodyType;
 import com.azure.messaging.servicebus.ServiceBusClientBuilder.ServiceBusProcessorClientBuilder;
+import com.azure.messaging.servicebus.models.ServiceBusReceiveMode;
+import com.azure.messaging.servicebus.ServiceBusClientBuilder;
 import com.azure.messaging.servicebus.ServiceBusErrorContext;
 import com.azure.messaging.servicebus.ServiceBusException;
 import com.azure.messaging.servicebus.ServiceBusFailureReason;
@@ -53,79 +56,163 @@ import io.ballerinax.asb.util.ASBUtils;
 import io.ballerinax.asb.util.ModuleUtils;
 
 /**
- * Handles and dispatched messages with data binding.
+ * Creates underlying listener and dispatches messages with data binding.
  */
 public class MessageDispatcher {
     private static final Logger log = Logger.getLogger(MessageDispatcher.class);
 
+    private Runtime runtime;
     private BObject service;
     private BObject caller;
-    private Runtime runtime;
-    private ServiceBusProcessorClientBuilder builder;
-    private ServiceBusProcessorClient processorClient;
+    private ServiceBusProcessorClient messageProcessor;
+    private boolean isStarted = false;
 
     /**
-     * Initialize the Message Dispatcher.
+     * Initializes the Message Dispatcher.
      *
-     * @param service       Ballerina service instance.
-     * @param runtime       Ballerina runtime instance.
-     * @param clientBuilder Asb MessageReceiver instance.
+     * @param service   Ballerina service instance
+     * @param runtime   Ballerina runtime instance
+     * @param sharedClientBuilder ASB message builder instance common to the listener
+     * @throws IllegalStateException    If input values are wrong
+     * @throws IllegalArgumentException If queueName/topicname not set
+     * @throws NullPointerException     If callbacks are not set
      */
-    public MessageDispatcher(BObject service, BObject caller, Runtime runtime,
-            ServiceBusProcessorClientBuilder clientBuilder, Level logLevel) {
+    public MessageDispatcher(Runtime runtime, BObject service,
+            BObject caller, ServiceBusClientBuilder sharedClientBuilder) {
+
+        this.runtime = runtime;
         this.service = service;
         this.caller = caller;
-        this.runtime = runtime;
-        this.builder = clientBuilder;
-        log.setLevel(logLevel);
+
+
+        setLogLevel(service);
+
+        this.messageProcessor = createMessageProcessor(sharedClientBuilder);
     }
 
-    public ServiceBusProcessorClient getProcessorClient() {
+    private void setLogLevel(BObject service) {
+        String logLevel = ASBUtils.getServiceConfigStringValue(service, ASBConstants.LOG_LEVEL_CONGIG_KEY);
+        log.setLevel(Level.toLevel(logLevel, Level.ERROR));     //if not set, default level is set
+    }
+
+    private ServiceBusProcessorClient createMessageProcessor(ServiceBusClientBuilder sharedClientBuilder) {        
+        String queueName = ASBUtils.getServiceConfigStringValue(service, ASBConstants.QUEUE_NAME_CONFIG_KEY);   //TODO set defaults if not set
+        String topicName = ASBUtils.getServiceConfigStringValue(service, ASBConstants.TOPIC_NAME_CONFIG_KEY);
+        String subscriptionName = ASBUtils.getServiceConfigStringValue(service,
+                ASBConstants.SUBSCRIPTION_NAME_CONFIG_KEY);
+        boolean isPeekLockModeEnabled = ASBUtils.isPeekLockModeEnabled(service);
+        int maxConcurrentCalls = ASBUtils.getServiceConfigSNumericValue(service,
+                ASBConstants.MAX_CONCURRENCY_CONFIG_KEY, ASBConstants.MAX_CONCURRENCY_DEFAULT);
+        int prefetchCount = ASBUtils.getServiceConfigSNumericValue(service, ASBConstants.MSG_PREFETCH_COUNT_CONFIG_KEY, ASBConstants.MSG_PREFETCH_COUNT_DEFAULT);
+        int maxAutoLockRenewDuration = ASBUtils.getServiceConfigSNumericValue(service,
+                ASBConstants.LOCK_RENEW_DURATION_CONFIG_KEY, ASBConstants.LOCK_RENEW_DURATION_DEFAULT);
+
+        if (log.isDebugEnabled()) {
+            log.debug(
+                    "Initializing message listener with PeekLockModeEnabled = " + isPeekLockModeEnabled + ", maxConcurrentCalls- "
+                            + maxConcurrentCalls + ", prefetchCount - " + prefetchCount
+                            + ", maxAutoLockRenewDuration(seconds) - " + maxAutoLockRenewDuration);
+        }
+        // create processor client using sharedClientBuilder attahed to the listener
+        ServiceBusProcessorClientBuilder clientBuilder = sharedClientBuilder.processor()
+                .maxConcurrentCalls(maxConcurrentCalls)
+                .disableAutoComplete()
+                .prefetchCount(prefetchCount);
+        if (!queueName.isEmpty()) {
+            if (isPeekLockModeEnabled) {
+                clientBuilder
+                        .receiveMode(ServiceBusReceiveMode.PEEK_LOCK)
+                        .queueName(queueName)
+                        .maxAutoLockRenewDuration(Duration.ofSeconds(maxAutoLockRenewDuration));
+            } else {
+                clientBuilder
+                        .receiveMode(ServiceBusReceiveMode.RECEIVE_AND_DELETE)
+                        .queueName(queueName);
+            }
+        } else if (!subscriptionName.isEmpty() && !topicName.isEmpty()) {
+            if (isPeekLockModeEnabled) {
+                clientBuilder
+                        .receiveMode(ServiceBusReceiveMode.PEEK_LOCK)
+                        .topicName(topicName)
+                        .subscriptionName(subscriptionName)
+                        .maxAutoLockRenewDuration(Duration.ofSeconds(maxAutoLockRenewDuration));
+            } else {
+                clientBuilder
+                        .receiveMode(ServiceBusReceiveMode.RECEIVE_AND_DELETE)
+                        .topicName(topicName)
+                        .subscriptionName(subscriptionName);
+            }
+        }
+        ServiceBusProcessorClient processorClient = clientBuilder.processMessage(t -> {
+            try {
+                this.processMessage(t);
+            } catch (IOException e) {
+                log.error("IOException occurred when processing the message", e);
+                throw new RuntimeException(e);
+            }
+        }).processError(context -> {
+            try {
+                processError(context);
+            } catch (Exception e) {
+                log.error("IOException while processing the error found when processing the message", e);
+            }
+        }).buildProcessorClient();
+
         return processorClient;
+
     }
 
     /**
-     * Start receiving messages asynchronously and dispatch the messages to the
+     * Starts receiving messages asynchronously and dispatch the messages to the
      * attached service.
-     *
-     * @param listener Ballerina listener object.
-     * @return IllegalArgumentException if failed.
+     * 
+     * @param clientBuilder
      */
-    public void receiveMessages(BObject listener) {
-        try {
-            processorClient = this.builder.processMessage(t -> {
-                try {
-                    this.processMessage(t);
-                } catch (IOException e) {
-                    log.error("IOException occurred when processing the message", e);
-                    throw new RuntimeException(e);
-                }
-            }).processError(context -> {
-                try {
-                    processError(context);
-                } catch (Exception e) {
-                    log.error("IOException while processing the error found when processing the message", e);
-                }
-            }).buildProcessorClient();
-            processorClient.start();
-            if (log.isDebugEnabled()) {
-                log.debug("(Message Dispatcher)Receiving started, identifier: " + processorClient.getIdentifier());
-            }
-        } catch (IllegalArgumentException e) {
-            log.error("Error in receiving messages: ", e);
-            ASBUtils.createErrorValue("Error in receiving messages", e);
-        } catch (Exception e) {
-            ASBUtils.createErrorValue("Error in receiving messages", e);
+    public void startListeningAndDispatching() {
+
+        this.messageProcessor.start();
+        isStarted = true;
+
+        if (log.isDebugEnabled()) {
+            log.debug("[Message Dispatcher]Receiving started, identifier: " + messageProcessor.getIdentifier());
         }
     }
 
     /**
-     * Handle the dispatch of message to the service.
-     *
-     * @param message Received azure service bus message instance.
-     * @throws IOException
+     * Stops receiving messages and close the undlying ASB listener. 
      */
-    public void processMessage(ServiceBusReceivedMessageContext context) throws IOException {
+    public void stopListeningAndDispatching() {
+        this.messageProcessor.stop();
+
+        if (log.isDebugEnabled()) {
+            log.debug("[Message Dispatcher]Receiving stopped, identifier: " + messageProcessor.getIdentifier());
+        }
+    }
+
+    /**
+     * Gets undeling ASB message listener instance
+     * 
+     * @return ServiceBusProcessorClient instance 
+     */
+    public ServiceBusProcessorClient getProcessorClient() {
+        return this.messageProcessor;
+    }
+
+    /**
+     * Checks if dispatcher is running. 
+     * 
+     * @return true if dispatcher is listenering for messages
+     */
+    public boolean isRunning() {
+        return isStarted;
+    }
+
+    /**
+     * Handles the dispatching of message to the service.
+     *
+     * @param context ServiceBusReceivedMessageContext containing the ASB message
+     */
+    private void processMessage(ServiceBusReceivedMessageContext context) throws IOException {
         MethodType method = this.getFunction(0, ASBConstants.FUNC_ON_MESSAGE);
         if (method == null) {
             return;
@@ -143,7 +230,14 @@ public class MessageDispatcher {
         return onMessageFunction;
     }
 
-    public void processError(ServiceBusErrorContext context) throws IOException {
+    /**
+     * Handles and dispatches errors occured when receiving messages to the attahed
+     * service.
+     * 
+     * @param context ServiceBusErrorContext related to the ASB error
+     * @throws IOException
+     */
+    private void processError(ServiceBusErrorContext context) throws IOException {
         MethodType method = this.getFunction(1, ASBConstants.FUNC_ON_ERROR);
         if (method == null) {
             return;
@@ -161,12 +255,12 @@ public class MessageDispatcher {
         BError error = ASBUtils.createErrorValue(e.getClass().getTypeName(), e);
         BMap<BString, Object> messageBObject = null;
         messageBObject = getErrorMessage(context);
-        Callback callback = new ASBResourceCallback();
+        Callback callback = new ASBResourceCallback();  //TODO: check
         executeResourceOnError(callback, messageBObject, true, error, true);
     }
 
     /**
-     * Dispatch message to the service.
+     * Dispatches message to the service.
      *
      * @param message Received azure service bus message instance.
      * @return BError if failed to dispatch.
@@ -178,7 +272,7 @@ public class MessageDispatcher {
         executeResourceOnMessage(callback, messageBObject, true, this.caller, true);
     }
 
-    public Object convertAMQPToJava(String messageId, Object amqpValue) {
+    private Object convertAMQPToJava(String messageId, Object amqpValue) {
         if (log.isDebugEnabled()) {
             log.debug("Type of amqpValue object of received message " + messageId + " is " + amqpValue.getClass());
         }
@@ -220,10 +314,9 @@ public class MessageDispatcher {
      * Prepares the message body content
      * 
      * @param receivedMessage ASB received message
-     * @return
-     * @throws IOException
+     * @return Object containing message data
      */
-    private Object getMessageContent(ServiceBusReceivedMessage receivedMessage) throws IOException {
+    private Object getMessageContent(ServiceBusReceivedMessage receivedMessage) {
         AmqpAnnotatedMessage rawAmqpMessage = receivedMessage.getRawAmqpMessage();
         AmqpMessageBodyType bodyType = rawAmqpMessage.getBody().getBodyType();
         switch (bodyType) {
@@ -245,13 +338,12 @@ public class MessageDispatcher {
     }
 
     /**
-     * @param endpointClient  Ballerina client object
-     * @param receivedMessage Received Message
-     * @return
-     * @throws IOException
+     * Constructs Ballerina representaion of ASB message.
+     * 
+     * @param receivedMessage Received ASB message
+     * @return BMap<BString, Object> representing Ballerina record 
      */
-    private BMap<BString, Object> getReceivedMessage(ServiceBusReceivedMessage receivedMessage)
-            throws IOException {
+    private BMap<BString, Object> getReceivedMessage(ServiceBusReceivedMessage receivedMessage) {
         Map<String, Object> map = new HashMap<>();
         Object body = getMessageContent(receivedMessage);
         if (body instanceof byte[]) {
@@ -291,13 +383,12 @@ public class MessageDispatcher {
     }
 
     /**
-     * @param endpointClient  Ballerina client object
-     * @param receivedMessage Received Message
-     * @return
-     * @throws IOException
+     * Constructs Ballerina representation of ASB error.
+     * 
+     * @param context ServiceBusErrorContext containing error detail
+     * @return BMap<BString, Object> representing Ballerina record
      */
-    private BMap<BString, Object> getErrorMessage(ServiceBusErrorContext context)
-            throws IOException {
+    private BMap<BString, Object> getErrorMessage(ServiceBusErrorContext context) {
         Map<String, Object> map = new HashMap<>();
         map.put("entityPath", StringUtils.fromString(context.getEntityPath()));
         map.put("className", StringUtils.fromString(context.getClass().getSimpleName()));
@@ -305,7 +396,7 @@ public class MessageDispatcher {
         map.put("errorSource", StringUtils.fromString(context.getErrorSource().toString()));
         ServiceBusException exception = (ServiceBusException) context.getException();
         ServiceBusFailureReason reason = exception.getReason();
-        map.put("reason",StringUtils.fromString(reason.toString()));
+        map.put("reason", StringUtils.fromString(reason.toString()));
         BMap<BString, Object> createRecordValue = ValueCreator.createRecordValue(ModuleUtils.getModule(),
                 "ErrorContext", map);
         return createRecordValue;
