@@ -133,6 +133,7 @@ public class MessageListener {
                     .get(service).getProcessorClient().getIdentifier() + " upon detaching service");
         }
         services.remove(service);
+        dispatcherSet.remove(service);
         return null;
     }
 
@@ -150,6 +151,8 @@ public class MessageListener {
             for (BObject service : services) {
                 stopMessageDispatch(service);
             }
+            services.clear();
+            dispatcherSet.clear();
         }
         return null;
     }

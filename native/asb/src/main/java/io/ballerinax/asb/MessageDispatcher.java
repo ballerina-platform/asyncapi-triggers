@@ -97,11 +97,7 @@ public class MessageDispatcher {
     }
 
     private ServiceBusProcessorClient createMessageProcessor(ServiceBusClientBuilder sharedClientBuilder) {
-        String queueName = ASBUtils.getServiceConfigStringValue(service, ASBConstants.QUEUE_NAME_CONFIG_KEY); // TODO
-                                                                                                              // set
-                                                                                                              // defaults
-                                                                                                              // if not
-                                                                                                              // set
+        String queueName = ASBUtils.getServiceConfigStringValue(service, ASBConstants.QUEUE_NAME_CONFIG_KEY); 
         String topicName = ASBUtils.getServiceConfigStringValue(service, ASBConstants.TOPIC_NAME_CONFIG_KEY);
         String subscriptionName = ASBUtils.getServiceConfigStringValue(service,
                 ASBConstants.SUBSCRIPTION_NAME_CONFIG_KEY);

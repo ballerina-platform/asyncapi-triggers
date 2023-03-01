@@ -115,7 +115,7 @@ public class ASBUtils {
      * 
      * @param service Service instance
      * @param key Key of the configuration
-     * @return String value of the given config key, or null if not found
+     * @return String value of the given config key, or empty string if not found
      */
     public static String getServiceConfigStringValue(BObject service, String key) {
         BMap<BString, Object> serviceConfig = getServiceConfig(service);
@@ -148,7 +148,7 @@ public class ASBUtils {
         BMap<BString, Object> serviceConfig = (BMap<BString, Object>) serviceType
                 .getAnnotation(StringUtils.fromString(ModuleUtils.getModule().getOrg() + ORG_NAME_SEPARATOR
                         + ModuleUtils.getModule().getName() + VERSION_SEPARATOR
-                        + ModuleUtils.getModule().getVersion() + ":"
+                        + ModuleUtils.getModule().getMajorVersion() + ":"
                         + ASBConstants.SERVICE_CONFIG));
         return serviceConfig;
     }

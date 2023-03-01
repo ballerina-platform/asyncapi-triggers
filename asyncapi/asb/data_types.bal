@@ -156,3 +156,16 @@ public type ErrorContext record {
     string errorSource;
     string reason;
 };
+
+public type ASBServiceConfig record {|
+    string queueName?;
+    boolean peekLockModeEnabled = false;
+    string topicName?;
+    string subscriptionName?;
+    int maxConcurrency = 1;
+    int prefetchCount =  0;
+    int maxAutoLockRenewDuration = 300;
+    string logLevel = ERROR;
+|};
+
+public annotation ASBServiceConfig ServiceConfig on service, class;
