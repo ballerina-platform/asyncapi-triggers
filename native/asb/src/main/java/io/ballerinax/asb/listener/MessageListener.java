@@ -61,7 +61,7 @@ public class MessageListener {
      * 
      * @param caller object represeting Ballerina Caller 
      */
-    public void externalInit(Environment environment, BObject caller) {
+    public void externalInit(BObject caller) {
         this.caller = caller;
     }
 
@@ -99,12 +99,10 @@ public class MessageListener {
      * Starts consuming the messages on all the attached 
      * services if not already started.
      *
-     * @param environment     Ballerina runtime
      * @param listenerBObject Ballerina listener object
      * @return An error if failed to start the listener
      */
-    public Object start(Environment environment, BObject listenerBObject) {
-        runtime = environment.getRuntime();
+    public Object start(BObject listenerBObject) {
         if (services.isEmpty()) {
             return ASBUtils.createErrorValue("No attached services found");
         }
@@ -127,7 +125,7 @@ public class MessageListener {
      * @param service         Ballerina service instance.
      * @return An error if failed detaching the service.
      */
-    public Object detach(Environment environment, BObject listenerBObject, BObject service) {
+    public Object detach(BObject listenerBObject, BObject service) {
         try {
             stopMessageDispatch(service);
         } catch (Exception e) {
@@ -145,7 +143,7 @@ public class MessageListener {
      * @param listenerBObject Ballerina listener object.
      * @return An error if listener fails to stop.
      */
-    public Object stop(Environment environment, BObject listenerBObject) {
+    public Object stop(BObject listenerBObject) {
         if (!started) {
             return ASBUtils.createErrorValue("Listener has not started.");
         } else {
@@ -163,8 +161,8 @@ public class MessageListener {
      * @param listenerBObject Ballerina listener object.
      * @return An error if listener fails to abort the connection.
      */
-    public Object forceStop(Environment environment, BObject listenerBObject) {
-        stop(environment, listenerBObject);
+    public Object forceStop(BObject listenerBObject) {
+        stop(listenerBObject);
         return null;
     }
 
