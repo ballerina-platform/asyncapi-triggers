@@ -23,10 +23,15 @@ import io.ballerina.runtime.api.creators.ErrorCreator;
 import io.ballerina.runtime.api.creators.TypeCreator;
 import io.ballerina.runtime.api.creators.ValueCreator;
 import io.ballerina.runtime.api.types.ErrorType;
+import io.ballerina.runtime.api.types.ObjectType;
 import io.ballerina.runtime.api.utils.StringUtils;
+import io.ballerina.runtime.api.utils.TypeUtils;
 import io.ballerina.runtime.api.values.BError;
 import io.ballerina.runtime.api.values.BMap;
+import io.ballerina.runtime.api.values.BObject;
 import io.ballerina.runtime.api.values.BString;
+import static io.ballerina.runtime.api.constants.RuntimeConstants.ORG_NAME_SEPARATOR;
+import static io.ballerina.runtime.api.constants.RuntimeConstants.VERSION_SEPARATOR;
 
 public class ASBUtils {
 
@@ -89,4 +94,64 @@ public class ASBUtils {
         return ErrorCreator.createError(errorType, StringUtils.fromString(message + " error from " + errorFromClass), er,
         map);
     }
+
+    /**
+     * Checks if PEEK LOCK mode is enabled for listening for messages.
+     * 
+     * @param service Service instance having configuration 
+     * @return true if enabled
+     */
+    public static boolean isPeekLockModeEnabled(BObject service) {
+        BMap<BString, Object> serviceConfig = getServiceConfig(service);
+        boolean peekLockEnabled = false;
+        if (serviceConfig != null && serviceConfig.containsKey(ASBConstants.PEEK_LOCK_ENABLE_CONFIG_KEY)) {
+            peekLockEnabled = serviceConfig.getBooleanValue(ASBConstants.PEEK_LOCK_ENABLE_CONFIG_KEY);
+        }
+        return peekLockEnabled;
+    }
+
+    /**
+     * Obtain string value of a service level configuration. 
+     * 
+     * @param service Service instance
+     * @param key Key of the configuration
+     * @return String value of the given config key, or empty string if not found
+     */
+    public static String getServiceConfigStringValue(BObject service, String key) {
+        BMap<BString, Object> serviceConfig = getServiceConfig(service);
+        if (serviceConfig != null && serviceConfig.containsKey(StringUtils.fromString(key))) {
+            return serviceConfig.getStringValue(StringUtils.fromString(key)).getValue();
+        } else {
+            return ASBConstants.EMPTY_STRING;
+        }
+    }
+
+    /**
+     * Obtain numeric value of a service level configuration.
+     * 
+     * @param service Service instance
+     * @param key     Key of the configuration
+     * @return Integer value of the given config key, or null if not found
+     */
+    public static Integer getServiceConfigSNumericValue(BObject service, String key, int defaultValue) {
+        BMap<BString, Object> serviceConfig = getServiceConfig(service);
+        if (serviceConfig != null && serviceConfig.containsKey(StringUtils.fromString(key))) {
+            return serviceConfig.getIntValue(StringUtils.fromString(key)).intValue();
+        } else {
+            return defaultValue;
+        }
+    }
+    
+    private static BMap<BString, Object> getServiceConfig(BObject service) {
+        ObjectType serviceType = (ObjectType) TypeUtils.getReferredType(service.getType());
+        @SuppressWarnings("unchecked")
+        BMap<BString, Object> serviceConfig = (BMap<BString, Object>) serviceType
+                .getAnnotation(StringUtils.fromString(ModuleUtils.getModule().getOrg() + ORG_NAME_SEPARATOR
+                        + ModuleUtils.getModule().getName() + VERSION_SEPARATOR
+                        + ModuleUtils.getModule().getMajorVersion() + ":"
+                        + ASBConstants.SERVICE_CONFIG));
+        return serviceConfig;
+    }
+
+
 }

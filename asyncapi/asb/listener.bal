@@ -23,11 +23,7 @@ public class Listener {
 
     private final string connectionString;
     private final handle listenerHandle;
-    private final string queueName;
-    private final string subscriptionName;
-    private final string topicName;
     private final LogLevel logLevel;
-
     Caller caller;
 
     # Gets invoked to initialize the `listener`.
@@ -38,25 +34,17 @@ public class Listener {
     # + return - An error if listener initialization failed
     public isolated function init(ListenerConfig config) returns error? {
         self.connectionString = config.connectionString;
-        if config.entityConfig is QueueConfig {
-            QueueConfig queueConfig = check config.entityConfig.ensureType(QueueConfig);
-            self.queueName = queueConfig.queueName;
-            self.subscriptionName = EMPTY_STRING;
-            self.topicName = EMPTY_STRING;
-        } else {
-            TopicSubsConfig topicSubsConfig = check config.entityConfig.ensureType(TopicSubsConfig);
-            self.topicName = topicSubsConfig.topicName;
-            self.subscriptionName = topicSubsConfig.subscriptionName;
-            self.queueName = EMPTY_STRING;
-        }
-
         self.logLevel = options.logLevel;
-        self.listenerHandle = check initListener(java:fromString(self.connectionString),
-        java:fromString(self.queueName), java:fromString(self.topicName), java:fromString(self.subscriptionName),
-        java:fromString(config.receiveMode), java:fromString(self.logLevel), config.maxConcurrentCalls,
-        config.prefetchCount, config.maxAutoLockRenewDuration);
+        self.listenerHandle = initListener(java:fromString(self.connectionString), java:fromString(self.logLevel));
         self.caller = new Caller(self.logLevel);
-        externalInit(self.listenerHandle, self, self.caller);
+        externalInit(self.listenerHandle, self.caller);
+    }
+
+    # Starts consuming the messages on all the attached services.
+    #
+    # + return - `()` or else an error upon failure to start
+    public isolated function 'start() returns Error? {
+        return 'start(self.listenerHandle, self);
     }
 
     # Attaches the service to the `asb:Listener` endpoint.
@@ -65,14 +53,7 @@ public class Listener {
     # + name - Name of the service
     # + return - `()` or else an error upon failure to register the service
     public isolated function attach(MessageService s, string[]|string? name = ()) returns Error? {
-        return registerListener(self.listenerHandle, self, s);
-    }
-
-    # Starts consuming the messages on all the attached services.
-    #
-    # + return - `()` or else an error upon failure to start
-    public isolated function 'start() returns Error? {
-        return 'start(self.listenerHandle, self);
+        return attach(self.listenerHandle, self, s);
     }
 
     # Stops consuming messages and detaches the service from the `asb:Listener` endpoint.
@@ -95,29 +76,20 @@ public class Listener {
     #
     # + return - `()` or else  an error upon failure to close the `ChannelListener`.
     public isolated function immediateStop() returns Error? {
-        return abortConnection(self.listenerHandle, self);
+        return forceStop(self.listenerHandle, self);
     }
 }
 
-isolated function initListener(handle connectionString, handle queueName, handle topicName, handle subscriptionName,
-        handle receiveMode, handle logLevel, int maxConcurrentCalls, int prefetchCount, int maxAutoLockRenewDuration)
-returns handle|error = @java:Constructor {
+isolated function initListener(handle connectionString, handle logLevel)
+returns handle = @java:Constructor {
     'class: "io.ballerinax.asb.listener.MessageListener",
     paramTypes: [
         "java.lang.String",
-        "java.lang.String",
-        "java.lang.String",
-        "java.lang.String",
-        "java.lang.String",
-        "java.lang.String",
-        "int",
-        "int",
-        "int"
+        "java.lang.String"
     ]
 } external;
 
-isolated function registerListener(handle listenerHandle, Listener lis, MessageService serviceType)
-returns Error? = @java:Method {
+isolated function externalInit(handle listenerHandle, Caller caller) = @java:Method {
     'class: "io.ballerinax.asb.listener.MessageListener"
 } external;
 
@@ -125,19 +97,19 @@ isolated function 'start(handle listenerHandle, Listener lis) returns Error? = @
     'class: "io.ballerinax.asb.listener.MessageListener"
 } external;
 
-isolated function detach(handle listenerHandle, Listener lis, MessageService serviceType)
-returns Error? = @java:Method {
-    'class: "io.ballerinax.asb.listener.MessageListener"
-} external;
-
 isolated function stop(handle listenerHandle, Listener lis) returns Error? = @java:Method {
     'class: "io.ballerinax.asb.listener.MessageListener"
 } external;
 
-isolated function abortConnection(handle listenerHandle, Listener lis) returns Error? = @java:Method {
+isolated function attach(handle listenerHandle, Listener lis, MessageService serviceType) returns Error? = @java:Method {
     'class: "io.ballerinax.asb.listener.MessageListener"
 } external;
 
-isolated function externalInit(handle listenerHandle, Listener lis, Caller caller) = @java:Method {
+isolated function detach(handle listenerHandle, Listener lis, MessageService serviceType) returns Error? = @java:Method {
     'class: "io.ballerinax.asb.listener.MessageListener"
 } external;
+
+isolated function forceStop(handle listenerHandle, Listener lis) returns Error? = @java:Method {
+    'class: "io.ballerinax.asb.listener.MessageListener"
+} external;
+
