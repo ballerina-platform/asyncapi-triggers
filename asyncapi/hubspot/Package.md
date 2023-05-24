@@ -7,7 +7,7 @@ This package allows you to access HubSpot Webhook API.
 ### Compatibility
 |                               | Version                        |
 |-------------------------------|--------------------------------|
-| Ballerina Language            | Ballerina Swan Lake 2201.1.0   |
+| Ballerina Language            | Ballerina Swan Lake 2201.4.1   |
 
 ## Report issues
 To report bugs, request new features, start new discussions, view project boards, etc., go to the [Ballerina Extended Library repository](https://github.com/ballerina-platform/ballerina-extended-library)

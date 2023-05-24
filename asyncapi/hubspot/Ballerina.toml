@@ -4,8 +4,8 @@ keywords = ["Sales & CRM/Customer Relationship Management", "Cost/Freemium", "Tr
 org = "ballerinax"
 name = "trigger.hubspot"
 repository = "https://github.com/ballerina-platform/asyncapi-triggers"
-version = "0.8.1"
-distribution = "2201.2.3"
+version = "0.9.0"
+distribution = "2201.4.1"
 icon = "docs/icon.png"
 authors = ["Ballerina"]
 

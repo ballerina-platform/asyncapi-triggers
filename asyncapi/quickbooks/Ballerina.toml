@@ -4,8 +4,8 @@ keywords = ["Finance/Accounting", "Cost/Paid", "Trigger"]
 org = "ballerinax"
 name = "trigger.quickbooks"
 repository = "https://github.com/ballerina-platform/asyncapi-triggers"
-version = "1.1.1"
-distribution = "2201.2.3"
+version = "1.2.0"
+distribution = "2201.4.1"
 icon = "docs/icon.png"
 authors = ["Ballerina"]
 
