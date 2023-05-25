@@ -13,7 +13,7 @@ on:
       bal_dist_version:
         description: Ballerina Image Version
         required: true
-        default: 2201.2.1
+        default: 2201.4.1
       specific_trigger:
         description: Specific Trigger to Release
         required: false

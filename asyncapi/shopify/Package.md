@@ -7,7 +7,7 @@ This package provides the capability to listen to events in Shopify.
 ### Compatibility
 |                               | Version                        |
 |-------------------------------|--------------------------------|
-| Ballerina Language            | Ballerina Swan Lake 2201.0.4   |
+| Ballerina Language            | Ballerina Swan Lake 2201.4.1   |
 | Shopify Webhook API           | 2021-10                        |
 
 ## Report issues
