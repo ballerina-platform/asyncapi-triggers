@@ -184,20 +184,20 @@ service class DispatcherService {
     public function decryptEvent(EventDetail event) returns string|error {
         string|error symmetricKey = decryptSymmetricKey(java:fromString(event.payloadCryptoKey), java:fromString(self.decryptionKey));
         if symmetricKey is string {
-            return check decryptPayload(java:fromString(event.payload), java:fromString(symmetricKey), java:fromString(event.iv));
+            return check decryptPayload(java:fromString(event.payload), java:fromString(symmetricKey), java:fromString(event.ivParameterSpec));
         } else {
             log:printDebug("Error in decrypting the payload.\nFetching the previous decryption key.");
             KeyData previousKey = check fetchDecryptionKey(self.keyServiceURL, self.token, self.orgHandle, 1);
             string|error symmetricKeyRetry = decryptSymmetricKey(java:fromString(event.payloadCryptoKey), java:fromString(previousKey.key));
             if symmetricKeyRetry is string {
-                return check decryptPayload(java:fromString(event.payload), java:fromString(symmetricKeyRetry), java:fromString(event.iv));
+                return check decryptPayload(java:fromString(event.payload), java:fromString(symmetricKeyRetry), java:fromString(event.ivParameterSpec));
             } else {
                 log:printDebug("Error in decrypting the payload.\nFetching a new token.");
                 self.token = check fetchToken(self.tokenEndpoint, self.clientId, self.clientSecret);
                 record {string key;} newDecryptionKey = check fetchDecryptionKey(self.keyServiceURL, self.token, self.orgHandle, 0);
                 self.decryptionKey = newDecryptionKey.key;
                 string newSymmetricKey = check decryptSymmetricKey(java:fromString(event.payloadCryptoKey), java:fromString(self.decryptionKey));
-                return check decryptPayload(java:fromString(event.payload), java:fromString(newSymmetricKey), java:fromString(event.iv));
+                return check decryptPayload(java:fromString(event.payload), java:fromString(newSymmetricKey), java:fromString(event.ivParameterSpec));
             }
         }
     }

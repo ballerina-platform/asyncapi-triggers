@@ -233,9 +233,9 @@ type DecryptedAsgardeoPayload record {
 #
 # + payload - Payload encrypted using symmetric key  
 # + payloadCryptoKey - Symettric key encrypted using Asymmetric key  
-# + iv - IV parameter
+# + ivParameterSpec - IV parameter
 type EventDetail record {
     string payload;
     string payloadCryptoKey;
-    string iv;
+    string ivParameterSpec;
 };
