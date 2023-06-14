@@ -55,6 +55,14 @@ channels:
             payload:
               $ref: '#/components/schemas/LoginSuccessEvent'
             title: User login succesfull.
+  Notifications:
+    subscribe:
+      message:
+        oneOf:
+          - x-ballerina-event-type: urn:ietf:params:notifications:smsOtp
+            payload:
+              $ref: '#/components/schemas/SMSOTPNotificationEvent'
+            title: SMS OTP Notification event.
 components:
   schemas:
     GenericUserData:
@@ -231,3 +239,25 @@ components:
         userName:
           type: string
           example: john@mailinator.com
+    SMSOTPNotificationEvent:
+     type: object
+     properties:
+       securityData:
+         $ref: '#/components/schemas/GenericSecurityData'
+       eventData:
+         $ref: '#/components/schemas/SMSOTPNotificationEventData'   
+    SMSOTPNotificationEventData:
+     type: object
+     properties:
+       organizationId:
+         type: string
+         example: '1234'
+       organizationName:
+         type: string
+         example: myorg
+       sendTo:
+         type: string
+         example: '12345678'
+       messageBody:
+         type: string
+         example: Your one-time password for the sms_otp_singlepage_App is 341304. This expires in 5 minutes.
