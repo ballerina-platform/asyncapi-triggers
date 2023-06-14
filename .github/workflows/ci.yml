@@ -5,14 +5,16 @@ on: [push, pull_request]
 jobs:
   container:
     runs-on: ubuntu-latest
+    env:
+      BALLERINA_DEV_CENTRAL: true
     container:
-      image: ballerina/ballerina:2201.0.1
+      image: ballerina/ballerina:2201.4.1
       options: --user root
     steps:
       - uses: actions/checkout@v1
       - name: Build with Gradle
         env:
-          BALLERINA_CENTRAL_ACCESS_TOKEN: ${{ secrets.BALLERINA_CENTRAL_ACCESS_TOKEN }}
+          BALLERINA_CENTRAL_ACCESS_TOKEN: ${{ secrets.BALLERINA_CENTRAL_DEV_ACCESS_TOKEN }}
           JAVA_OPTS: -DBALLERINA_DEV_COMPILE_BALLERINA_ORG=true
           GRADLE_USER_HOME: ~/.gradle
           packageUser: ${{ github.actor }}

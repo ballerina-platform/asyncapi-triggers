@@ -13,10 +13,17 @@ on:
       bal_dist_version:
         description: Ballerina Image Version
         required: true
-        default: 2201.0.1
+        default: 2201.4.1
       specific_trigger:
         description: Specific Trigger to Release
         required: false
+      release_build:
+        description: Do a Release
+        type: choice
+        options:
+          - true
+          - false
+        required: true
 
 jobs:
   release:
@@ -40,7 +47,7 @@ jobs:
           packagePAT: ${{ secrets.BALLERINA_BOT_TOKEN }}
           specificTrigger: ${{ github.event.inputs.specific_trigger }}
         run: |
-          ./gradlew build -Prelease=true -Premote=true -Ptrigger=${{ github.event.inputs.specific_trigger }}
+          ./gradlew build -Prelease=${{ github.event.inputs.release_build }} -Premote=true -Ptrigger=${{ github.event.inputs.specific_trigger }}
 
       - name: Push to Dev
         if: github.event.inputs.bal_central_environment == 'DEV'
@@ -50,4 +57,4 @@ jobs:
           packageUser: ${{ secrets.BALLERINA_BOT_USERNAME }}
           packagePAT: ${{ secrets.BALLERINA_BOT_TOKEN }}
         run: |
-          ./gradlew build -Prelease=true -Ptrigger=${{ github.event.inputs.specific_trigger }}
+          ./gradlew build -Prelease=${{ github.event.inputs.release_build }} -Ptrigger=${{ github.event.inputs.specific_trigger }}

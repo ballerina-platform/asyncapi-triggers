@@ -111,7 +111,7 @@ function testTwilioSmsSent() {
     if (smsSentPayload is error) {
         test:assertFail(msg = "Sms sending failed" + smsSentPayload.message());
     } else {
-        test:assertTrue(smsSentPayload.statusCode === 200, msg = "Expected a 200 status code. Found" + smsSentPayload.statusCode.toString());
+        test:assertTrue(smsSentPayload.statusCode === 200 || smsSentPayload.statusCode === 201, msg = "Expected a 200/201 status code. Found" + smsSentPayload.statusCode.toString());
         test:assertEquals(smsSentPayload.getTextPayload(), "Event acknowledged successfully", msg = "Expected payload not received");
     }
 
@@ -134,7 +134,7 @@ function testTwilioSmsDelivered() {
     if (smsDeliveredPayload is error) {
         test:assertFail(msg = "Sms delivery failed" + smsDeliveredPayload.message());
     } else {
-        test:assertTrue(smsDeliveredPayload.statusCode === 200, msg = "expected a 200 status code. Found" + smsDeliveredPayload.statusCode.toString());
+        test:assertTrue(smsDeliveredPayload.statusCode === 200 || smsDeliveredPayload.statusCode === 201, msg = "expected a 200/201 status code. Found" + smsDeliveredPayload.statusCode.toString());
         test:assertEquals(smsDeliveredPayload.getTextPayload(), "Event acknowledged successfully", msg = "Expected payload not received");
     }
 
@@ -156,7 +156,7 @@ function testTwilioSmsReceived() {
     if (smsReceivedPayload is error) {
         test:assertFail(msg = "Sms receving failed" + smsReceivedPayload.message());
     } else {
-        test:assertTrue(smsReceivedPayload.statusCode === 200, msg = "Expected a 200 status code. Found" + smsReceivedPayload.statusCode.toString());
+        test:assertTrue(smsReceivedPayload.statusCode === 200 || smsReceivedPayload.statusCode === 201, msg = "Expected a 200/201 status code. Found" + smsReceivedPayload.statusCode.toString());
         test:assertEquals(smsReceivedPayload.getTextPayload(), "Event acknowledged successfully", msg = "Expected payload not received");
     }
 

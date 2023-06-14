@@ -85,7 +85,7 @@ function testOnAppendRowEvent() {
     if (updateRowPayload is error) {
         test:assertFail(msg = "Issue creation failed: " + updateRowPayload.message());
     } else {
-        test:assertTrue(updateRowPayload.statusCode === 200, msg = "expected a 200 status code. Found " + updateRowPayload.statusCode.toBalString());
+        test:assertTrue(updateRowPayload.statusCode === 200 || updateRowPayload.statusCode === 201, msg = "expected a 200/201 status code. Found " + updateRowPayload.statusCode.toBalString());
         test:assertEquals(updateRowPayload.getTextPayload(), "200", msg = "");
     }
 

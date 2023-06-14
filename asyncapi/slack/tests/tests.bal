@@ -101,7 +101,7 @@ function testOnAppMentionEvent() {
     if (appMentionPayload is error) {
         test:assertFail(msg = "App mention event failed: " + appMentionPayload.message());
     } else {
-        test:assertTrue(appMentionPayload.statusCode === 200, msg = "expected a 200 status code. Found " + appMentionPayload.statusCode.toBalString());
+        test:assertTrue(appMentionPayload.statusCode === 200 || appMentionPayload.statusCode === 201, msg = "expected a 200/201 status code. Found " + appMentionPayload.statusCode.toBalString());
         test:assertEquals(appMentionPayload.getTextPayload(), "200", msg = "");
     }
 

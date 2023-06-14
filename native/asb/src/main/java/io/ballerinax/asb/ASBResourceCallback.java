@@ -18,6 +18,7 @@
 
 package io.ballerinax.asb;
 
+import java.util.concurrent.CountDownLatch;
 import io.ballerina.runtime.api.async.Callback;
 import io.ballerina.runtime.api.values.BError;
 
@@ -25,13 +26,24 @@ import io.ballerina.runtime.api.values.BError;
  * Handles the Azure service bus resource callback.
  */
 public class ASBResourceCallback implements Callback {
+
+    private final CountDownLatch countDownLatch;
+
+    ASBResourceCallback (CountDownLatch countDownLatch) {
+        this.countDownLatch = countDownLatch;
+    }
+
     @Override
     public void notifySuccess(Object obj) {
-        // do nothing
+        if (obj instanceof BError) {
+            ((BError) obj).printStackTrace();
+        }
+        countDownLatch.countDown();
     }
 
     @Override
     public void notifyFailure(BError error) {
-        // do nothing
+        error.printStackTrace();
+        countDownLatch.countDown();
     }
 }

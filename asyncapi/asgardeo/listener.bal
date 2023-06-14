@@ -1,6 +1,23 @@
-import ballerina/websub;
-import ballerina/http;
+// Copyright (c) 2023, WSO2 LLC. (http://www.wso2.org) All Rights Reserved.
+//
+// WSO2 LLC. licenses this file to you under the Apache License,
+// Version 2.0 (the "License"); you may not use this file except
+// in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+
 import ballerina/cloud;
+import ballerina/crypto;
+import ballerina/http;
+import ballerina/websub;
 
 @display {label: "Asgardeo", iconPath: "docs/icon.png"}
 public class Listener {
@@ -14,27 +31,21 @@ public class Listener {
         self.websubListener = check new (listenOn);
         self.config = listenerConfig;
         self.dispatcherService = new DispatcherService();
-        string token = check self.fetchToken(listenerConfig.tokenEndpointHost, listenerConfig.clientId, listenerConfig.clientSecret);
+        string token = check fetchToken(listenerConfig.tokenEndpointHost, listenerConfig.clientId, listenerConfig.clientSecret);
         http:ClientConfiguration httpConfig = {
             auth: {
                 token: token
             }
         };
         self.httpConfig = httpConfig;
+        KeyData decryptionKey = check fetchDecryptionKey(self.config.keyServiceURL, token, listenerConfig.organization, 0);
+        self.dispatcherService.setOrgInfo(decryptionKey.key, decryptionKey.algo, token, listenerConfig);
     }
 
-    private isolated function fetchToken(string tokenEndpoint, string clientId, string clientSecret) returns string|error {
-        final http:Client clientEndpoint = check new (tokenEndpoint);
-        string authHeader = string `${clientId}:${clientSecret}`;
-        http:Request tokenRequest = new;
-        tokenRequest.setHeader("Authorization", "Basic " + authHeader.toBytes().toBase64());
-        tokenRequest.setHeader("Content-Type", "application/json");
-        tokenRequest.setPayload({
-            "grant_type": "client_credentials"
-        });
-        json resp = check clientEndpoint->post("/oauth2/token", tokenRequest);
-        string accessToken = check resp.access_token;
-        return accessToken;
+    private isolated function getMd5Hash(string str) returns string {
+        byte[] input = str.toBytes();
+        byte[] output = crypto:hashMd5(input);
+        return output.toBase16();
     }
 
     public isolated function attach(GenericServiceType serviceRef, () attachPoint) returns @tainted error? {
@@ -49,11 +60,12 @@ public class Listener {
     }
 
     public isolated function 'start() returns error? {
+        string hubSecret = self.getMd5Hash(self.config.callbackURL);
         websub:SubscriberServiceConfiguration subConfig = {
             target: [self.config.hubURL, self.topics[0]],
             callback: self.config.callbackURL,
             appendServicePath: false,
-            secret: self.config.hubSecret,
+            secret: hubSecret,
             httpConfig: self.httpConfig
         };
         check self.websubListener.attachWithConfig(self.dispatcherService, subConfig);
@@ -73,8 +85,10 @@ public class Listener {
             return "RegistrationService";
         } else if serviceRef is UserOperationService {
             return "UserOperationService";
+        } else if serviceRef is NotificationService {
+            return "NotificationService";
         } else {
-            return "LoginsService";
+            return "LoginService";
         }
     }
 
@@ -84,6 +98,8 @@ public class Listener {
             return base + "REGISTRATIONS";
         } else if serviceRef is UserOperationService {
             return base + "USER_OPERATIONS";
+        } else if serviceRef is NotificationService {
+            return base + "NOTIFICATIONS";
         } else {
             return base + "LOGINS";
         }
