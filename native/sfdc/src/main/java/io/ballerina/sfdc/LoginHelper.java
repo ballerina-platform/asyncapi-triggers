@@ -11,6 +11,8 @@ import org.eclipse.jetty.client.util.ByteBufferContentProvider;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
 
+import io.ballerina.runtime.internal.values.ObjectValue;
+
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import java.io.ByteArrayInputStream;
@@ -18,6 +20,9 @@ import java.io.UnsupportedEncodingException;
 import java.net.ConnectException;
 import java.net.URL;
 import java.nio.ByteBuffer;
+
+import static io.ballerina.sfdc.Constants.ENVIRONMENT;
+import static io.ballerina.sfdc.Constants.SANDBOX;
 
 /**
  * A helper to obtain the Authentication bearer token via login
@@ -79,6 +84,7 @@ public class LoginHelper {
     public static final String COMETD_REPLAY = "/cometd/";
     public static final String COMETD_REPLAY_OLD = "/cometd/replay/";
     static final String LOGIN_ENDPOINT = "https://login.salesforce.com";
+    static final String TEST_LOGIN_ENDPOINT = "https://test.salesforce.com";
     private static final String ENV_END = "</soapenv:Body></soapenv:Envelope>";
     private static final String ENV_START = "<soapenv:Envelope xmlns:soapenv='http://schemas.xmlsoap.org/soap/envelope/' "
             + "xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' "
@@ -87,8 +93,8 @@ public class LoginHelper {
     // The enterprise SOAP API endpoint used for the login call
     private static final String SERVICES_SOAP_PARTNER_ENDPOINT = "/services/Soap/u/44.0/";
 
-    public static io.ballerina.sfdc.BayeuxParameters login(String username, String password) throws Exception {
-        return login(new URL(LOGIN_ENDPOINT), username, password);
+    public static io.ballerina.sfdc.BayeuxParameters login(String username, String password, ObjectValue listener) throws Exception {
+        return login(new URL(getLoginEndpoint(listener.getNativeData(ENVIRONMENT).toString())), username, password);
     }
 
     public static io.ballerina.sfdc.BayeuxParameters login(String username, String password, io.ballerina.sfdc.BayeuxParameters params) throws Exception {
@@ -164,5 +170,12 @@ public class LoginHelper {
     private static byte[] soapXmlForLogin(String username, String password) throws UnsupportedEncodingException {
         return (ENV_START + "  <urn:login>" + "    <urn:username>" + username + "</urn:username>" + "    <urn:password>"
                 + password + "</urn:password>" + "  </urn:login>" + ENV_END).getBytes("UTF-8");
+    }
+    
+    private static String getLoginEndpoint(String environment) {
+        if (SANDBOX.equals(environment)) {
+            return TEST_LOGIN_ENDPOINT;
+        }
+        return LOGIN_ENDPOINT;
     }
 }

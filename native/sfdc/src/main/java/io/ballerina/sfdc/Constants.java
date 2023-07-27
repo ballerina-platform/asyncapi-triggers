@@ -55,4 +55,9 @@ public class Constants {
     public static final String UNDELETE = "UNDELETE";
 
     public static final String SFDC_ERROR = "SFDC_Error";
+
+    public static final String ENVIRONMENT = "environment";
+    public static final String PRODUCTION = "Production";
+    public static final String SANDBOX = "Sandbox";
+    public static final String DEVELOPMENT = "Developer";
 }

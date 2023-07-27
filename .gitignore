@@ -6,3 +6,6 @@ build
 
 # Ignore System files
 .DS_STORE
+
+# Config tomls
+Config.toml
