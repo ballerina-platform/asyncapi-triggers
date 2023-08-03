@@ -25,6 +25,7 @@ public class Listener {
     private handle password = JAVA_NULL;
     private handle channelName = JAVA_NULL;
     private handle replayFrom = JAVA_NULL;
+    private handle environment = JAVA_NULL;
 
     # Gets invoked to initialize the `listener`.
     # The liatener initialization requires setting the credentials.
@@ -36,7 +37,8 @@ public class Listener {
         self.password = java:fromString(listenerConfig.password);
         self.channelName = java:fromString(listenerConfig.channelName);
         self.replayFrom = java:fromString(listenerConfig.replayFrom.toString());
-        initListener(self, self.replayFrom, self.channelName);
+        self.environment = java:fromString(listenerConfig.environment.toString());
+        initListener(self, self.replayFrom, self.channelName, self.environment);    
     }
 
     # Attaches the service to the `sfdc:Listener` endpoint.
@@ -78,7 +80,7 @@ public class Listener {
     }
 }
 
-function initListener(Listener instance, handle replayFrom, handle channelName) =
+function initListener(Listener instance, handle replayFrom, handle channelName, handle environment) = 
 @java:Method {
     'class: "io.ballerina.sfdc.ListenerUtil"
 } external;

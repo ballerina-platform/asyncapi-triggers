@@ -22,14 +22,18 @@ import ballerinax/trigger.salesforce as sfdc;
 ```
 
 ### Step 2: Create a new listener instance
-Create a `sfdc:Listener` using your `Salesforce User Name`, `Salesforce Password` `Salesforce Security Token`, `Subscribe Channel Name` and initialize the listener with it.
+Create a `sfdc:Listener` using your `Salesforce User Name`, `Salesforce Password` `Salesforce Security Token`, `Subscribe Channel Name` and initialize the listener with it. 
+
+Notes: 
+- For using the listener in sandbox environments we need to specify the parameter `environment: "Sandbox"`
+
 ```ballerina
 sfdc:ListenerConfig configuration = {
     username: "USER_NAME",
-    password: "PASSWORD_SECURITY_TOKEN",
+    password: "PASSWORD" + "SECURITY_TOKEN",
     channelName: "CHANNEL_NAME"
 };
-listener Listener sfdcListener = new (configuration);
+listener Listener sfdc:Listener = new (configuration);
 ```
 
 ### Step 3: Implement a listener remote function
@@ -42,20 +46,20 @@ listener Listener sfdcListener = new (configuration);
 import ballerina/log;
 import ballerinax/trigger.salesforce as sfdc;
 
-service sfdc:StreamingEventService on sfdcListener {
-    isolated remote function onUpdate(sfdc:EventData event) returns error? {
+service sfdc:RecordService on sfdcListener {
+    remote function onUpdate(sfdc:EventData event) returns error? {
         log:printInfo(event.toString());
     }
 
-    isolated remote function onCreate(sfdc:EventData event) {
+    remote function onCreate(sfdc:EventData event) returns error? {
 
     }
         
-    isolated remote function onDelete(sfdc:EventData event) {
+    remote function onDelete(sfdc:EventData event) returns error? {
 
     }
 
-    isolated remote function onRestore(sfdc:EventData event) {
+    remote function onRestore(sfdc:EventData event) returns error? {
 
     }
 }

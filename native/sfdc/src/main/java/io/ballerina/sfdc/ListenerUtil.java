@@ -32,7 +32,7 @@ import io.ballerina.runtime.internal.values.ObjectValue;
 import static io.ballerina.sfdc.Constants.CHANNEL_NAME;
 import static io.ballerina.sfdc.Constants.CONSUMER_SERVICES;
 import static io.ballerina.sfdc.Constants.REPLAY_FROM;
-import static io.ballerina.sfdc.Constants.SFDC_ERROR;
+import static io.ballerina.sfdc.Constants.ENVIRONMENT;
 import static org.cometd.bayeux.Channel.META_CONNECT;
 import static org.cometd.bayeux.Channel.META_DISCONNECT;
 import static org.cometd.bayeux.Channel.META_HANDSHAKE;
@@ -48,10 +48,11 @@ public class ListenerUtil {
     private static EmpConnector connector;
     private static TopicSubscription subscription;
 
-    public static void initListener(ObjectValue listener, String replayFrom, String channelName) {
+    public static void initListener(ObjectValue listener, String replayFrom, String channelName, String environment) {
         listener.addNativeData(CONSUMER_SERVICES, services);
         listener.addNativeData(REPLAY_FROM, replayFrom);
         listener.addNativeData(CHANNEL_NAME, channelName);
+        listener.addNativeData(ENVIRONMENT, environment);
     }
 
     public static Object attachService(ObjectValue listener, ObjectValue service) {
@@ -68,7 +69,7 @@ public class ListenerUtil {
     public static Object startListener(Environment environment, String username, String password, ObjectValue listener) {
         BearerTokenProvider tokenProvider = new BearerTokenProvider(() -> {
             try {
-                return LoginHelper.login(username, password);
+                return LoginHelper.login(username, password, listener);
             } catch (Exception e) {
                 throw sfdcError(e.getMessage());
             }
