@@ -34,8 +34,6 @@ Before using this connector in your Ballerina application, complete the followin
         2. [Get the connection string](https://docs.microsoft.com/en-us/azure/service-bus-messaging/service-bus-quickstart-portal#get-the-connection-string)
 
         3. [Create a queue in the Azure portal](https://docs.microsoft.com/en-us/azure/service-bus-messaging/service-bus-quickstart-portal#create-a-queue-in-the-azure-portal)
-           
-           It is in the format ‘queueName’.
 
     * For Service Bus Topics and Subscriptions
 
@@ -44,12 +42,8 @@ Before using this connector in your Ballerina application, complete the followin
         2. [Get the connection string](https://docs.microsoft.com/en-us/azure/service-bus-messaging/service-bus-quickstart-portal#get-the-connection-string)
 
         3. [Create a topic in the Azure portal](https://docs.microsoft.com/en-us/azure/service-bus-messaging/service-bus-quickstart-topics-subscriptions-portal#create-a-topic-using-the-azure-portal)
-           
-           It's in the format ‘topicName‘.
 
         4. [Create a subscription in the Azure portal](https://docs.microsoft.com/en-us/azure/service-bus-messaging/service-bus-quickstart-topics-subscriptions-portal#create-subscriptions-to-the-topic)
-           
-           It’s in the format ‘topicName/subscriptions/subscriptionName’.
 
 ## Quickstart
 
@@ -86,11 +80,11 @@ listener asb:Listener asbListener = new (configuration);
 
 ### Step 3: Define a consumer service 
 
-* Now you can define one or more consumer services and attach it to the defined listner endpoint. The messages will then be delivered automatically as they arrive rather than having to be explicitly requested. Multiple consumer services can be bound to one Ballerina Azure Service Bus `asb:Listener`. 
+* Now you can define one or more consumer services and attach it to the defined listener endpoint. The messages will then be delivered automatically as they arrive rather than having to be explicitly requested. Multiple consumer services can be bound to one Ballerina Azure Service Bus `asb:Listener`. 
 
 * Listener configurations such as queue or topic name to listen to, message receive mode etc. are configured in the `asb:ServiceConfig`  annotation of the service. 
 
-  ```
+  ```ballerina
   @asb:ServiceConfig {
         queueName: "MyQueue",
         peekLockModeEnabled: true,
@@ -110,17 +104,17 @@ listener asb:Listener asbListener = new (configuration);
 
   1. queueName : Name of the queue service should listen to. Either queueName or topicName should be configured. 
   2. topicName : Name of the topic service should listen to. Either queueName or topicName should be configured.
-  3. peekLockModeEnabled : ASB has two modes of message receive. Setting this to `true` makes the mode to `PEEK_LOCK`. Making it false or not seeting it makes the mode to `RECEIVE_AND_DELETE `. You can find more information about the receive
+  3. peekLockModeEnabled : ASB has two modes of message receive. Setting this to `true` makes the mode to `PEEK_LOCK`. Making it false or not setting it makes the mode to `RECEIVE_AND_DELETE `. You can find more information about receive
   modes [here](https://docs.microsoft.com/en-us/java/api/com.microsoft.azure.servicebus.receivemode?view=azure-java-stable)
   4. subscriptionName : Name of the subscription if a topicName is specified. 
-  5. maxConcurrency : How many messages are parallely dispatche to the service (dafault =1, means sequential). 
-  6. prefetchCount: Number of messages pre-featched by underlying subscriber for efficiency (default - 0, means prefetch off) 
+  5. maxConcurrency : How many messages are parallelly dispatched to the service (default =1, means sequential). 
+  6. prefetchCount: Number of messages pre-fetched by underlying subscriber for efficiency (default - 0, means prefetch off) 
   7. maxAutoLockRenewDuration: Sets the amount of time to continue auto-renewing the lock in `seconds`. Setting Duration to #ZERO disables   auto-renewal. This is not considered when `peekLockModeEnabled` is false. (default 300 seconds)
   8. logLevel:  desired log level (e.g. DEBUG, INFO, WARN, (Default)ERROR, FATAL, OFF) for underlying SDK
 
 * Implement logic on how to process the message under `onMessage` resource. 
 * Implement logic on how to process error when receiving a message under `onError` resource. 
-* Following is an example on how to listen to messages from a Azure Service Bus queue called `MyQueue` sequencially using Ballerina ASB listener. 
+* Following is a complete example on how to listen to messages from an Azure Service Bus queue called `MyQueue` sequentially using Ballerina ASB listener. 
 
    Listen to Messages from the Azure Service Bus
 
@@ -144,11 +138,13 @@ listener asb:Listener asbListener = new (configuration);
     }
     service asb:MessageService on asbListener {
         isolated remote function onMessage(asb:Message message, asb:Caller caller) returns error? {
-            // Write your logic here
-            log:printInfo("Azure service bus message as byte[] which is the standard according to the AMQP protocol" + 
-            message.toString());
-            }
+            // Write your message processing logic here
+            log:printInfo("Message received from queue: " + message.toBalString());
             _ = check caller.complete(message);
+        }
+  
+        isolated remote function onError(asb:ErrorContext context, error 'error) returns error? {
+            // Write your error handling logic here
         }
     };
     ```
