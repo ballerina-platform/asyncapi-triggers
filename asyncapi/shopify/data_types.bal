@@ -64,7 +64,7 @@ public type OrderAdjustment record {
     # The reason for the order adjustment. To set this value, include discrepancy_reason when you create a refund.
     string? reason?;
     # The value of the discrepancy between the calculated refund and the actual refund. If the kind property's value is shipping_refund, then amount returns the value of shipping charges refunded to the customer.
-    int? amount?;
+    string? amount?;
     # The order adjustment type. Valid values are shipping_refund and refund_discrepancy.
     string? kind?;
     # The unique identifier for the order adjustment.
@@ -183,7 +183,7 @@ public type PaymentTerms record {
     # The type of selected payment terms template for the order.
     string? payment_terms_type?;
     # The amount that is owed according to the payment terms.
-    int? amount?;
+    string? amount?;
     # The name of the selected payment terms template for the order.
     string? payment_terms_name?;
     # The number of days between the invoice date and due date that is defined in the selected payment terms template.
@@ -467,7 +467,7 @@ public type PaymentSchedule record {
     # The date and time when the purchase is completed. Returns null initially and updates when the payment is captured.
     string? completed_at?;
     # The amount that is owed according to the payment terms.
-    int? amount?;
+    string? amount?;
     # The name of the payment method gateway.
     string? expected_payment_method?;
     # The presentment currency for the payment.
