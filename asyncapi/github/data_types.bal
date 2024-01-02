@@ -83,7 +83,7 @@ public type User record {
     string 'type; //"type" in payload
     boolean site_admin;
     string name?;
-    string email?;
+    string? email?;
 };
 
 # Represent the GitHub Repository payload.
