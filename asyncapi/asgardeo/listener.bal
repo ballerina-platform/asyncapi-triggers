@@ -24,7 +24,7 @@ public class Listener {
     private websub:Listener websubListener;
     private DispatcherService dispatcherService;
     private ListenerConfig config;
-    private http:ClientConfiguration httpConfig = {};
+    private websub:ClientConfiguration httpConfig = {};
     private string[] topics = [];
 
     public function init(ListenerConfig listenerConfig, @cloud:Expose int|http:Listener listenOn = 8090) returns error? {
@@ -32,7 +32,7 @@ public class Listener {
         self.config = listenerConfig;
         self.dispatcherService = new DispatcherService();
         string token = check fetchToken(listenerConfig.tokenEndpointHost, listenerConfig.clientId, listenerConfig.clientSecret);
-        http:ClientConfiguration httpConfig = {
+        websub:ClientConfiguration httpConfig = {
             auth: {
                 token: token
             }
