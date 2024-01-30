@@ -5,7 +5,7 @@ org = "ballerinax"
 name = "trigger.asgardeo"
 repository = "https://github.com/ballerina-platform/asyncapi-triggers"
 version = "0.5.0"
-distribution = "2201.4.1"
+distribution = "2201.8.0"
 icon = "docs/icon.png"
 authors = ["Ballerina"]
 
