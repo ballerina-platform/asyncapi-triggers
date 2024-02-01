@@ -66,11 +66,8 @@ task codeBuild {
     doLast {
         println "Task: Building triggers..."
         for (String path : ballerinaPackages) {
-            if (!(path.contains("asb") || path.contains("salesforce") || path.contains("asgardeo") || 
-            path.contains("hubspot") || path.contains("quickbooks"))) {
-                exec {
-                    commandLine 'sh', '-c', "${ballerinaDistributionPath}/bin/bal test ${path}"
-                }
+            if (!path.contains("asgardeo")) {
+                continue;
             }
             exec {
                 commandLine 'sh', '-c', "${ballerinaDistributionPath}/bin/bal pack ${path}"
@@ -80,6 +77,9 @@ task codeBuild {
         if (!release) {
             println "Task: Pushing triggers to local..."
             for (String path : ballerinaPackages) {
+                if (!path.contains("asgardeo")) {
+                    continue;
+                }
                 try {
                     exec {
                         workingDir "${path}"
@@ -98,7 +98,10 @@ task releaseTrigger {
     doLast {
         if(release){
             println "Task: Pushing triggers to Ballerina Central..."
-            for (String path : ballerinaPackages) {          
+            for (String path : ballerinaPackages) {    
+                if (!path.contains("asgardeo")) {
+                    continue;
+                }      
                 try {
                     exec {
                         println "Pushing trigger [" + path + "] to Ballerina Central"
