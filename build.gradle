@@ -46,7 +46,7 @@ if (project.hasProperty("release")){
     release = new Boolean(project.property("release").toString())
 }
 
-def specificTrigger = "";
+def specificTrigger = "asgardeo";
 if (project.hasProperty("trigger")){
     specificTrigger = project.property("trigger").toString()
 }
