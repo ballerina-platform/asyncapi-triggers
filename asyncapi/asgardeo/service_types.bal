@@ -14,6 +14,7 @@ public type UserOperationService service object {
 
 public type LoginService service object {
     remote function onLoginSuccess(LoginSuccessEvent event) returns error?;
+    remote function onLoginFailed(LoginFailedEvent event) returns error?;
 };
 
 public type NotificationService service object {
