@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id "com.github.johnrengelman.shadow" version "5.2.0"
+    id "com.github.johnrengelman.shadow" version "${githubJohnrengelmanShadowVersion}"
 }
 
 group project.asb_trigger_group
@@ -27,10 +27,10 @@ repositories {
 dependencies {
     implementation group: 'com.azure', name: 'azure-messaging-servicebus', version: project.asb_sdk_version
     dist group: 'com.azure', name: 'azure-messaging-servicebus', version: project.asb_sdk_version
-    compile group: 'org.ballerinalang', name: 'ballerina-lang', version: project.ballerinaLangVersion
+    implementation group: 'org.ballerinalang', name: 'ballerina-lang', version: project.ballerinaLangVersion
     implementation group: 'log4j', name: 'log4j', version: project.log4jVersion
     dist group: 'log4j', name: 'log4j', version: project.log4jVersion
-    compile(group: 'org.ballerinalang', name: 'ballerina-runtime', version: project.ballerinaLangVersion) {
+    implementation(group: 'org.ballerinalang', name: 'ballerina-runtime', version: project.ballerinaLangVersion) {
         transitive = false
     }
 }
