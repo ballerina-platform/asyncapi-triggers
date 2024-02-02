@@ -929,10 +929,10 @@ public type Release record {|
     User author;
     boolean prerelease;
     string created_at;
-    string published_at;
+    string? published_at;
     Asset[] assets;
-    string tarball_url;
-    string zipball_url;
+    string? tarball_url;
+    string? zipball_url;
     string? body;
 |};
 
