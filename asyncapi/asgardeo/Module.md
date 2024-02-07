@@ -15,6 +15,7 @@ The Asgardeo Trigger module allows you to listen to the following events when th
    - User Group Update Event
 - **Login Events**
    - Login Success Event
+   - Login Failed Event
 
 Learn more about [Asgardeo events](https://wso2.com/asgardeo/docs/references/asgardeo-events/#configure-asgardeo-to-publish-events).
 
