@@ -162,7 +162,7 @@ public type LoginSuccessData record {
 # + serviceProvider - Service provider  
 # + authenticatingUser - User Name  
 # + userId - User Id
-# + failedStep -  A list of Authentication Steps
+# + failedStep -  Authentication failed step
 public type LoginFailedData record {
     int organizationId?;
     string ref?;
@@ -170,7 +170,7 @@ public type LoginFailedData record {
     string serviceProvider?;
     string authenticatingUser?;
     string userId?;
-    AuthStep authSteps?;
+    AuthStep failedStep?;
 };
 
 # User data

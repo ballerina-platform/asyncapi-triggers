@@ -12,6 +12,8 @@ public type UserOperationService service object {
     remote function onUpdateUserGroup(UserGroupUpdateEvent event) returns error?;
 };
 
+# Triggers when a new event related to login is received.
+# Available actions: onLoginSuccess and onLoginFailed
 public type LoginService service object {
     remote function onLoginSuccess(LoginSuccessEvent event) returns error?;
     remote function onLoginFailed(LoginFailedEvent event) returns error?;
