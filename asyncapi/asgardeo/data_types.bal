@@ -97,8 +97,8 @@ public type LoginSuccessEvent record {
 # + eventData - Event data  
 # + securityData - Event related security data
 public type LoginFailedEvent record {
-    LoginFailedData eventData?;
-    GenericSecurityData securityData?;
+    LoginFailedData eventData;
+    GenericSecurityData securityData;
  };
 
 # Add User event data
@@ -164,13 +164,13 @@ public type LoginSuccessData record {
 # + userId - User Id
 # + failedStep -  Authentication failed step
 public type LoginFailedData record {
-    int organizationId?;
-    string ref?;
-    string organizationName?;
-    string serviceProvider?;
-    string authenticatingUser?;
-    string userId?;
-    AuthStep failedStep?;
+    int organizationId;
+    string ref;
+    string organizationName;
+    string serviceProvider;
+    string authenticatingUser;
+    string? userId?;
+    AuthStep failedStep;
 };
 
 # User data
@@ -188,9 +188,9 @@ public type User record {
 # + idp - IdentityProvider
 # + authenticator - Authenticator
 public type AuthStep record {
-    int step?;
-    string idp?;
-    string authenticator?;
+    int step;
+    string idp;
+    string authenticator;
 };
 
 # User Group Update event data
