@@ -92,7 +92,7 @@ public type LoginSuccessEvent record {
     GenericSecurityData securityData?;
 };
 
-# Login Failed event
+# Represents login-failed event.
 #
 # + eventData - Event data  
 # + securityData - Event related security data
@@ -154,7 +154,7 @@ public type LoginSuccessData record {
     AuthStep[] authSteps?;
 };
 
-# Login Failed Data
+# Represents login-failed event data.
 #
 # + organizationId - Organization Id  
 # + ref - Reference  
@@ -182,7 +182,7 @@ public type User record {
     string userId?;
 };
 
-# AuthStep data
+# Represents auth-step data.
 #
 # + step - Step  
 # + idp - IdentityProvider
