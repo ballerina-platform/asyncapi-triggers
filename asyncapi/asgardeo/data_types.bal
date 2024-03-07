@@ -100,8 +100,8 @@ public type GenericEvent record {
 # + eventData - Event data  
 # + securityData - Event related security data
 public type UpdateUserCredentialsEvent record {
-    UpdateUserCredentialsData eventData?;
-    GenericSecurityData securityData?;
+    UpdateUserCredentialsData eventData;
+    GenericSecurityData securityData;
 };
 
 # Update Event - User and Group
