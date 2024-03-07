@@ -7,7 +7,7 @@ public type RegistrationService service object {
 public type UserOperationService service object {
     remote function onLockUser(GenericEvent event) returns error?;
     remote function onUnlockUser(GenericEvent event) returns error?;
-    remote function onUpdateUserCredentials(GenericEvent event) returns error?;
+    remote function onUpdateUserCredentials(UpdateUserCredentialsEvent event) returns error?;
     remote function onDeleteUser(GenericEvent event) returns error?;
     remote function onUpdateUserGroup(UserGroupUpdateEvent event) returns error?;
 };
