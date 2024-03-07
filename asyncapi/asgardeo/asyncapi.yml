@@ -191,7 +191,7 @@ components:
           example: john@gmail.com
         scenario:
           type: string
-          example: myorg  
+          example: CREDENTIAL_UPDATE_BY_USER_VIA_MY_ACCOUNT  
         userStoreName:
           type: string
           example: DEFAULT           
