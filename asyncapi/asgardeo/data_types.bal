@@ -63,14 +63,14 @@ public type GenericUserData record {
 # + scenario - Credential Updated scenario
 # + claims - Claims
 public type UpdateUserCredentialsData record {
-    int organizationId?;
-    string ref?;
-    string organizationName?;
-    string userStoreName?;
-    string userName?;
-    string userId?;
-    string scenario?;
-    map<string> claims?;
+    int organizationId;
+    string ref;
+    string organizationName;
+    string userStoreName;
+    string userName;
+    string userId;
+    string scenario;
+    map<string> claims;
 };
 
 # Generic Security Data
