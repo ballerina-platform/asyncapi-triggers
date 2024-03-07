@@ -37,7 +37,7 @@ channels:
             title: User account was unlocked.
           - x-ballerina-event-type: urn:ietf:params:user-operations:updateUserCredentials
             payload:
-              $ref: '#/components/schemas/GenericEvent'
+              $ref: '#/components/schemas/UpdateUserCredentialsEvent'
             title: User credentilas were updated.
           - x-ballerina-event-type: urn:ietf:params:user-operations:deleteUser
             payload:
