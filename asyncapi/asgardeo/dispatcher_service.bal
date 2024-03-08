@@ -136,9 +136,9 @@ service class DispatcherService {
                     check self.executeRemoteFunc(genericEvent, "urn:ietf:params:user-operations:unlockUser", "UserOperationService", "onUnlockUser");
                 }
                 "urn:ietf:params:user-operations:updateUserCredentials" => {
-                    GenericUserData eventData = check eventMap.get(event).cloneWithType(GenericUserData);
-                    GenericEvent genericEvent = {securityData, eventData};
-                    check self.executeRemoteFunc(genericEvent, "urn:ietf:params:user-operations:updateUserCredentials", "UserOperationService", "onUpdateUserCredentials");
+                    UpdateUserCredentialsData eventData = check eventMap.get(event).cloneWithType(UpdateUserCredentialsData);
+                    UpdateUserCredentialsEvent updateUserCredentialsEvent = {securityData, eventData};
+                    check self.executeRemoteFunc(updateUserCredentialsEvent, "urn:ietf:params:user-operations:updateUserCredentials", "UserOperationService", "onUpdateUserCredentials");
                 }
                 "urn:ietf:params:user-operations:deleteUser" => {
                     GenericUserData eventData = check eventMap.get(event).cloneWithType(GenericUserData);

@@ -52,6 +52,27 @@ public type GenericUserData record {
     map<string> claims?;
 };
 
+# Update User Credentials Data
+#
+# + organizationId - Organization Id  
+# + ref - Reference
+# + organizationName - Organization Name  
+# + userStoreName - Name of the User Store
+# + userName - User Name
+# + userId - User Id
+# + scenario - Credential Updated scenario
+# + claims - Claims
+public type UpdateUserCredentialsData record {
+    int organizationId;
+    string ref;
+    string organizationName;
+    string userStoreName;
+    string userName;
+    string userId;
+    string scenario;
+    map<string> claims;
+};
+
 # Generic Security Data
 #
 # + aud - Audience of the event.  
@@ -72,6 +93,15 @@ public type GenericSecurityData record {
 public type GenericEvent record {
     GenericUserData eventData?;
     GenericSecurityData securityData?;
+};
+
+# Credential Update Event
+#
+# + eventData - Event data  
+# + securityData - Event related security data
+public type UpdateUserCredentialsEvent record {
+    UpdateUserCredentialsData eventData;
+    GenericSecurityData securityData;
 };
 
 # Update Event - User and Group
@@ -168,7 +198,7 @@ public type LoginFailedData record {
     string ref;
     string organizationName;
     string serviceProvider;
-    string authenticatingUser;
+    string? authenticatingUser?;
     string? userId?;
     AuthStep failedStep;
 };
@@ -237,7 +267,7 @@ public type SmsOtpNotificationEvent record {
 };
 
 # Generic Data Type
-public type GenericDataType GenericEvent|UserGroupUpdateEvent|LoginSuccessEvent|AddUserEvent|SmsOtpNotificationEvent|LoginFailedEvent;
+public type GenericDataType GenericEvent|UpdateUserCredentialsEvent|UserGroupUpdateEvent|LoginSuccessEvent|AddUserEvent|SmsOtpNotificationEvent|LoginFailedEvent;
 
 # Key format
 #

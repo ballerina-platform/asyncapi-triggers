@@ -37,7 +37,7 @@ channels:
             title: User account was unlocked.
           - x-ballerina-event-type: urn:ietf:params:user-operations:updateUserCredentials
             payload:
-              $ref: '#/components/schemas/GenericEvent'
+              $ref: '#/components/schemas/UpdateUserCredentialsEvent'
             title: User credentilas were updated.
           - x-ballerina-event-type: urn:ietf:params:user-operations:deleteUser
             payload:
@@ -163,6 +163,38 @@ components:
           $ref: '#/components/schemas/GenericSecurityData'
         eventData:
           $ref: '#/components/schemas/GenericUserData'
+    UpdateUserCredentialsEvent:
+      type: object
+      properties:
+        securityData:
+          $ref: '#/components/schemas/GenericSecurityData'
+        eventData:
+          $ref: '#/components/schemas/UpdateUserCredentialsData'
+    UpdateUserCredentialsData:
+      type: object
+      properties:
+        ref:
+          type: string
+          example: >-
+            https://api.asg.io/t/myorg/scim2/Users/36a4541a-1055-4986-872c-cdf2faa7a468
+        organizationId:
+          type: int
+          example: '1234'
+        organizationName:
+          type: string
+          example: myorg
+        userId:
+          type: string
+          example: e3dca90f-e1e3-4f4b-83e4-5743ecce570f
+        userName:
+          type: string
+          example: john@gmail.com
+        scenario:
+          type: string
+          example: CREDENTIAL_UPDATE_BY_USER_VIA_MY_ACCOUNT  
+        userStoreName:
+          type: string
+          example: DEFAULT           
     UserGroupUpdateEvent:
       type: object
       properties:
