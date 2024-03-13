@@ -60,7 +60,8 @@ public type GenericUserData record {
 # + userStoreName - Name of the User Store
 # + userName - User Name
 # + userId - User Id
-# + scenario - Credential Updated scenario
+# + credentialUpdateMethod - Credential Updated Method
+# + credentialUpdateChannel - Credential Updated Channel
 # + claims - Claims
 public type UpdateUserCredentialsData record {
     int organizationId;
@@ -69,7 +70,8 @@ public type UpdateUserCredentialsData record {
     string userStoreName;
     string userName;
     string userId;
-    string scenario;
+    string credentialUpdateMethod;
+    string credentialUpdateChannel;
     map<string> claims;
 };
 

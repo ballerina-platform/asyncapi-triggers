@@ -189,9 +189,12 @@ components:
         userName:
           type: string
           example: john@gmail.com
-        scenario:
+        credentialUpdateMethod:
           type: string
-          example: CREDENTIAL_UPDATE_BY_USER_VIA_MY_ACCOUNT  
+          example: ADMIN_FORCED_RESET
+        credentialUpdateChannel:
+          type: string
+          example: EMAIL_LINK     
         userStoreName:
           type: string
           example: DEFAULT           
