@@ -189,12 +189,12 @@ components:
         userName:
           type: string
           example: john@gmail.com
-        credentialUpdateMethod:
+        initiatorType:
           type: string
-          example: ADMIN_FORCED_RESET
-        credentialUpdateChannel:
+          example: admin
+        action:
           type: string
-          example: EMAIL_LINK     
+          example: update     
         userStoreName:
           type: string
           example: DEFAULT           
