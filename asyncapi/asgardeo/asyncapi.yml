@@ -189,9 +189,12 @@ components:
         userName:
           type: string
           example: john@gmail.com
-        scenario:
+        initiatorType:
           type: string
-          example: CREDENTIAL_UPDATE_BY_USER_VIA_MY_ACCOUNT  
+          example: admin
+        action:
+          type: string
+          example: update     
         userStoreName:
           type: string
           example: DEFAULT           
