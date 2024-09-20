@@ -55,6 +55,10 @@ channels:
             payload:
               $ref: '#/components/schemas/LoginSuccessEvent'
             title: User login succesfull.
+          - x-ballerina-event-type: urn:ietf:params:logins:loginFailed
+            payload:
+              $ref: '#/components/schemas/LoginFailedEvent'
+            title: User login failed.   
   Notifications:
     subscribe:
       message:
@@ -230,6 +234,52 @@ components:
         serviceProvider:
           type: string
           example: My Account
+        authSteps:
+          type: array
+          description: A list of authentication steps
+          items:
+            $ref: '#/components/schemas/authStep'
+    LoginFailedEvent:
+      type: object
+      properties:
+        securityData:
+          $ref: '#/components/schemas/GenericSecurityData'
+        eventData:
+          $ref: '#/components/schemas/LoginFailedData'
+    LoginFailedData:
+      type: object
+      properties:
+        ref:
+          type: string
+          example: >-
+            https://api.asg.io/t/myorg/scim2/Users/36a4541a-1055-4986-872c-cdf2faa7a468
+        organizationId:
+          type: int
+          example: '1234'
+        organizationName:
+          type: string
+          example: myorg
+        userId:
+          type: string
+          example: e3dca90f-e1e3-4f4b-83e4-5743ecce570f
+        authenticatingUser:
+          type: string
+          example: john@gmail.com
+        serviceProvider:
+          type: string
+          example: My Account
+        failedStep:
+          type: object
+          properties:
+            step:
+              type: int
+              example: 1
+            idp:
+              type: string
+              example: Google
+            authenticator:
+              type: string
+              example: GoogleOIDCAuthenticator         
     user:
       type: object
       properties:
@@ -239,6 +289,18 @@ components:
         userName:
           type: string
           example: john@mailinator.com
+    authStep:
+      type: object
+      properties:
+        step:
+          type: int
+          example: 1
+        idp:
+          type: string
+          example: Google
+        authenticator:
+          type: string
+          example: GoogleOIDCAuthenticator       
     SMSOTPNotificationEvent:
      type: object
      properties:

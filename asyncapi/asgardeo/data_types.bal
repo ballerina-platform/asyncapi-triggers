@@ -92,6 +92,15 @@ public type LoginSuccessEvent record {
     GenericSecurityData securityData?;
 };
 
+# Login Failed event
+#
+# + eventData - Event data  
+# + securityData - Event related security data
+public type LoginFailedEvent record {
+    LoginFailedData eventData?;
+    GenericSecurityData securityData?;
+};
+
 # Add User event data
 #
 # + organizationId - Organization Id  
@@ -133,6 +142,7 @@ public type AddUserEvent record {
 # + serviceProvider - Service provider  
 # + userName - User Name  
 # + userId - User Id
+# + authSteps -  A list of Authentication Steps
 public type LoginSuccessData record {
     int organizationId?;
     string ref?;
@@ -141,6 +151,26 @@ public type LoginSuccessData record {
     string serviceProvider?;
     string userName?;
     string userId?;
+    AuthStep[] authSteps?;
+};
+
+# Login Failed Data
+#
+# + organizationId - Organization Id  
+# + ref - Reference  
+# + organizationName - Organization Name  
+# + serviceProvider - Service provider  
+# + authenticatingUser - User Name  
+# + userId - User Id
+# + failedStep -  Authentication failed step
+public type LoginFailedData record {
+    int organizationId?;
+    string ref?;
+    string organizationName?;
+    string serviceProvider?;
+    string authenticatingUser?;
+    string userId?;
+    AuthStep failedStep?;
 };
 
 # User data
@@ -150,6 +180,17 @@ public type LoginSuccessData record {
 public type User record {
     string userName?;
     string userId?;
+};
+
+# AuthStep data
+#
+# + step - Step  
+# + idp - IdentityProvider
+# + authenticator - Authenticator
+public type AuthStep record {
+    int step?;
+    string idp?;
+    string authenticator?;
 };
 
 # User Group Update event data
@@ -196,7 +237,7 @@ public type SmsOtpNotificationEvent record {
 };
 
 # Generic Data Type
-public type GenericDataType GenericEvent|UserGroupUpdateEvent|LoginSuccessEvent|AddUserEvent|SmsOtpNotificationEvent;
+public type GenericDataType GenericEvent|UserGroupUpdateEvent|LoginSuccessEvent|AddUserEvent|SmsOtpNotificationEvent|LoginFailedEvent;
 
 # Key format
 #
