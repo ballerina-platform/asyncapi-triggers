@@ -21,6 +21,9 @@ package io.ballerina.sfdc;
 import io.ballerina.runtime.api.Environment;
 import io.ballerina.runtime.api.Module;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * This class will hold module related utility functions.
  */
@@ -40,5 +43,14 @@ public class ModuleUtils {
 
     public static Module getModule() {
         return salesforceModule;
+    }
+
+    public static Map<String, Object> getProperties(String resourceName) {
+        Map<String, Object> properties = new HashMap<>();
+        properties.put("moduleOrg", getModule().getOrg());
+        properties.put("moduleName", getModule().getName());
+        properties.put("moduleVersion", getModule().getMajorVersion());
+        properties.put("parentFunctionName", resourceName);
+        return properties;
     }
 }

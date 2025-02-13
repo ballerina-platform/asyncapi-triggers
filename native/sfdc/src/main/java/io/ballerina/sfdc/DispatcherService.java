@@ -19,7 +19,7 @@ package io.ballerina.sfdc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import io.ballerina.runtime.api.Runtime;
-import io.ballerina.runtime.api.async.StrandMetadata;
+import io.ballerina.runtime.api.concurrent.StrandMetadata;
 import io.ballerina.runtime.api.creators.ValueCreator;
 import io.ballerina.runtime.api.types.MethodType;
 import io.ballerina.runtime.api.utils.StringUtils;
@@ -51,6 +51,7 @@ import static io.ballerina.sfdc.Constants.SEQUENCE_NUMBER;
 import static io.ballerina.sfdc.Constants.TRANSACTION_KEY;
 import static io.ballerina.sfdc.Constants.UNDELETE;
 import static io.ballerina.sfdc.Constants.UPDATE;
+import static io.ballerina.sfdc.ModuleUtils.getProperties;
 
 /**
  * Dispatcher Service class to dispatch the event data obtained through the streaming API
@@ -89,14 +90,15 @@ public class DispatcherService {
     }
 
     private void executeResourceOnEvent(BMap<BString, Object> eventRecord, String functionName) {
-        StrandMetadata metaData = new StrandMetadata(ModuleUtils.getModule().getOrg(),
-                ModuleUtils.getModule().getName(), ModuleUtils.getModule().getMajorVersion(), functionName);
+        Map<String, Object> metaData = getProperties(functionName);
         executeResource(functionName, metaData, eventRecord);
     }
 
-    private void executeResource(String functionName, StrandMetadata metaData,
+    private void executeResource(String functionName, Map<String, Object> metaData,
                                  BMap<BString, Object> eventRecord) {
-        runtime.invokeMethodAsync(service, functionName, null, metaData, null, eventRecord, true);
+        Thread.startVirtualThread(() -> {
+            runtime.callMethod(service, functionName, new StrandMetadata(true, metaData), eventRecord);
+        });
     }
 
     /**

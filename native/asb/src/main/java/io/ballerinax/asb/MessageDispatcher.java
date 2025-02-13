@@ -24,8 +24,8 @@ import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.CountDownLatch;
 
+import io.ballerina.runtime.api.concurrent.StrandMetadata;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
@@ -41,10 +41,7 @@ import com.azure.messaging.servicebus.ServiceBusProcessorClient;
 import com.azure.messaging.servicebus.ServiceBusReceivedMessage;
 import com.azure.messaging.servicebus.ServiceBusReceivedMessageContext;
 
-import io.ballerina.runtime.api.PredefinedTypes;
 import io.ballerina.runtime.api.Runtime;
-import io.ballerina.runtime.api.async.Callback;
-import io.ballerina.runtime.api.async.StrandMetadata;
 import io.ballerina.runtime.api.creators.ValueCreator;
 import io.ballerina.runtime.api.types.MethodType;
 import io.ballerina.runtime.api.utils.StringUtils;
@@ -55,6 +52,8 @@ import io.ballerina.runtime.api.values.BString;
 import io.ballerinax.asb.util.ASBConstants;
 import io.ballerinax.asb.util.ASBUtils;
 import io.ballerinax.asb.util.ModuleUtils;
+
+import static io.ballerinax.asb.util.ModuleUtils.getProperties;
 
 /**
  * Creates underlying listener and dispatches messages with data binding.
@@ -167,8 +166,6 @@ public class MessageDispatcher {
     /**
      * Starts receiving messages asynchronously and dispatch the messages to the
      * attached service.
-     * 
-     * @param clientBuilder
      */
     public void startListeningAndDispatching() {
 
@@ -256,10 +253,7 @@ public class MessageDispatcher {
         Exception e = (Exception) context.getException();
         BError error = ASBUtils.createErrorValue(e.getClass().getTypeName(), e);
         BMap<BString, Object> errorDetailBMap = getErrorMessage(context);
-        CountDownLatch countDownLatch = new CountDownLatch(1);
-        Callback callback = new ASBResourceCallback(countDownLatch);
-        executeResourceOnError(callback, errorDetailBMap, true, error, true);
-        countDownLatch.await();
+        executeResourceOnError(errorDetailBMap, error);
     }
 
     /**
@@ -271,11 +265,8 @@ public class MessageDispatcher {
      */
     private void dispatchMessage(ServiceBusReceivedMessage message) throws InterruptedException {
         BMap<BString, Object> messageBObject = null;
-        CountDownLatch countDownLatch = new CountDownLatch(1);
-        Callback callback = new ASBResourceCallback(countDownLatch);
         messageBObject = getReceivedMessage(message);
-        executeResourceOnMessage(callback, messageBObject, true, this.caller, true);
-        countDownLatch.await();
+        executeResourceOnMessage(messageBObject, this.caller);
     }
 
     private Object convertAMQPToJava(String messageId, Object amqpValue) {
@@ -408,23 +399,26 @@ public class MessageDispatcher {
         return createRecordValue;
     }
 
-    private void executeResourceOnMessage(Callback callback, Object... args) {
-        StrandMetadata metaData = new StrandMetadata(ModuleUtils.getModule().getOrg(),
-                ModuleUtils.getModule().getName(), ModuleUtils.getModule().getMajorVersion(),
-                ASBConstants.FUNC_ON_MESSAGE);
-        executeResource(ASBConstants.FUNC_ON_MESSAGE, callback, metaData, args);
+    private void executeResourceOnMessage(Object... args) {
+        Map<String, Object> metaData = getProperties(ASBConstants.FUNC_ON_MESSAGE);
+        executeResource(ASBConstants.FUNC_ON_MESSAGE, metaData, args);
     }
 
-    private void executeResourceOnError(Callback callback, Object... args) {
-        StrandMetadata metaData = new StrandMetadata(ModuleUtils.getModule().getOrg(),
-                ModuleUtils.getModule().getName(), ModuleUtils.getModule().getMajorVersion(),
-                ASBConstants.FUNC_ON_ERROR);
-        executeResource(ASBConstants.FUNC_ON_ERROR, callback, metaData, args);
+    private void executeResourceOnError(Object... args) {
+        Map<String, Object> metaData = getProperties(ASBConstants.FUNC_ON_ERROR);
+        executeResource(ASBConstants.FUNC_ON_ERROR, metaData, args);
     }
 
-    private void executeResource(String function, Callback callback, StrandMetadata metaData,
-            Object... args) {
-        runtime.invokeMethodAsyncSequentially(service, function, null, metaData, callback, null,
-                PredefinedTypes.TYPE_NULL, args);
+    private void executeResource(String function, Map<String, Object> metaData,
+                                 Object... args) {
+        Thread.startVirtualThread(() -> {
+            try {
+                Object result = runtime.callMethod(service, function, new StrandMetadata(false, metaData), args);
+                if (result instanceof BError) {
+                    ((BError) result).printStackTrace();
+                }
+            } catch (BError ignored) {}
+
+        });
     }
 }

@@ -7,10 +7,10 @@ The `ballerinax/trigger.twilio` is a [Ballerina](https://ballerina.io/) trigger 
 This package provides the capability to access Twilio Events API.
 
 ### Compatibility
-|                               | Version                        |
-|-------------------------------|--------------------------------|
-| Ballerina Language            | Ballerina Swan Lake 2201.4.1   |
-| Twilio Events API             | V1.0.0                         | 
+|                               | Version                       |
+|-------------------------------|-------------------------------|
+| Ballerina Language            | Ballerina Swan Lake 2201.11.0 |
+| Twilio Events API             | V1.0.0                        | 
 
 ## Report issues
 To report bugs, request new features, start new discussions, view project boards, etc., go to the [Ballerina AsyncAPI Triggers repository](https://github.com/ballerina-platform/asyncapi-triggers)

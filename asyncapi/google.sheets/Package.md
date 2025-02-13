@@ -5,9 +5,9 @@ The `ballerinax/trigger.google.sheets` is a [Ballerina](https://ballerina.io/) t
 This package provides the capability to access Google App script for Google Sheets.
 
 ### Compatibility
-|                               | Version                        |
-|-------------------------------|--------------------------------|
-| Ballerina Language            | Ballerina Swan Lake 2201.4.1   |
+|                               | Version                       |
+|-------------------------------|-------------------------------|
+| Ballerina Language            | Ballerina Swan Lake 2201.11.0 |
 
 ## Report issues
 To report bugs, request new features, start new discussions, view project boards, etc., go to the [Ballerina Extended Library repository](https://github.com/ballerina-platform/ballerina-extended-library)

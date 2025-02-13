@@ -7,15 +7,15 @@ authors = ["Ballerina"]
 keywords = ["IT Operations/Message Brokers", "Cost/Paid", "Vendor/Microsoft"]
 icon = "docs/icon.png"
 repository = "https://github.com/ballerina-platform/asyncapi-triggers"
-distribution = "2202.4.1"
+distribution = "2201.11.0-20250127-101700-a4b67fe5"
 
 [build-options]
 observabilityIncluded = true
 
-[[platform.java11.dependency]]
-path = "../../native/asb/build/libs/asb-1.1.0.jar"
+[[platform.java21.dependency]]
+path = "../../native/asb/build/libs/asb-1.2.0.jar"
 groupId = "org.ballerinax"
 artifactId = "asb"
 module = "asb" 
-version = "1.1.0"
+version = "1.2.0"
 

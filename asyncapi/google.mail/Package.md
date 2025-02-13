@@ -8,8 +8,8 @@ This package provides the capability to access Gmail Webhook API.
 ### Compatibility
 
 |                    | Version                       |
-| ------------------ | ------------------------------|
-| Ballerina Language | Ballerina Swan Lake 2201.4.1  |
+| ------------------ |-------------------------------|
+| Ballerina Language | Ballerina Swan Lake 2201.11.0 |
 
 ## Report issues
 

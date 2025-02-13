@@ -5,10 +5,10 @@ The `ballerinax/trigger.google.drive` is a [Ballerina](https://ballerina.io/) tr
 This package provides the capability to access Google Drive API
 
 ### Compatibility
-|                               | Version                        |
-|-------------------------------|--------------------------------|
-| Ballerina Language            | Ballerina Swan Lake 2201.4.1   |
-| Google Drive API              | v3                             | 
+|                               | Version                       |
+|-------------------------------|-------------------------------|
+| Ballerina Language            | Ballerina Swan Lake 2201.11.0 |
+| Google Drive API              | v3                            | 
 
 ## Report issues
 To report bugs, request new features, start new discussions, view project boards, etc., go to the [Ballerina AsyncAPI Triggers repository](https://github.com/ballerina-platform/asyncapi-triggers)

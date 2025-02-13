@@ -5,10 +5,10 @@ The `ballerinax/trigger.slack` is a [Ballerina](https://ballerina.io/) trigger f
 This package provides the capability to access Slack Events API.
 
 ### Compatibility
-|                               | Version                        |
-|-------------------------------|--------------------------------|
-| Ballerina Language            | Ballerina Swan Lake 2201.4.1   |
-| Slack Events API              | V1.0.0                         | 
+|                               | Version                       |
+|-------------------------------|-------------------------------|
+| Ballerina Language            | Ballerina Swan Lake 2201.11.0 |
+| Slack Events API              | V1.0.0                        | 
 
 ## Report issues
 To report bugs, request new features, start new discussions, view project boards, etc., go to the [Ballerina AsyncAPI Triggers repository](https://github.com/ballerina-platform/asyncapi-triggers)

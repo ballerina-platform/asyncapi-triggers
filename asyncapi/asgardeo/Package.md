@@ -5,10 +5,10 @@ The `ballerinax/trigger.asgardeo` is a [Ballerina](https://ballerina.io/) trigge
 This package provides the capability to access Asgaredo Events API.
 
 ### Compatibility
-|                               | Version                        |
-|-------------------------------|--------------------------------|
-| Ballerina Language            | Ballerina Swan Lake 2201.4.1   |
-| Asgardeo Events API              | V1.0.0                         | 
+|                               | Version                       |
+|-------------------------------|-------------------------------|
+| Ballerina Language            | Ballerina Swan Lake 2201.11.0 |
+| Asgardeo Events API              | V1.0.0                        | 
 
 ## Report issues
 To report bugs, request new features, start new discussions, view project boards, etc., go to the [Ballerina AsyncAPI Triggers repository](https://github.com/ballerina-platform/asyncapi-triggers)

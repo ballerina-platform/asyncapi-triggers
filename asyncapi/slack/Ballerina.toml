@@ -6,7 +6,7 @@ name = "trigger.slack"
 icon = "icon.png"
 repository = "https://github.com/ballerina-platform/asyncapi-triggers"
 version = "0.8.0"
-distribution = "2201.4.1"
+distribution = "2201.11.0-20250127-101700-a4b67fe5"
 icon = "docs/icon.png"
 authors = ["Ballerina"]
 
