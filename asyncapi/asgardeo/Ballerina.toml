@@ -8,6 +8,7 @@ version = "0.5.0"
 distribution = "2201.11.0-20250127-101700-a4b67fe5"
 icon = "docs/icon.png"
 authors = ["Ballerina"]
+readme = "Package.md"
 
 [build-options]
 observabilityIncluded = true
