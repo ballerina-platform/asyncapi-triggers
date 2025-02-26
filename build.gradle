@@ -84,6 +84,10 @@ tasks.register('codeBuild') {
         if (!release) {
             println "Task: Pushing triggers to local..."
             for (String path : ballerinaPackages) {
+                // Temporarily disable salesforce.trigger build as it has yet to migrate to U11
+                if (path.contains("salesforce")) {
+                    continue;
+                }
                 try {
                     exec {
                         workingDir "${path}"
