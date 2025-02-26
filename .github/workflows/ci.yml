@@ -30,4 +30,4 @@ jobs:
           packageUser: ${{ github.actor }}
           packagePAT: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          ./gradlew build -Prelease=false -Ptrigger=slack
+          ./gradlew build -Prelease=false
