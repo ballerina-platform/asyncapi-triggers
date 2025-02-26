@@ -5,6 +5,9 @@ on: [push, pull_request]
 jobs:
   container:
     runs-on: ubuntu-latest
+    env:
+      packageUser: ${{ secrets.BALLERINA_BOT_USERNAME }}
+      packagePAT: ${{ secrets.BALLERINA_BOT_TOKEN }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
