@@ -17,12 +17,6 @@ on:
 jobs:
   container:
     runs-on: ubuntu-latest
-<<<<<<< HEAD
-    container:
-      image: ballerina/ballerina:2201.11.0
-      options: --user root
-=======
->>>>>>> upstream/main
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
