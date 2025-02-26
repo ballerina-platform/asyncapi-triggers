@@ -12,25 +12,25 @@ configurations {
     }
 }
 
-repositories {
-    mavenLocal()
+// repositories {
+//     mavenLocal()
 
-    maven {
-        url = 'https://maven.wso2.org/nexus/content/groups/wso2-public/'
-    }
+//     maven {
+//         url = 'https://maven.wso2.org/nexus/content/groups/wso2-public/'
+//     }
 
-    maven {
-        url = 'https://repo.maven.apache.org/maven2'
-    }
+//     maven {
+//         url = 'https://repo.maven.apache.org/maven2'
+//     }
 
-    maven {
-        url = 'https://maven.pkg.github.com/ballerina-platform/ballerina-lang'
-        credentials {
-            username System.getenv("packageUser")
-            password System.getenv("packagePAT")
-        }
-    }
-}
+//     maven {
+//         url = 'https://maven.pkg.github.com/ballerina-platform/ballerina-lang'
+//         credentials {
+//             username System.getenv("packageUser")
+//             password System.getenv("packagePAT")
+//         }
+//     }
+// }
 
 dependencies {
     implementation group: 'com.azure', name: 'azure-messaging-servicebus', version: project.asb_sdk_version
