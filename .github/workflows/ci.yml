@@ -5,9 +5,9 @@ on: [push, pull_request]
 jobs:
   container:
     runs-on: ubuntu-latest
-    env:
-      packageUser: ${{ secrets.BALLERINA_BOT_USERNAME }}
-      packagePAT: ${{ secrets.BALLERINA_BOT_TOKEN }}
+    # env:
+    #   packageUser: ${{ secrets.BALLERINA_BOT_USERNAME }}
+    #   packagePAT: ${{ secrets.BALLERINA_BOT_TOKEN }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -28,7 +28,7 @@ jobs:
           BALLERINA_CENTRAL_ACCESS_TOKEN: ${{ secrets.BALLERINA_CENTRAL_DEV_ACCESS_TOKEN }}
           JAVA_OPTS: -DBALLERINA_DEV_COMPILE_BALLERINA_ORG=true
           GRADLE_USER_HOME: ~/.gradle
-          packageUser: ${{ github.actor }}
-          packagePAT: ${{ secrets.GITHUB_TOKEN }}
+          packageUser: ${{ secrets.BALLERINA_BOT_USERNAME }}
+          packagePAT: ${{ secrets.BALLERINA_BOT_TOKEN }}
         run: |
           ./gradlew build -Prelease=false
