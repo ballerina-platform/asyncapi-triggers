@@ -66,7 +66,11 @@ tasks.register('codeBuild') {
     doLast {
         println "Task: Building triggers..."
         for (String path : ballerinaPackages) {
-            if (!(path.contains("asb") || path.contains("salesforce") || path.contains("asgardeo") ||
+            // Temporarily disable salesforce.trigger build as it has yet to migrate to U11
+            if (path.contains("salesforce")) {
+                continue;
+            }
+            if (!(path.contains("asb") || path.contains("asgardeo") ||
                     path.contains("hubspot") || path.contains("quickbooks"))) {
                 exec {
                     commandLine 'sh', '-c', "${ballerinaDistributionPath}/bin/bal test ${path}"
@@ -99,6 +103,10 @@ tasks.register('releaseTrigger') {
         if (release) {
             println "Task: Pushing triggers to Ballerina Central..."
             for (String path : ballerinaPackages) {
+                // Temporarily disable salesforce.trigger release as it has yet to migrate to U11
+                if (path.contains("salesforce")) {
+                    continue;
+                }
                 try {
                     exec {
                         println "Pushing trigger [" + path + "] to Ballerina Central"
