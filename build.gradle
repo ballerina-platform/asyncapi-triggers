@@ -61,13 +61,13 @@ if (specificTrigger?.trim()) {
     }
 }
 
-task codeBuild {
+tasks.register('codeBuild') {
     dependsOn subprojects.build
     doLast {
         println "Task: Building triggers..."
         for (String path : ballerinaPackages) {
-            if (!(path.contains("asb") || path.contains("salesforce") || path.contains("asgardeo") || 
-            path.contains("hubspot") || path.contains("quickbooks"))) {
+            if (!(path.contains("asb") || path.contains("salesforce") || path.contains("asgardeo") ||
+                    path.contains("hubspot") || path.contains("quickbooks"))) {
                 exec {
                     commandLine 'sh', '-c', "${ballerinaDistributionPath}/bin/bal test ${path}"
                 }
@@ -87,18 +87,18 @@ task codeBuild {
                     }
                 }
                 catch (Exception ex) {
-                    println "Failed to push trigger [" + path + "] to local repository. Error : " + ex.toString(); 
+                    println "Failed to push trigger [" + path + "] to local repository. Error : " + ex.toString();
                 }
             }
         }
     }
 }
 
-task releaseTrigger {
+tasks.register('releaseTrigger') {
     doLast {
-        if(release){
+        if (release) {
             println "Task: Pushing triggers to Ballerina Central..."
-            for (String path : ballerinaPackages) {          
+            for (String path : ballerinaPackages) {
                 try {
                     exec {
                         println "Pushing trigger [" + path + "] to Ballerina Central"
@@ -106,7 +106,7 @@ task releaseTrigger {
                         commandLine 'sh', '-c', "${ballerinaDistributionPath}/bin/bal push"
                     }
                 } catch (Exception ex) {
-                    println "Failed to push trigger [" + path + "] to Ballerina Central. Error : " + ex.toString(); 
+                    println "Failed to push trigger [" + path + "] to Ballerina Central. Error : " + ex.toString();
                 }
                 println "---------------------------------------"
             }
