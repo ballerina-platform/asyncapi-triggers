@@ -18,9 +18,6 @@ jobs:
   container:
     runs-on: ubuntu-latest
     steps:
-      - name: Install Git
-        run: apk --no-cache add git
-
       - name: Checkout Repository
         uses: actions/checkout@v3
       
