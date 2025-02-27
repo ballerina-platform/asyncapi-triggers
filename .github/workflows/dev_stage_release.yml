@@ -28,8 +28,6 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
-    env:
-      BALLERINA_${{ github.event.inputs.bal_central_environment }}_CENTRAL: true
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -48,20 +46,26 @@ jobs:
       - name: Push to Staging
         if: github.event.inputs.bal_central_environment == 'STAGE'
         env:
+          BALLERINA_DEV_CENTRAL: false
+          BALLERINA_STAGE_CENTRAL: true
           BALLERINA_CENTRAL_ACCESS_TOKEN: ${{ secrets.BALLERINA_CENTRAL_STAGE_ACCESS_TOKEN }}
           JAVA_OPTS: -DBALLERINA_DEV_COMPILE_BALLERINA_ORG=true
           packageUser: ${{ secrets.BALLERINA_BOT_USERNAME }}
           packagePAT: ${{ secrets.BALLERINA_BOT_TOKEN }}
           specificTrigger: ${{ github.event.inputs.specific_trigger }}
+          GITHUB_TOKEN: ${{ secrets.BALLERINA_BOT_TOKEN }}
         run: |
           ./gradlew build -Prelease=${{ github.event.inputs.release_build }} -Premote=true -Ptrigger=${{ github.event.inputs.specific_trigger }}
 
       - name: Push to Dev
         if: github.event.inputs.bal_central_environment == 'DEV'
         env:
+          BALLERINA_DEV_CENTRAL: true
+          BALLERINA_STAGE_CENTRAL: false
           BALLERINA_CENTRAL_ACCESS_TOKEN: ${{ secrets.BALLERINA_CENTRAL_DEV_ACCESS_TOKEN }}
           JAVA_OPTS: -DBALLERINA_DEV_COMPILE_BALLERINA_ORG=true
           packageUser: ${{ secrets.BALLERINA_BOT_USERNAME }}
           packagePAT: ${{ secrets.BALLERINA_BOT_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.BALLERINA_BOT_TOKEN }}
         run: |
           ./gradlew build -Prelease=${{ github.event.inputs.release_build }} -Ptrigger=${{ github.event.inputs.specific_trigger }}
