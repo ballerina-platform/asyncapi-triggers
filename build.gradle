@@ -66,12 +66,11 @@ tasks.register('codeBuild') {
     doLast {
         println "Task: Building triggers..."
         for (String path : ballerinaPackages) {
-            // Temporarily disable salesforce.trigger build as it has yet to migrate to U11
-            if (path.contains("salesforce")) {
+            // Temporarily disable salesforce.trigger and asb.trigger build as it has yet to migrate to U11
+            if (path.contains("salesforce") || path.contains("asb")) {
                 continue;
             }
-            if (!(path.contains("asb") || path.contains("asgardeo") ||
-                    path.contains("hubspot") || path.contains("quickbooks"))) {
+            if (!(path.contains("asgardeo") || path.contains("hubspot") || path.contains("quickbooks"))) {
                 exec {
                     commandLine 'sh', '-c', "${ballerinaDistributionPath}/bin/bal test ${path}"
                 }
@@ -84,8 +83,8 @@ tasks.register('codeBuild') {
         if (!release) {
             println "Task: Pushing triggers to local..."
             for (String path : ballerinaPackages) {
-                // Temporarily disable salesforce.trigger build as it has yet to migrate to U11
-                if (path.contains("salesforce")) {
+                // Temporarily disable salesforce.trigger and asb.trigger build as it has yet to migrate to U11
+                if (path.contains("salesforce") || path.contains("asb")) {
                     continue;
                 }
                 try {
@@ -107,8 +106,8 @@ tasks.register('releaseTrigger') {
         if (release) {
             println "Task: Pushing triggers to Ballerina Central..."
             for (String path : ballerinaPackages) {
-                // Temporarily disable salesforce.trigger release as it has yet to migrate to U11
-                if (path.contains("salesforce")) {
+                // Temporarily disable salesforce.trigger and asb.trigger release as it has yet to migrate to U11
+                if (path.contains("salesforce") || path.contains("asb")) {
                     continue;
                 }
                 try {
