@@ -11,6 +11,13 @@ Before using this connector in your Ballerina application, complete the followin
     2. Add events that you are planning to listen in the `Subscribe to events on behalf of users` section and save changes.
     3. Obtain `Verification Token` from the `Basic Information` section of your Slack App.
 
+### Compatibility
+
+|                               | Version                       |
+|-------------------------------|-------------------------------|
+| Ballerina Language            | Ballerina Swan Lake 2201.11.0 |
+| Slack Events API              | V1.0.0                        | 
+
 ## Quickstart
 To use the Slack listener in your Ballerina application, update the .bal file as follows:
 
@@ -59,3 +66,14 @@ service slack:UserChangeService on slackListener {
 
 * Receiving events
     * After successful verification of Request URL your ballerina service will receive events.
+
+## Report issues
+
+To report bugs, request new features, start new discussions, etc., go to the [Ballerina Library repository](https://github.com/ballerina-platform/ballerina-library)
+
+## Useful links
+
+- For more information go to the [`trigger.slack` package](https://central.ballerina.io/ballerinax/trigger.slack/latest).
+- For example demonstrations of the usage, go to [Ballerina By Examples](https://ballerina.io/learn/by-example/).
+- Chat live with us via our [Discord server](https://discord.gg/ballerinalang).
+- Post all technical questions on Stack Overflow with the [#ballerina](https://stackoverflow.com/questions/tagged/ballerina) tag.

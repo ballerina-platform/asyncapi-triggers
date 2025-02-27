@@ -15,6 +15,12 @@ Before using this connector in your Ballerina application, complete the followin
 - Follow [this guide](https://developers.google.com/identity/protocols/oauth2)
   > **Note :** Enable `Cloud Pub/Sub API` or user setup service account with pubsub admin role. [Create a service account](https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount) with pubsub admin
 
+### Compatibility
+
+|                    | Version                       |
+| ------------------ |-------------------------------|
+| Ballerina Language | Ballerina Swan Lake 2201.11.0 |
+
 ## Quickstart
 
 To use the `Gmail` Trigger in your Ballerina application, update the .bal file as follows:
@@ -97,3 +103,14 @@ The remote functions can be provided as follows.
         log:printInfo("Received new email", eventPayload = message);
     }
 ```
+
+## Report issues
+
+To report bugs, request new features, start new discussions, etc., go to the [Ballerina Library repository](https://github.com/ballerina-platform/ballerina-library)
+
+## Useful links
+
+- For more information go to the [`trigger.google.mail` package](https://central.ballerina.io/ballerinax/trigger.google.mail/latest).
+- For example demonstrations of the usage, go to [Ballerina By Examples](https://ballerina.io/learn/by-example/).
+- Chat live with us via our [Discord server](https://discord.gg/ballerinalang).
+- Post all technical questions on Stack Overflow with the [#ballerina](https://stackoverflow.com/questions/tagged/ballerina) tag.

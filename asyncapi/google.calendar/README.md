@@ -37,6 +37,12 @@ Before using this connector in your Ballerina application, complete the followin
     17. Select required Google Calendar scopes, and then click Authorize APIs.
     18. When you receive your authorization code, click Exchange authorization code for tokens to obtain the refresh token and access token.
 
+### Compatibility
+
+|                               | Version                       |
+|-------------------------------|-------------------------------|
+| Ballerina Language            | Ballerina Swan Lake 2201.11.0 |
+
 ## Quickstart
 To use the Google Calendar listener in your Ballerina application, update the .bal file as follows:
 
@@ -90,5 +96,13 @@ Create a `calendar:ListenerConfig` with the details obtained in the prerequisite
 
 2. Use `bal run` command to compile and run the Ballerina program. 
 
+## Report issues
 
+To report bugs, request new features, start new discussions, etc., go to the [Ballerina Library repository](https://github.com/ballerina-platform/ballerina-library)
 
+## Useful links
+
+- For more information go to the [`trigger.google.calendar` package](https://central.ballerina.io/ballerinax/trigger.google.calendar/latest).
+- For example demonstrations of the usage, go to [Ballerina By Examples](https://ballerina.io/learn/by-example/).
+- Chat live with us via our [Discord server](https://discord.gg/ballerinalang).
+- Post all technical questions on Stack Overflow with the [#ballerina](https://stackoverflow.com/questions/tagged/ballerina) tag.

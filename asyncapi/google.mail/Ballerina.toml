@@ -4,8 +4,8 @@ keywords = ["Cost/Freemium", "Trigger"]
 org = "ballerinax"
 name = "trigger.google.mail"
 repository = "https://github.com/ballerina-platform/asyncapi-triggers"
-version = "0.10.0"
-distribution = "2201.4.1"
+version = "0.11.0"
+distribution = "2201.11.0"
 icon = "docs/icon.png"
 authors = ["Ballerina"]
 

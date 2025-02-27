@@ -12,6 +12,12 @@ Before using this trigger in your Ballerina application, complete the following:
 * Create a account on [MFT Gateway (by Aayu technologies)](https://console.mftgateway.com/auth/register)
 * Create a [Station](https://aayutechnologies.com/docs/product/mft-gateway/creating-as2-station/) in the MFT Gateway account.
 
+### Compatibility
+
+|                               | Version                       |
+|-------------------------------|-------------------------------|
+| Ballerina Language            | Ballerina Swan Lake 2201.11.0 |
+
 ## Quickstart
 To use the MFTG trigger in your Ballerina application, update the  .bal file as follows:
 
@@ -68,5 +74,13 @@ Note:
 - Add a trailing / to the public URL if its not present 
 - Use ngrok to obtain a public URL for localhost instances
 
+## Report issues
 
+To report bugs, request new features, start new discussions, etc., go to the [Ballerina Library repository](https://github.com/ballerina-platform/ballerina-library)
 
+## Useful links
+
+- For more information go to the [`trigger.aayu.mftg.as2` package](https://central.ballerina.io/ballerinax/trigger.aayu.mftg.as2/latest).
+- For example demonstrations of the usage, go to [Ballerina By Examples](https://ballerina.io/learn/by-example/).
+- Chat live with us via our [Discord server](https://discord.gg/ballerinalang).
+- Post all technical questions on Stack Overflow with the [#ballerina](https://stackoverflow.com/questions/tagged/ballerina) tag.

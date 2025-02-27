@@ -8,6 +8,13 @@ Before using this trigger in your Ballerina application, complete the following:
 
 * Create a [Shopify](https://www.shopify.com) account
 
+### Compatibility
+
+|                               | Version                       |
+|-------------------------------|-------------------------------|
+| Ballerina Language            | Ballerina Swan Lake 2201.11.0 |
+| Shopify Webhook API           | 2021-10                       |
+
 ## Quickstart
 To use the Shopify trigger in your Ballerina application, update the .bal file as follows:
 
@@ -71,3 +78,14 @@ Subscribe to a webhook topic by following [this guide](https://shopify.dev/apps/
 > - Locally, you can use [ngrok](https://ngrok.com/docs) to expose your web service to the internet and to obtain a public URL (For example: 'https://7745640c2478.ngrok.io'). 
 > - In Choreo, you can obtain this service URL from the `Invoke URL` section of the `Configure and Deploy` form under `Deploy` view before App deployment.
 > - Add a trailing `/` to the end of public URL if it's not present. 
+
+## Report issues
+
+To report bugs, request new features, start new discussions, etc., go to the [Ballerina Library repository](https://github.com/ballerina-platform/ballerina-library)
+
+## Useful links
+
+- For more information go to the [`trigger.shopify` package](https://central.ballerina.io/ballerinax/trigger.shopify/latest).
+- For example demonstrations of the usage, go to [Ballerina By Examples](https://ballerina.io/learn/by-example/).
+- Chat live with us via our [Discord server](https://discord.gg/ballerinalang).
+- Post all technical questions on Stack Overflow with the [#ballerina](https://stackoverflow.com/questions/tagged/ballerina) tag.

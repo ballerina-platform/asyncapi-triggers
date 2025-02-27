@@ -45,6 +45,12 @@ Before using this connector in your Ballerina application, complete the followin
 
         4. [Create a subscription in the Azure portal](https://docs.microsoft.com/en-us/azure/service-bus-messaging/service-bus-quickstart-topics-subscriptions-portal#create-subscriptions-to-the-topic)
 
+### Compatibility
+
+|                               | Version                       |
+|-------------------------------|-------------------------------|
+| Ballerina Language            | Ballerina Swan Lake 2201.11.0 |
+
 ## Quickstart
 
 To use the Azure Service Bus listener in your Ballerina application, update the .bal file as follows:
@@ -153,3 +159,14 @@ listener asb:Listener asbListener = new (configuration);
    You can complete, abandon, deadLetter, defer, renewLock using the `asb:Caller` instance. If you want to handle to errors that come when processing messages, use `MessageServiceErrorHandling` service type.
 
   Use `bal run` command to compile and run the Ballerina program.
+
+## Report issues
+
+To report bugs, request new features, start new discussions, etc., go to the [Ballerina Library repository](https://github.com/ballerina-platform/ballerina-library)
+
+## Useful links
+
+- For more information go to the [`trigger.asb` package](https://central.ballerina.io/ballerinax/trigger.asb/latest).
+- For example demonstrations of the usage, go to [Ballerina By Examples](https://ballerina.io/learn/by-example/).
+- Chat live with us via our [Discord server](https://discord.gg/ballerinalang).
+- Post all technical questions on Stack Overflow with the [#ballerina](https://stackoverflow.com/questions/tagged/ballerina) tag.

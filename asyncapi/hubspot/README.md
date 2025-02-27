@@ -23,6 +23,12 @@ Before using this connector in your Ballerina application, complete the followin
 - Go to [webhooks](https://developers.hubspot.com/docs/api/webhooks) and register a targetURL for notifications.
 - Create a subscription with required events.
 
+### Compatibility
+
+|                               | Version                       |
+|-------------------------------|-------------------------------|
+| Ballerina Language            | Ballerina Swan Lake 2201.11.0 |
+
 ## Quickstart
 To use the HubSpot listener in your Ballerina application, update the `.bal` file as follows:
 
@@ -62,4 +68,17 @@ Listen to HubSpot Company Creation and Deletion
 
 To compile and run the Ballerina program, issue the following command:
 
-`bal run`
+```sh
+bal run
+```
+
+## Report issues
+
+To report bugs, request new features, start new discussions, etc., go to the [Ballerina Library repository](https://github.com/ballerina-platform/ballerina-library)
+
+## Useful links
+
+- For more information go to the [`trigger.hubspot` package](https://central.ballerina.io/ballerinax/trigger.hubspot/latest).
+- For example demonstrations of the usage, go to [Ballerina By Examples](https://ballerina.io/learn/by-example/).
+- Chat live with us via our [Discord server](https://discord.gg/ballerinalang).
+- Post all technical questions on Stack Overflow with the [#ballerina](https://stackoverflow.com/questions/tagged/ballerina) tag.

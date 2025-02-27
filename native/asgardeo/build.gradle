@@ -28,7 +28,16 @@ group = project.asgardeo_trigger_group
 version = project.asgardeo_trigger_version
 
 repositories {
-    mavenCentral()
+    mavenLocal()
+
+    maven {
+        url = 'https://maven.wso2.org/nexus/content/groups/wso2-public/'
+    }
+
+    maven {
+        url = 'https://repo.maven.apache.org/maven2'
+    }
+
     maven {
         url = 'https://maven.pkg.github.com/ballerina-platform/ballerina-lang'
         credentials {
