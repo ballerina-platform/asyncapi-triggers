@@ -25,6 +25,13 @@ Learn more about [Asgardeo events](https://wso2.com/asgardeo/docs/references/asg
 - An organization in [Choreo](https://wso2.com/choreo/) created with the same email address and under the same name that was used to create the organization in Asgardeo.
 - Enable event publishing in your Asgardeo Organization. Learn how to enable from [here.](https://wso2.com/asgardeo/docs/references/asgardeo-events/#configure-asgardeo-to-publish-events)
 
+### Compatibility
+
+|                               | Version                       |
+|-------------------------------|-------------------------------|
+| Ballerina Language            | Ballerina Swan Lake 2201.11.0 |
+| Asgardeo Events API           | V1.0.0                        |
+
 ## Quickstart
 
 Follow the steps given below to try out the Asgardeo listener.
@@ -69,3 +76,14 @@ Now you can implement listener remote functions supported by this connector.
 
 ### Step 3: Deploy the Webhook in Choreo
 Once you have created the webhook, go to the **Deploy** tab on the Choreo Console and click on **Config & Deploy** button to start the deployment process. Learn more about how to deploy a webhook from [here.](https://wso2.com/choreo/docs/webhook/#deploy-a-webhook).
+
+## Report issues
+
+To report bugs, request new features, start new discussions, etc., go to the [Ballerina Library repository](https://github.com/ballerina-platform/ballerina-library)
+
+## Useful links
+
+- For more information go to the [`trigger.asgardeo` package](https://central.ballerina.io/ballerinax/trigger.asgardeo/latest).
+- For example demonstrations of the usage, go to [Ballerina By Examples](https://ballerina.io/learn/by-example/).
+- Chat live with us via our [Discord server](https://discord.gg/ballerinalang).
+- Post all technical questions on Stack Overflow with the [#ballerina](https://stackoverflow.com/questions/tagged/ballerina) tag.

@@ -115,6 +115,12 @@ Before using this connector in your Ballerina application, complete the followin
         | Select event type            | `On edit`         |
     11. You have now configured your triggers. You can test these triggers by editing the Google sheet.
 
+### Compatibility
+
+|                               | Version                       |
+|-------------------------------|-------------------------------|
+| Ballerina Language            | Ballerina Swan Lake 2201.11.0 |
+
 ## Quickstart
 To use the Google Sheets listener in your Ballerina application, update the .bal file as follows:
 
@@ -162,5 +168,13 @@ Create a `sheets:ListenerConfig` with the spreadsheet ID obtained, and initializ
 
 2. Use `bal run` command to compile and run the Ballerina program. 
 
+## Report issues
 
+To report bugs, request new features, start new discussions, etc., go to the [Ballerina Library repository](https://github.com/ballerina-platform/ballerina-library)
 
+## Useful links
+
+- For more information go to the [`trigger.google.sheets` package](https://central.ballerina.io/ballerinax/trigger.google.sheets/latest).
+- For example demonstrations of the usage, go to [Ballerina By Examples](https://ballerina.io/learn/by-example/).
+- Chat live with us via our [Discord server](https://discord.gg/ballerinalang).
+- Post all technical questions on Stack Overflow with the [#ballerina](https://stackoverflow.com/questions/tagged/ballerina) tag.

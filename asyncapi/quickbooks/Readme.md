@@ -10,6 +10,12 @@ Before using this trigger in your Ballerina application, complete the following:
 * Add listener endpoint URL to QuickBooks webhooks.
 * [Optional] Select and Save Entities and their events.
 
+### Compatibility
+
+|                               | Version                       |
+|-------------------------------|-------------------------------|
+| Ballerina Language            | Ballerina Swan Lake 2201.11.0 |
+
 ## Quickstart
 To use the QuickBooks trigger in your Ballerina application, update the .bal file as follows:
 
@@ -58,3 +64,14 @@ For instructions to subscribe to a webhook topic with the URL of the service, se
 > - Locally, you can use [ngrok](https://ngrok.com/docs) to expose your web service to the internet and to obtain a public URL (For example: 'https://7745640c2478.ngrok.io'). 
 > - In Choreo, you can obtain this service URL from the `Invoke URL` section of the `Configure and Deploy` form under `Deploy` view before App deployment.
 > - Add a trailing `/` to the end of public URL if it's not present. 
+
+## Report issues
+
+To report bugs, request new features, start new discussions, etc., go to the [Ballerina Library repository](https://github.com/ballerina-platform/ballerina-library)
+
+## Useful links
+
+- For more information go to the [`trigger.quickbooks` package](https://central.ballerina.io/ballerinax/trigger.quickbooks/latest).
+- For example demonstrations of the usage, go to [Ballerina By Examples](https://ballerina.io/learn/by-example/).
+- Chat live with us via our [Discord server](https://discord.gg/ballerinalang).
+- Post all technical questions on Stack Overflow with the [#ballerina](https://stackoverflow.com/questions/tagged/ballerina) tag.

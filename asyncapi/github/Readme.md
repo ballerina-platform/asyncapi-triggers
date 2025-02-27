@@ -13,6 +13,12 @@ Before using this trigger in your Ballerina application, complete the following:
 
 * Create github account
 
+### Compatibility
+
+|                               | Version                       |
+|-------------------------------|-------------------------------|
+| Ballerina Language            | Ballerina Swan Lake 2201.11.0 |
+
 ## Quickstart
 To use the GitHub Trigger in your Ballerina application, update the  .bal file as follows:
 
@@ -101,3 +107,14 @@ Use `bal run` command to compile and run the Ballerina program.
 - Select the list of events you need to subscribe to and click on Add webhook.
 
 This will add a subscription to github event api and the ballerina service functions will be triggerred once an event is fired.
+
+## Report issues
+
+To report bugs, request new features, start new discussions, etc., go to the [Ballerina Library repository](https://github.com/ballerina-platform/ballerina-library)
+
+## Useful links
+
+- For more information go to the [`trigger.github` package](https://central.ballerina.io/ballerinax/trigger.github/latest).
+- For example demonstrations of the usage, go to [Ballerina By Examples](https://ballerina.io/learn/by-example/).
+- Chat live with us via our [Discord server](https://discord.gg/ballerinalang).
+- Post all technical questions on Stack Overflow with the [#ballerina](https://stackoverflow.com/questions/tagged/ballerina) tag.

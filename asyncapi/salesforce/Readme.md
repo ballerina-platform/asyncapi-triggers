@@ -12,6 +12,13 @@ Before using this connector in your Ballerina application, complete the followin
     - Subscribe to **Change Data Capture Events**
         1. Subscribe to channels to receive notifications for record changes by visiting <br/> `Setup -> Integrations -> Change Data Capture`
 
+### Compatibility
+
+|                               | Version                       |
+|-------------------------------|-------------------------------|
+| Ballerina Language            | Ballerina Swan Lake 2201.11.0 |
+| Salesforce Streaming API      | 43.0                          |
+
 ## Quickstart
 To use the Salesforce listener in your Ballerina application, update the .bal file as follows:
 
@@ -68,3 +75,14 @@ service sfdc:RecordService on sfdcListener {
 
 * Receiving events
     * After successful verification of Request URL your ballerina service will receive events.
+
+## Report issues
+
+To report bugs, request new features, start new discussions, etc., go to the [Ballerina Library repository](https://github.com/ballerina-platform/ballerina-library)
+
+## Useful links
+
+- For more information go to the [`trigger.salesforce` package](https://central.ballerina.io/ballerinax/trigger.salesforce/latest).
+- For example demonstrations of the usage, go to [Ballerina By Examples](https://ballerina.io/learn/by-example/).
+- Chat live with us via our [Discord server](https://discord.gg/ballerinalang).
+- Post all technical questions on Stack Overflow with the [#ballerina](https://stackoverflow.com/questions/tagged/ballerina) tag.

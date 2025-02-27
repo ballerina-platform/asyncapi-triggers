@@ -34,6 +34,13 @@ Before using this trigger in your Ballerina application, complete the following:
     6. Paste the **Forwarding URL** you copied via ngrok as the **Request URL**.
     7. Proceed with the next steps and click **Complete Messaging Service Setup**.
 
+### Compatibility
+
+|                               | Version                       |
+|-------------------------------|-------------------------------|
+| Ballerina Language            | Ballerina Swan Lake 2201.11.0 |
+| Twilio Events API             | V1.0.0                        | 
+
 ## Quickstart
 To use the Twilio trigger in your Ballerina application, update the `.bal` file as follows:
 
@@ -167,3 +174,14 @@ bal run
 ```
 ## Receiving events
 To try out receiving Twilio call/message events, you can use an active Twilio number to send a call/message.
+
+## Report issues
+
+To report bugs, request new features, start new discussions, etc., go to the [Ballerina Library repository](https://github.com/ballerina-platform/ballerina-library)
+
+## Useful links
+
+- For more information go to the [`trigger.twilio` package](https://central.ballerina.io/ballerinax/trigger.twilio/latest).
+- For example demonstrations of the usage, go to [Ballerina By Examples](https://ballerina.io/learn/by-example/).
+- Chat live with us via our [Discord server](https://discord.gg/ballerinalang).
+- Post all technical questions on Stack Overflow with the [#ballerina](https://stackoverflow.com/questions/tagged/ballerina) tag.
