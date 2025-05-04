@@ -67,7 +67,7 @@ tasks.register('codeBuild') {
         println "Task: Building triggers..."
         for (String path : ballerinaPackages) {
             // Temporarily disable salesforce.trigger and asb.trigger build as it has yet to migrate to U11
-            if (path.contains("salesforce") || path.contains("asb")) {
+            if (path.contains("salesforce")) {
                 continue;
             }
             if (!(path.contains("asgardeo") || path.contains("hubspot") || path.contains("quickbooks"))) {
