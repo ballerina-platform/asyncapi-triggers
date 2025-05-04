@@ -1,7 +1,7 @@
 [package]
 org = "ballerinax"
 name = "trigger.asb"
-version = "1.2.0"
+version = "1.3.0"
 license= ["Apache-2.0"]
 authors = ["Ballerina"]
 keywords = ["IT Operations/Message Brokers", "Cost/Paid", "Vendor/Microsoft"]
@@ -13,9 +13,9 @@ distribution = "2201.11.0"
 observabilityIncluded = true
 
 [[platform.java21.dependency]]
-path = "../../native/asb/build/libs/asb-1.2.0.jar"
+path = "../../native/asb/build/libs/asb-1.3.0.jar"
 groupId = "org.ballerinax"
 artifactId = "asb"
 module = "asb" 
-version = "1.2.0"
+version = "1.3.0"
 
