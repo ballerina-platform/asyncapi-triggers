@@ -84,7 +84,7 @@ tasks.register('codeBuild') {
             println "Task: Pushing triggers to local..."
             for (String path : ballerinaPackages) {
                 // Temporarily disable salesforce.trigger and asb.trigger build as it has yet to migrate to U11
-                if (path.contains("salesforce") || path.contains("asb")) {
+                if (path.contains("salesforce")) {
                     continue;
                 }
                 try {
@@ -107,7 +107,7 @@ tasks.register('releaseTrigger') {
             println "Task: Pushing triggers to Ballerina Central..."
             for (String path : ballerinaPackages) {
                 // Temporarily disable salesforce.trigger and asb.trigger release as it has yet to migrate to U11
-                if (path.contains("salesforce") || path.contains("asb")) {
+                if (path.contains("salesforce")) {
                     continue;
                 }
                 try {
