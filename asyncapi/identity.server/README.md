@@ -18,4 +18,4 @@ Learn more about [WSO2 Identity Server events](https://is.docs.wso2.com/en/next/
 
 |                               | Version                       |
 |-------------------------------|-------------------------------|
-| Ballerina Language            | Ballerina Swan Lake 2201.12.9 |
+| Ballerina Language            | Ballerina Swan Lake 2201.12.0 |
