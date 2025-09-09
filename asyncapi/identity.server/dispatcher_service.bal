@@ -46,7 +46,8 @@ service class DispatcherService {
 
     // We are not using the (@http:payload GenericEventWrapperEvent g) notation because of a bug in Ballerina.
     // Issue: https://github.com/ballerina-platform/ballerina-lang/issues/32859
-    resource function post .(http:Caller caller, http:Request request) returns http:Response|error? {
+    resource function post .(http:Caller caller, http:Request request)
+        returns http:Ok|http:Unauthorized|http:BadRequest|error? {
         string payload = check request.getTextPayload();
         byte[] binaryPay = payload.toBytes();
         string signature = check request.getHeader("x-wso2-event-signature");
@@ -57,7 +58,7 @@ service class DispatcherService {
             // Validate secret with x-wso2-event-signature header for intent verification.
             http:Response response = new;
             response.statusCode = http:STATUS_UNAUTHORIZED;
-            return response;
+            return <http:Unauthorized>{body: "Signature validation failed."};
         }
 
         json parsedPayload = check payload.fromJsonString();
@@ -65,12 +66,12 @@ service class DispatcherService {
         if genericPayloadType is error {
             http:Response response = new;
             response.statusCode = http:STATUS_BAD_REQUEST;
-            return response;
+            return <http:BadRequest>{body: "Invalid payload."};
         }
         check self.matchRemoteFunc(genericPayloadType);
         http:Response response = new;
         response.statusCode = http:STATUS_OK;
-        return response;
+        return <http:Ok>{body: "Event processed successfully."};
     }
 
     private function matchRemoteFunc(GenericPayloadType genericPayloadType) returns error? {
