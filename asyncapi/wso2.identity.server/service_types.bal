@@ -16,6 +16,12 @@
 
 public type UserOperationService service object {
     remote function onCreateUser(GenericUserOperationEvent event) returns error?;
+    remote function onUpdateUser(UserProfileUpdateOperationEvent event) returns error?;
+    remote function onDeleteUser(GenericUserOperationEvent event) returns error?;
+    remote function onEnableUser(GenericUserOperationEvent event) returns error?;
+    remote function onDisableUser(GenericUserOperationEvent event) returns error?;
+    remote function onUserAccountLock(GenericUserOperationEvent event) returns error?;
+    remote function onUserAccountUnlock(GenericUserOperationEvent event) returns error?;
 };
 
 public type GenericServiceType UserOperationService;

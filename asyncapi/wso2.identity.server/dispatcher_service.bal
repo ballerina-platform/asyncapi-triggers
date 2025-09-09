@@ -83,7 +83,7 @@ service class DispatcherService {
         string mainEvent = regex:split(mainEventParts[1], "/event-type/")[0];
         string[] eventTypeParts = regex:split(eventKey, "/event-type/");
         string eventType = eventTypeParts[1];
-        log:printInfo("Received event: " + mainEvent + " of type: " + eventType);
+
         match mainEvent {
             "user" => {
                 match eventType {
@@ -101,6 +101,96 @@ service class DispatcherService {
                             securityData: securityData
                         };
                         check self.executeRemoteFunc(userCreatedEvent, "userCreated", "UserOperationService", "onCreateUser");
+                    }
+                    "userProfileUpdated" => {
+                        json eventData = eventMap[eventKey];
+                        UserProfileUpdateData userUpdatedData = check eventData.cloneWithType(UserProfileUpdateData);
+                        GenericSecurityData securityData = {
+                            iss: genericPayloadType.iss,
+                            jti: genericPayloadType.jti,
+                            iat: genericPayloadType.iat,
+                            rci: genericPayloadType.rci
+                        };
+                        UserProfileUpdateOperationEvent userUpdatedEvent = {
+                            eventData: userUpdatedData,
+                            securityData: securityData
+                        };
+                        check self.executeRemoteFunc(userUpdatedEvent, "userProfileUpdated", "UserOperationService", "onUpdateUser");
+                    }
+                    "userEnabled" => {
+                        json eventData = eventMap[eventKey];
+                        GenericUserOperationData userEnabledData = check eventData.cloneWithType(GenericUserOperationData);
+                        GenericSecurityData securityData = {
+                            iss: genericPayloadType.iss,
+                            jti: genericPayloadType.jti,
+                            iat: genericPayloadType.iat,
+                            rci: genericPayloadType.rci
+                        };
+                        GenericUserOperationEvent userEnabledEvent = {
+                            eventData: userEnabledData,
+                            securityData: securityData
+                        };
+                        check self.executeRemoteFunc(userEnabledEvent, "userEnabled", "UserOperationService", "onEnableUser");
+                    }
+                    "userDisabled" => {
+                        json eventData = eventMap[eventKey];
+                        GenericUserOperationData userDisabledData = check eventData.cloneWithType(GenericUserOperationData);
+                        GenericSecurityData securityData = {
+                            iss: genericPayloadType.iss,
+                            jti: genericPayloadType.jti,
+                            iat: genericPayloadType.iat,
+                            rci: genericPayloadType.rci
+                        };
+                        GenericUserOperationEvent userDisabledEvent = {
+                            eventData: userDisabledData,
+                            securityData: securityData
+                        };
+                        check self.executeRemoteFunc(userDisabledEvent, "userDisabled", "UserOperationService", "onDisableUser");
+                    }
+                    "userAccountLocked" => {
+                        json eventData = eventMap[eventKey];
+                        GenericUserOperationData userAccountLockedData = check eventData.cloneWithType(GenericUserOperationData);
+                        GenericSecurityData securityData = {
+                            iss: genericPayloadType.iss,
+                            jti: genericPayloadType.jti,
+                            iat: genericPayloadType.iat,
+                            rci: genericPayloadType.rci
+                        };
+                        GenericUserOperationEvent userAccountLockedEvent = {
+                            eventData: userAccountLockedData,
+                            securityData: securityData
+                        };
+                        check self.executeRemoteFunc(userAccountLockedEvent, "userAccountLocked", "UserOperationService", "onUserAccountLock");
+                    }
+                    "userAccountUnlocked" => {
+                        json eventData = eventMap[eventKey];
+                        GenericUserOperationData userAccountUnlockedData = check eventData.cloneWithType(GenericUserOperationData);
+                        GenericSecurityData securityData = {
+                            iss: genericPayloadType.iss,
+                            jti: genericPayloadType.jti,
+                            iat: genericPayloadType.iat,
+                            rci: genericPayloadType.rci
+                        };
+                        GenericUserOperationEvent userAccountUnlockedEvent = {
+                            eventData: userAccountUnlockedData,
+                            securityData: securityData
+                        };
+                        check self.executeRemoteFunc(userAccountUnlockedEvent, "userAccountUnlocked", "UserOperationService", "onUserAccountUnlock");
+                    }
+                    "userDeleted" => {
+                        json eventData = eventMap[eventKey];
+                        GenericUserOperationData userDeletedData = check eventData.cloneWithType(GenericUserOperationData);
+                        GenericSecurityData securityData = {
+                            iss: genericPayloadType.iss,
+                            jti: genericPayloadType.jti,
+                            iat: genericPayloadType.iat,
+                            rci: genericPayloadType.rci
+                        };
+                        GenericUserOperationEvent userDeletedEvent = {
+                            eventData: userDeletedData,
+                            securityData: securityData
+                        };
+                        check self.executeRemoteFunc(userDeletedEvent, "userDeleted", "UserOperationService", "onDeleteUser");
                     }
                 }
             }

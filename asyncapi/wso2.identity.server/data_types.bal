@@ -23,9 +23,23 @@ public type GenericUserOperationEvent record {
     GenericSecurityData securityData;
 };
 
+public type UserProfileUpdateOperationEvent record {
+    UserProfileUpdateData eventData;
+    GenericSecurityData securityData;
+};
+
 public type GenericUserOperationData record {
     string initiatorType?;
     GenericUserData user;
+    GenericTenantData tenant;
+    GenericOrganizationData organization;
+    GenericUserStoreData userStore;
+    string action?;
+};
+
+public type UserProfileUpdateData record {
+    string initiatorType?;
+    UserProfileUpdateUserData user;
     GenericTenantData tenant;
     GenericOrganizationData organization;
     GenericUserStoreData userStore;
@@ -37,6 +51,15 @@ public type GenericUserData record {
     GenericClaimData[] claims;
     GenericOrganizationData organization;
     string ref;
+};
+
+public type UserProfileUpdateUserData record {
+    string id;
+    GenericOrganizationData organization;
+    string ref;
+    GenericClaimData[] addedClaims?;
+    GenericClaimData[] updatedClaims?;
+    GenericClaimData[] removedClaims?;
 };
 
 public type GenericTenantData record {
@@ -76,4 +99,4 @@ public type GenericPayloadType record {
     json events;
 };
 
-public type GenericDataType GenericUserOperationEvent;
+public type GenericDataType GenericUserOperationEvent | UserProfileUpdateOperationEvent;
