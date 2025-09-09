@@ -17,7 +17,6 @@
 import ballerina/crypto;
 import ballerina/http;
 import ballerina/lang.regexp;
-import ballerina/log;
 import ballerinax/asyncapi.native.handler;
 
 service class DispatcherService {
@@ -48,42 +47,47 @@ service class DispatcherService {
     // We are not using the (@http:payload GenericEventWrapperEvent g) notation because of a bug in Ballerina.
     // Issue: https://github.com/ballerina-platform/ballerina-lang/issues/32859
     resource function post .(http:Caller caller, http:Request request) returns http:Response|error? {
-        json payload = check request.getJsonPayload();
-        byte[] binaryPay = payload.toString().toBytes();
+        string payload = check request.getTextPayload();
+        byte[] binaryPay = payload.toBytes();
         string signature = check request.getHeader("x-wso2-event-signature");
         string trimmedSecret = signature.substring(7, signature.length());
         byte[] output = check crypto:hmacSha256(binaryPay, self.listenerConfig.webhookSecret.toBytes());
         string computedDigest = output.toBase16();
-        if (trimmedSecret.length() != computedDigest.length() || trimmedSecret !== computedDigest) {
+        if (trimmedSecret.length() != computedDigest.length() || trimmedSecret != computedDigest) {
             // Validate secret with x-wso2-event-signature header for intent verification.
-            log:printError("Signature verification failure");
             http:Response response = new;
             response.statusCode = http:STATUS_UNAUTHORIZED;
-            response.setPayload("Signature verification failure");
             return response;
         }
 
-        GenericPayloadType|error genericPayloadType = payload.cloneWithType();
-        if (genericPayloadType is error) {
-            log:printError("Unsupported payload");
-            return genericPayloadType;
-        } else {
-            check self.matchRemoteFunc(genericPayloadType);
+        json parsedPayload = check payload.fromJsonString();
+        GenericPayloadType|error genericPayloadType = parsedPayload.cloneWithType();
+        if genericPayloadType is error {
             http:Response response = new;
-            response.statusCode = http:STATUS_OK;
-            response.setPayload("Event acknowledged successfully");
+            response.statusCode = http:STATUS_BAD_REQUEST;
             return response;
         }
+        check self.matchRemoteFunc(genericPayloadType);
+        http:Response response = new;
+        response.statusCode = http:STATUS_OK;
+        return response;
     }
 
     private function matchRemoteFunc(GenericPayloadType genericPayloadType) returns error? {
         json events = genericPayloadType.events;
-        map<json> eventMap = <map<json>>events;
+        map<json> eventMap = check events.ensureType();
         string eventKey = eventMap.keys()[0];
-        regexp:RegExp eventPattern = check regexp:fromString("/events/");
-        string mainEventWithEventType = regexp:split(eventPattern, eventKey)[1];
-        regexp:RegExp eventTypePattern = check regexp:fromString("/event-type/");
+        regexp:RegExp eventPattern = re `/events/`;
+        string[] eventSplit = regexp:split(eventPattern, eventKey);
+        if eventSplit.length() < 2 {
+            return error("Invalid event key format: missing main event with event type");
+        }
+        string mainEventWithEventType = eventSplit[1];
+        regexp:RegExp eventTypePattern = re `/event-type/`;
         string[] eventDetails = regexp:split(eventTypePattern, mainEventWithEventType);
+        if eventDetails.length() < 2 {
+            return error("Invalid event key format: missing event type");
+        }
         string mainEvent = eventDetails[0];
         string eventType = eventDetails[1];
 
@@ -93,114 +97,72 @@ service class DispatcherService {
                     "userCreated" => {
                         json eventData = eventMap[eventKey];
                         GenericUserOperationData userCreatedData = check eventData.cloneWithType();
-                        GenericSecurityData securityData = {
-                            iss: genericPayloadType.iss,
-                            jti: genericPayloadType.jti,
-                            iat: genericPayloadType.iat,
-                            rci: genericPayloadType.rci
-                        };
                         GenericUserOperationEvent userCreatedEvent = {
                             eventData: userCreatedData,
-                            securityData: securityData
+                            securityData: self.getSecurityData(genericPayloadType)
                         };
                         check self.executeRemoteFunc(userCreatedEvent, "userCreated",
-                        "UserOperationService", "onCreateUser");
+                            "UserOperationService", "onCreateUser");
                     }
                     "userProfileUpdated" => {
                         json eventData = eventMap[eventKey];
                         UserProfileUpdateData userUpdatedData = check eventData.cloneWithType();
-                        GenericSecurityData securityData = {
-                            iss: genericPayloadType.iss,
-                            jti: genericPayloadType.jti,
-                            iat: genericPayloadType.iat,
-                            rci: genericPayloadType.rci
-                        };
                         UserProfileUpdateOperationEvent userUpdatedEvent = {
                             eventData: userUpdatedData,
-                            securityData: securityData
+                            securityData: self.getSecurityData(genericPayloadType)
                         };
                         check self.executeRemoteFunc(userUpdatedEvent, "userProfileUpdated",
-                        "UserOperationService", "onUpdateUser");
+                            "UserOperationService", "onUpdateUser");
                     }
                     "userEnabled" => {
                         json eventData = eventMap[eventKey];
                         GenericUserOperationData userEnabledData = check eventData.cloneWithType();
-                        GenericSecurityData securityData = {
-                            iss: genericPayloadType.iss,
-                            jti: genericPayloadType.jti,
-                            iat: genericPayloadType.iat,
-                            rci: genericPayloadType.rci
-                        };
                         GenericUserOperationEvent userEnabledEvent = {
                             eventData: userEnabledData,
-                            securityData: securityData
+                            securityData: self.getSecurityData(genericPayloadType)
                         };
                         check self.executeRemoteFunc(userEnabledEvent, "userEnabled",
-                        "UserOperationService", "onEnableUser");
+                            "UserOperationService", "onEnableUser");
                     }
                     "userDisabled" => {
                         json eventData = eventMap[eventKey];
                         GenericUserOperationData userDisabledData = check eventData.cloneWithType();
-                        GenericSecurityData securityData = {
-                            iss: genericPayloadType.iss,
-                            jti: genericPayloadType.jti,
-                            iat: genericPayloadType.iat,
-                            rci: genericPayloadType.rci
-                        };
                         GenericUserOperationEvent userDisabledEvent = {
                             eventData: userDisabledData,
-                            securityData: securityData
+                            securityData: self.getSecurityData(genericPayloadType)
                         };
                         check self.executeRemoteFunc(userDisabledEvent, "userDisabled",
-                        "UserOperationService", "onDisableUser");
+                            "UserOperationService", "onDisableUser");
                     }
                     "userAccountLocked" => {
                         json eventData = eventMap[eventKey];
                         GenericUserOperationData userAccountLockedData = check eventData.cloneWithType();
-                        GenericSecurityData securityData = {
-                            iss: genericPayloadType.iss,
-                            jti: genericPayloadType.jti,
-                            iat: genericPayloadType.iat,
-                            rci: genericPayloadType.rci
-                        };
                         GenericUserOperationEvent userAccountLockedEvent = {
                             eventData: userAccountLockedData,
-                            securityData: securityData
+                            securityData: self.getSecurityData(genericPayloadType)
                         };
                         check self.executeRemoteFunc(userAccountLockedEvent, "userAccountLocked",
-                        "UserOperationService", "onUserAccountLock");
+                            "UserOperationService", "onUserAccountLock");
                     }
                     "userAccountUnlocked" => {
                         json eventData = eventMap[eventKey];
                         GenericUserOperationData userAccountUnlockedData = check eventData.cloneWithType();
-                        GenericSecurityData securityData = {
-                            iss: genericPayloadType.iss,
-                            jti: genericPayloadType.jti,
-                            iat: genericPayloadType.iat,
-                            rci: genericPayloadType.rci
-                        };
                         GenericUserOperationEvent userAccountUnlockedEvent = {
                             eventData: userAccountUnlockedData,
-                            securityData: securityData
+                            securityData: self.getSecurityData(genericPayloadType)
                         };
                         check self.executeRemoteFunc(userAccountUnlockedEvent, "userAccountUnlocked",
-                        "UserOperationService", "onUserAccountUnlock");
+                            "UserOperationService", "onUserAccountUnlock");
                     }
                     "userDeleted" => {
                         json eventData = eventMap[eventKey];
                         GenericUserOperationData userDeletedData = check eventData.cloneWithType();
-                        GenericSecurityData securityData = {
-                            iss: genericPayloadType.iss,
-                            jti: genericPayloadType.jti,
-                            iat: genericPayloadType.iat,
-                            rci: genericPayloadType.rci
-                        };
                         GenericUserOperationEvent userDeletedEvent = {
                             eventData: userDeletedData,
-                            securityData: securityData
+                            securityData: self.getSecurityData(genericPayloadType)
                         };
-                        check self.executeRemoteFunc(
-                            userDeletedEvent, "userDeleted", "UserOperationService", "onDeleteUser");
+                        check self.executeRemoteFunc(userDeletedEvent, "userDeleted",
+                            "UserOperationService", "onDeleteUser");
                     }
                 }
             }
@@ -213,5 +175,14 @@ service class DispatcherService {
         if genericService is GenericServiceType {
             check self.nativeHandler.invokeRemoteFunction(genericEvent, eventName, eventFunction, genericService);
         }
+    }
+
+    private function getSecurityData(GenericPayloadType genericPayloadType) returns GenericSecurityData {
+        return {
+            iss: genericPayloadType.iss,
+            jti: genericPayloadType.jti,
+            iat: genericPayloadType.iat,
+            rci: genericPayloadType.rci
+        };
     }
 }

@@ -17,14 +17,13 @@
 import ballerina/cloud;
 import ballerina/http;
 
-const string DEFAULT_SECRET = "";
-
-@display {label: "WSO2IdentityServer", iconPath: "docs/icon.png"}
+@display {label: "WSO2 Identity Server", iconPath: "docs/icon.png"}
 public class Listener {
     private http:Listener httpListener;
     private DispatcherService dispatcherService;
 
-    public function init(ListenerConfig listenerConfig = {webhookSecret: DEFAULT_SECRET}, @cloud:Expose int|http:Listener listenOn = 8090) returns error? {
+    public function init(ListenerConfig listenerConfig, @cloud:Expose int|http:Listener listenOn = 8090)
+        returns error? {
         if listenOn is http:Listener {
             self.httpListener = listenOn;
         } else {

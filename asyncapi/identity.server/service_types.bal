@@ -14,6 +14,8 @@
 // specific language governing permissions and limitations
 // under the License.
 
+# Triggers when a new event related to user operations is received.
+# Available actions: onCreateUser, onUpdateUser, onDeleteUser, onEnableUser, onDisableUser, onUserAccountLock, onUserAccountUnlock
 public type UserOperationService service object {
     remote function onCreateUser(GenericUserOperationEvent event) returns error?;
     remote function onUpdateUser(UserProfileUpdateOperationEvent event) returns error?;
