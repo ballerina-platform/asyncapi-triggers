@@ -323,7 +323,7 @@ modules = [
 
 [[package]]
 org = "ballerinax"
-name = "wso2.identity.server"
+name = "trigger.identityserver"
 version = "0.9.0"
 dependencies = [
 	{org = "ballerina", name = "cloud"},
@@ -335,6 +335,6 @@ dependencies = [
 	{org = "ballerinax", name = "asyncapi.native.handler"}
 ]
 modules = [
-	{org = "ballerinax", packageName = "wso2.identity.server", moduleName = "wso2.identity.server"}
+	{org = "ballerinax", packageName = "trigger.identityserver", moduleName = "trigger.identityserver"}
 ]
 
