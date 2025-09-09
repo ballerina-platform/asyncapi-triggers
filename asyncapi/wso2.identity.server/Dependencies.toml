@@ -188,6 +188,9 @@ version = "0.0.0"
 dependencies = [
 	{org = "ballerina", name = "jballerina.java"}
 ]
+modules = [
+	{org = "ballerina", packageName = "lang.regexp", moduleName = "lang.regexp"}
+]
 
 [[package]]
 org = "ballerina"
@@ -271,18 +274,6 @@ dependencies = [
 
 [[package]]
 org = "ballerina"
-name = "regex"
-version = "1.3.2"
-dependencies = [
-	{org = "ballerina", name = "jballerina.java"},
-	{org = "ballerina", name = "lang.string"}
-]
-modules = [
-	{org = "ballerina", packageName = "regex", moduleName = "regex"}
-]
-
-[[package]]
-org = "ballerina"
 name = "task"
 version = "2.7.0"
 dependencies = [
@@ -338,8 +329,8 @@ dependencies = [
 	{org = "ballerina", name = "cloud"},
 	{org = "ballerina", name = "crypto"},
 	{org = "ballerina", name = "http"},
+	{org = "ballerina", name = "lang.regexp"},
 	{org = "ballerina", name = "log"},
-	{org = "ballerina", name = "regex"},
 	{org = "ballerinai", name = "observe"},
 	{org = "ballerinax", name = "asyncapi.native.handler"}
 ]

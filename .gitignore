@@ -9,3 +9,6 @@ build
 
 # Config tomls
 Config.toml
+
+# Target files
+**/target/
