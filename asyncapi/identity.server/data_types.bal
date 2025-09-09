@@ -99,4 +99,4 @@ public type GenericPayloadType record {
     json events;
 };
 
-public type GenericDataType GenericUserOperationEvent | UserProfileUpdateOperationEvent;
+public type GenericDataType GenericUserOperationEvent|UserProfileUpdateOperationEvent;

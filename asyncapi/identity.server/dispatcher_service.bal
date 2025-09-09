@@ -14,11 +14,11 @@
 // specific language governing permissions and limitations
 // under the License.
 
-import ballerina/http;
-import ballerina/log;
-import ballerina/lang.regexp;
-import ballerinax/asyncapi.native.handler;
 import ballerina/crypto;
+import ballerina/http;
+import ballerina/lang.regexp;
+import ballerina/log;
+import ballerinax/asyncapi.native.handler;
 
 service class DispatcherService {
     *http:Service;
@@ -208,7 +208,7 @@ service class DispatcherService {
     }
 
     private function executeRemoteFunc(GenericDataType genericEvent, string eventName, string serviceTypeStr,
-    string eventFunction) returns error? {
+            string eventFunction) returns error? {
         GenericServiceType? genericService = self.services[serviceTypeStr];
         if genericService is GenericServiceType {
             check self.nativeHandler.invokeRemoteFunction(genericEvent, eventName, eventFunction, genericService);
