@@ -1,8 +1,0 @@
-[package]
-org = "ballerinax"
-name = "trigger.identityserver"
-version = "0.9.0"
-distribution = "2201.12.0"
-
-[build-options]
-observabilityIncluded = true
