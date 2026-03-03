@@ -1,6 +1,6 @@
 [package]
 license = ["Apache-2.0"]
-keywords = ["Communication/Team Chat", "Cost/Freemium"]
+keywords = ["Communication/Team Chat", "Cost/Freemium", "Vendor/Slack", "Area/Communication", "Type/Trigger"]
 org = "ballerinax"
 name = "trigger.slack"
 icon = "icon.png"

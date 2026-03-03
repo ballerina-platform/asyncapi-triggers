@@ -1,6 +1,6 @@
 [package]
 license = ["Apache-2.0"]
-keywords = ["Sales & CRM/Customer Relationship Management", "Cost/Freemium"]
+keywords = ["Sales & CRM/Customer Relationship Management", "Cost/Freemium", "Vendor/Salesforce", "Area/CRM", "Type/Trigger"]
 org = "ballerinax"
 name = "trigger.salesforce"
 repository = "https://github.com/ballerina-platform/asyncapi-triggers"

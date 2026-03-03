@@ -1,6 +1,6 @@
 [package]
 license = ["Apache-2.0"]
-keywords = ["IT Operations/Gateway", "Cost/Paid", "Trigger"]
+keywords = ["IT Operations/Gateway", "Cost/Paid", "Trigger", "Vendor/Aayu", "Area/Integration", "Type/Trigger"]
 org = "ballerinax"
 name = "trigger.aayu.mftg.as2"
 repository = "https://github.com/ballerina-platform/asyncapi-triggers"

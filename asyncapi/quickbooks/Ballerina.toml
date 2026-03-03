@@ -1,6 +1,6 @@
 [package]
 license = ["Apache-2.0"]
-keywords = ["Finance/Accounting", "Cost/Paid", "Trigger"]
+keywords = ["Finance/Accounting", "Cost/Paid", "Trigger", "Vendor/QuickBooks", "Area/Finance", "Type/Trigger"]
 org = "ballerinax"
 name = "trigger.quickbooks"
 repository = "https://github.com/ballerina-platform/asyncapi-triggers"

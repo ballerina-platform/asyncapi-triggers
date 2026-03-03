@@ -1,6 +1,6 @@
 [package]
 license = ["Apache-2.0"]
-keywords = ["Sales & CRM/Customer Relationship Management", "Cost/Freemium", "Trigger"]
+keywords = ["Sales & CRM/Customer Relationship Management", "Cost/Freemium", "Trigger", "Vendor/HubSpot", "Area/CRM", "Type/Trigger"]
 org = "ballerinax"
 name = "trigger.hubspot"
 repository = "https://github.com/ballerina-platform/asyncapi-triggers"

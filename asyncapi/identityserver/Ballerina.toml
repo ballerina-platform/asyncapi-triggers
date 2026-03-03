@@ -1,6 +1,6 @@
 [package]
 license = ["Apache-2.0"]
-keywords = ["IT Operations/Authentication", "Cost/Freemium", "Trigger"]
+keywords = ["IT Operations/Authentication", "Cost/Freemium", "Trigger", "Vendor/Other", "Area/Security & Identity", "Type/Trigger"]
 org = "ballerinax"
 name = "trigger.identityserver"
 repository = "https://github.com/ballerina-platform/asyncapi-triggers"

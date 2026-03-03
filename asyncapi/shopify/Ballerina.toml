@@ -1,6 +1,6 @@
 [package]
 license = ["Apache-2.0"]
-keywords = ["Commerce/eCommerce", "Cost/Paid", "Trigger"]
+keywords = ["Commerce/eCommerce", "Cost/Paid", "Trigger", "Vendor/Shopify", "Area/eCommerce", "Type/Trigger"]
 org = "ballerinax"
 name = "trigger.shopify"
 repository = "https://github.com/ballerina-platform/asyncapi-triggers"

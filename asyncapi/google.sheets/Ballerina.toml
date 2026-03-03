@@ -1,6 +1,6 @@
 [package]
 license = ["Apache-2.0"]
-keywords = ["Communication/Team Chat", "Cost/Freemium", "Trigger"]
+keywords = ["Communication/Team Chat", "Cost/Freemium", "Trigger", "Vendor/Google", "Area/Productivity", "Type/Trigger"]
 org = "ballerinax"
 name = "trigger.google.sheets"
 repository = "https://github.com/ballerina-platform/asyncapi-triggers"
