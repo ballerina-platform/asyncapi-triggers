@@ -17,7 +17,6 @@
 import ballerina/log;
 import ballerina/uuid;
 import ballerina/http;
-import ballerinax/'client.config;
 import ballerinax/googleapis.gmail as gmail;
 
 type mapJson map<json>;
@@ -174,11 +173,6 @@ isolated function stop(http:Client gmailHttpClient, string userId) returns @tain
     return check gmailHttpClient->post(stopPath, request);
 }
 
-isolated function getClient(gmail:ConnectionConfig config) returns http:Client|error {
-    http:ClientConfiguration httpClientConfig = check config:constructHTTPClientConfig(config);
-    return check new (gmail:BASE_URL, httpClientConfig);
-}
-
 # Retrieves whether the particular remote method is available.
 #
 # + methodName - Name of the required method
@@ -195,69 +189,78 @@ isolated function isMethodAvailable(string methodName, string[] methods) returns
     return isAvailable;
 }
 
-isolated function readMessage(gmail:ConnectionConfig gmailConfig, string messageId, string? format = (), 
-                              string[]? metadataHeaders = (), string? userId = ()) returns @tainted gmail:Message|error {
+isolated function readMessage(gmail:ConnectionConfig gmailConfig, string messageId, string? userId = ()) 
+                              returns @tainted gmail:Message|error {
     string userEmailId = ME;
     if (userId is string) {
         userEmailId = userId;
     }
-    string uriParams = "";
-    //Append format query parameter
-    if (format is string) {
-        uriParams = check gmail:appendEncodedURIParameter(uriParams, gmail:FORMAT, format);
-    }
-    if (metadataHeaders is string[]) {
-        foreach string metaDataHeader in metadataHeaders {
-            uriParams = check gmail:appendEncodedURIParameter(uriParams, gmail:METADATA_HEADERS, metaDataHeader);
-        }
-    }
-    string readMessagePath = USER_RESOURCE + userEmailId + gmail:MESSAGE_RESOURCE + FORWARD_SLASH_SYMBOL + messageId 
-        + uriParams;
-
-    http:Client httpClient = check getClient(gmailConfig);
-    http:Response httpResponse = <http:Response>check httpClient->get(readMessagePath);
-    //Get json message response. If unsuccessful, throws and returns error.
-    json jsonreadMessageResponse = check handleResponse(httpResponse);
-    //Transform the json mail response from Gmail API to Message type. If unsuccessful, throws and returns error.
-    return gmail:convertJSONToMessageType(<@untainted>jsonreadMessageResponse);
+    gmail:Client gmailClient = check new (gmailConfig);
+    return gmailClient->/users/[userEmailId]/messages/[messageId]();
 }
 
-isolated function readThread(gmail:ConnectionConfig gmailConfig, string threadId, string? format = (), 
-                             string[]? metadataHeaders = (), string? userId = ()) returns @tainted gmail:MailThread|error {
+isolated function readThread(gmail:ConnectionConfig gmailConfig, string threadId, string? userId = ()) 
+                             returns @tainted gmail:MailThread|error {
     string userEmailId = ME;
     if (userId is string) {
         userEmailId = userId;
     }
-    string uriParams = "";
-    if (format is string) {
-        uriParams = check gmail:appendEncodedURIParameter(uriParams, gmail:FORMAT, format);
-    }
-    if (metadataHeaders is string[]) {
-        //Append the optional meta data headers as query parameters
-        foreach string metaDataHeader in metadataHeaders {
-            uriParams = check gmail:appendEncodedURIParameter(uriParams, gmail:METADATA_HEADERS, metaDataHeader);
-        }
-    }
-    string readThreadPath = USER_RESOURCE + userEmailId + gmail:THREAD_RESOURCE + FORWARD_SLASH_SYMBOL + threadId 
-                             + uriParams;
-
-    http:Client httpClient = check getClient(gmailConfig);
-    http:Response httpResponse = <http:Response>check httpClient->get(readThreadPath);
-    //Get json thread response. If unsuccessful, throws and returns error.
-    json jsonReadThreadResponse = check handleResponse(httpResponse);
-    //Transform json thread response from Gmail API to MailThread type. If unsuccessful, throws and returns error.
-    return gmail:convertJSONToThreadType(<@untainted>jsonReadThreadResponse);
+    gmail:Client gmailClient = check new (gmailConfig);
+    return gmailClient->/users/[userEmailId]/threads/[threadId]();
 }
 
-isolated function listHistory(gmail:ConnectionConfig gmailConfig, string startHistoryId, string[]? historyTypes = (), 
-                              string? labelId = (), string? maxResults = (), string? pageToken = (), string? userId = ()) 
-                              returns @tainted stream<gmail:History,error?>|error {
+isolated function listHistory(gmail:ConnectionConfig gmailConfig, string startHistoryId, string? labelId = (), 
+                              int? maxResults = (), string? pageToken = (), string? userId = ()) 
+                              returns @tainted gmail:ListHistoryResponse|error {
     string userEmailId = ME; 
     if (userId is string) {
         userEmailId = userId;
     }
-    http:Client httpClient = check getClient(gmailConfig);   
-    gmail:MailboxHistoryStream mailboxHistoryStream = check new gmail:MailboxHistoryStream (httpClient, userEmailId,
-            startHistoryId, historyTypes, labelId, maxResults, pageToken);
-    return new stream<gmail:History,error?>(mailboxHistoryStream);
-}  
+    gmail:Client gmailClient = check new (gmailConfig);
+    return gmailClient->/users/[userEmailId]/history(startHistoryId = startHistoryId, labelId = labelId, 
+            maxResults = maxResults, pageToken = pageToken);
+}
+
+# Extracts attachment parts from a message.
+#
+# + message - The Gmail message
+# + return - Array of message parts that are attachments
+isolated function getAttachments(gmail:Message message) returns gmail:MessagePart[] {
+    gmail:MessagePart? payload = message.payload;
+    if payload is () {
+        return [];
+    }
+    gmail:MessagePart[]? parts = payload.parts;
+    if parts is () {
+        return [];
+    }
+    gmail:MessagePart[] attachments = [];
+    foreach gmail:MessagePart part in parts {
+        string? filename = part.filename;
+        if filename is string && filename != "" {
+            attachments.push(part);
+        }
+    }
+    return attachments;
+}
+
+# Converts gmail:MessagePart array to MessageBodyPart array to maintain public API compatibility.
+#
+# + parts - Array of gmail:MessagePart
+# + return - Array of MessageBodyPart
+isolated function convertToMessageBodyParts(gmail:MessagePart[] parts) returns MessageBodyPart[] {
+    MessageBodyPart[] bodyParts = [];
+    foreach gmail:MessagePart part in parts {
+        MessageBodyPart bodyPart = {
+            partId: part.partId,
+            mimeType: part.mimeType,
+            bodyHeaders: part.headers,
+            fileId: part.attachmentId,
+            fileName: part.filename,
+            data: part.data,
+            size: part.size
+        };
+        bodyParts.push(bodyPart);
+    }
+    return bodyParts;
+}

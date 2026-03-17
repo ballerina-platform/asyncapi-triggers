@@ -29,6 +29,8 @@ public const string WATCH = "/watch";
 public const string STOP = "/stop";
 # Holds the value for user resource path of gmail client.
 const string USER_RESOURCE = "/v1/users/";
+# Holds the value for the Gmail API base URL.
+const string GMAIL_BASE_URL = "https://gmail.googleapis.com/gmail";
 
 # Holds the value "me". Used as current authenticated userId.
 const string ME = "me";
