@@ -17,7 +17,6 @@
 import ballerina/http;
 import ballerinax/googleapis.gmail;
 import ballerina/log;
-import ballerinax/'client.config;
 
 @display {label: "Google Mail", iconPath: "docs/icon.png"}
 public class Listener {
@@ -62,8 +61,9 @@ public class Listener {
                 refreshToken: listenerConfig.refreshToken
             }
         };
-        http:ClientConfiguration httpClientConfig = check config:constructHTTPClientConfig(gmailConfig);
-        self.gmailHttpClient = check new (gmail:BASE_URL, httpClientConfig);
+        self.gmailHttpClient = check new (GMAIL_BASE_URL, {
+            auth: gmailConfig.auth
+        });
         self.gmailConfig = gmailConfig;
         self.project = listenerConfig.project;
         self.pushEndpoint = listenerConfig.callbackURL;

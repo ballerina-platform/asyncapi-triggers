@@ -88,6 +88,33 @@ public type TopicSubscriptionDetail record {
     string subscriptionResource;
 };
 
+# Represents a body part of a message.
+#
+# + data - Body data of the message part
+# + mimeType - MIME type of the message part
+# + bodyHeaders - Headers of the message part
+# + fileId - File ID of the attachment (attachment ID)
+# + fileName - File name of the attachment
+# + partId - Part ID of the message part
+# + size - Size of the message part in bytes
+@display {label: "Message Body Part"}
+public type MessageBodyPart record {
+    @display {label: "Data"}
+    string data?;
+    @display {label: "Mime Type"}
+    string mimeType?;
+    @display {label: "Body Headers"}
+    map<string> bodyHeaders?;
+    @display {label: "File ID"}
+    string fileId?;
+    @display {label: "File Name"}
+    string fileName?;
+    @display {label: "Part ID"}
+    string partId?;
+    @display {label: "Size"}
+    int size?;
+};
+
 # Represents a mail attachment
 #
 # + messageId - Message ID
@@ -97,7 +124,7 @@ public type MailAttachment record {
     @display {label: "Message ID"}
     string messageId;
     @display {label: "Message Attachments"}
-    gmail:MessageBodyPart[] msgAttachments;
+    MessageBodyPart[] msgAttachments;
 };
 
 // Records for pubsub
