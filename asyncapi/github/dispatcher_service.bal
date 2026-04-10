@@ -195,8 +195,8 @@ service class DispatcherService {
                         "deleted" => {
                             check self.executeRemoteFunc(genericDataType, "deleted", "ReleaseService", "onDeleted");
                         }
-                        "pre_released" => {
-                            check self.executeRemoteFunc(genericDataType, "pre_released", "ReleaseService", "onPreReleased");
+                        "prereleased" => {
+                            check self.executeRemoteFunc(genericDataType, "prereleased", "ReleaseService", "onPreReleased");
                         }
                         "released" => {
                             check self.executeRemoteFunc(genericDataType, "released", "ReleaseService", "onReleased");

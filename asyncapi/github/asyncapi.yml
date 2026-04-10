@@ -271,7 +271,7 @@ components:
           action:
             type: string
             description: The action that was performed. Can be one of opened, closed, reopened, assigned, unassigned, review_requested, review_request_removed, labeled, unlabeled, and synchronize.
-          member:
+          number:
             type: integer
             description: The pull request number.
           changes:
@@ -303,7 +303,7 @@ components:
           review:
             type: object
             description: The review that was affected.
-    PullRequestReviewCommnetEventWrapper:
+    PullRequestReviewCommentEventWrapper:
       additionalProperties: true
       externalDocs:
         description: Event documentation for pull-request-review-comment-event
@@ -313,7 +313,7 @@ components:
         payload:
           action:
             type: string
-            description: The action that was performed on the comment. Can be created.
+            description: The action that was performed on the comment. Can be created, edited, or deleted.
           changes:
             type: object
             description: The changes to the comment if the action was edited.
@@ -372,7 +372,7 @@ components:
             type: string
             description: The git author's email address.
           commits[][url]:
-            type: url
+            type: string
             description: URL that points to the commit API resource.
           commits[][distinct]:
             type: boolean
@@ -387,13 +387,13 @@ components:
         payload:
           action:
             type: string
-            description: The action that was performed. Can be published.
+            description: The action that was performed. Can be published, unpublished, created, edited, deleted, prereleased, or released.
           changes[body][from]:
             type: string
             description: The previous version of the body if the action was edited.
           changes[name][from]:
             type: string
-            description: 	The previous version of the name if the action was edited.
+            description: The previous version of the name if the action was edited.
           release:
             type: object
             description: 	The release object.
@@ -425,9 +425,61 @@ components:
       properties:
         $ref: '#/components/schemas/GenericEventWrapper'
         payload:
-        action:
-          type: string
-          description: The action that was performed. Currently, can only be started.
+          action:
+            type: string
+            description: The action that was performed. Currently, can only be started.
+    LabelEventWrapper:
+      additionalProperties: true
+      externalDocs:
+        description: Event documentation for label-event
+        url: 'https://docs.github.com/en/webhooks/webhook-events-and-payloads#label'
+      properties:
+        $ref: '#/components/schemas/GenericEventWrapper'
+        payload:
+          action:
+            type: string
+            description: The action that was performed. Can be created, edited, or deleted.
+          label:
+            type: object
+            description: The label that was created, edited, or deleted.
+          changes:
+            type: object
+            description: The changes to the label if the action was edited.
+          repository:
+            type: object
+            description: The repository where the event occurred.
+          organization:
+            type: object
+            description: Webhook payloads contain the organization object when the webhook is configured for an organization or the event occurs from activity in a repository owned by an organization.
+          sender:
+            type: object
+            description: The user that triggered the event.
+    MilestoneEventWrapper:
+      additionalProperties: true
+      externalDocs:
+        description: Event documentation for milestone-event
+        url: 'https://docs.github.com/en/webhooks/webhook-events-and-payloads#milestone'
+      properties:
+        $ref: '#/components/schemas/GenericEventWrapper'
+        payload:
+          action:
+            type: string
+            description: The action that was performed. Can be created, closed, opened, edited, or deleted.
+          milestone:
+            type: object
+            description: The milestone that was created, closed, opened, edited, or deleted.
+          changes:
+            type: object
+            description: The changes to the milestone if the action was edited.
+          repository:
+            type: object
+            description: The repository where the event occurred.
+          organization:
+            type: object
+            description: Webhook payloads contain the organization object when the webhook is configured for an organization or the event occurs from activity in a repository owned by an organization.
+          sender:
+            type: object
+            description: The user that triggered the event.
 channels:
   commit-comment:
     subscribe:
@@ -476,66 +528,66 @@ channels:
         name: issue_comment
         title: IssueCommentEvent
         summary: Activity relate to an issue or pull request comment.
-    oneOf:
-      - x-ballerina-event-type: "created"
-        payload:
-        $ref: '#/components/schemas/IssueCommentEventWrapper'
-      - x-ballerina-event-type: "edited"
-        payload:
-        $ref: '#/components/schemas/IssueCommentEventWrapper'
-      - x-ballerina-event-type: "deleted"
-        payload:
-        $ref: '#/components/schemas/IssueCommentEventWrapper'
+        oneOf:
+          - x-ballerina-event-type: "created"
+            payload:
+              $ref: '#/components/schemas/IssueCommentEventWrapper'
+          - x-ballerina-event-type: "edited"
+            payload:
+              $ref: '#/components/schemas/IssueCommentEventWrapper'
+          - x-ballerina-event-type: "deleted"
+            payload:
+              $ref: '#/components/schemas/IssueCommentEventWrapper'
   project_card:
     subscribe:
       message:
         name: project_card
         title: ProjectCardEvent
         summary: Activity related to project_card
-    oneOf:
-      - x-ballerina-event-type: "created"
-        payload:
-          $ref: '#/components/schemas/ProjectCardEventWrapper'
-      - x-ballerina-event-type: "edited"
-        payload:
-          $ref: '#/components/schemas/ProjectCardEventWrapper'
-      - x-ballerina-event-type: "moved"
-        payload:
-          $ref: '#/components/schemas/ProjectCardEventWrapper'
-      - x-ballerina-event-type: "converted"
-        payload:
-          $ref: '#/components/schemas/ProjectCardEventWrapper'
-      - x-ballerina-event-type: "deleted"
-        payload:
-          $ref: '#/components/schemas/ProjectCardEventWrapper'
+        oneOf:
+          - x-ballerina-event-type: "created"
+            payload:
+              $ref: '#/components/schemas/ProjectCardEventWrapper'
+          - x-ballerina-event-type: "edited"
+            payload:
+              $ref: '#/components/schemas/ProjectCardEventWrapper'
+          - x-ballerina-event-type: "moved"
+            payload:
+              $ref: '#/components/schemas/ProjectCardEventWrapper'
+          - x-ballerina-event-type: "converted"
+            payload:
+              $ref: '#/components/schemas/ProjectCardEventWrapper'
+          - x-ballerina-event-type: "deleted"
+            payload:
+              $ref: '#/components/schemas/ProjectCardEventWrapper'
   issue:
     subscribe:
       message:
         name: issue
         title: IssueEvent
         summary: Activity related to an issue.
-    oneOf:
-      - x-ballerina-event-type: "opened"
-        payload:
-          $ref: '#/components/schemas/IssueEventWrapper'
-      - x-ballerina-event-type: "closed"
-        payload:
-          $ref: '#/components/schemas/IssueEventWrapper'
-      - x-ballerina-event-type: "reopened"
-        payload:
-          $ref: '#/components/schemas/IssueEventWrapper'
-      - x-ballerina-event-type: "assigned"
-        payload:
-          $ref: '#/components/schemas/IssueEventWrapper'
-      - x-ballerina-event-type: "unassigned"
-        payload:
-          $ref: '#/components/schemas/IssueEventWrapper'
-      - x-ballerina-event-type: "labeled"
-        payload:
-          $ref: '#/components/schemas/IssueEventWrapper'
-      - x-ballerina-event-type: "unlabeled"
-        payload:
-          $ref: '#/components/schemas/IssueEventWrapper'
+        oneOf:
+          - x-ballerina-event-type: "opened"
+            payload:
+              $ref: '#/components/schemas/IssueEventWrapper'
+          - x-ballerina-event-type: "closed"
+            payload:
+              $ref: '#/components/schemas/IssueEventWrapper'
+          - x-ballerina-event-type: "reopened"
+            payload:
+              $ref: '#/components/schemas/IssueEventWrapper'
+          - x-ballerina-event-type: "assigned"
+            payload:
+              $ref: '#/components/schemas/IssueEventWrapper'
+          - x-ballerina-event-type: "unassigned"
+            payload:
+              $ref: '#/components/schemas/IssueEventWrapper'
+          - x-ballerina-event-type: "labeled"
+            payload:
+              $ref: '#/components/schemas/IssueEventWrapper'
+          - x-ballerina-event-type: "unlabeled"
+            payload:
+              $ref: '#/components/schemas/IssueEventWrapper'
   member:
     subscribe:
       message:
@@ -553,43 +605,43 @@ channels:
         summary: When a private repository made public
         payload:
           $ref: '#/components/schemas/PublicEventWrapper'
-  pull-requet:
+  pull-request:
     subscribe:
       message:
         name: pull_request
         title: PullRequestEvent
         summary: Activity related to pull request.
-    oneOf:  
-      - x-ballerina-event-type: "opened"
-        payload:
-          $ref: '#/components/schemas/PullRequestEventWrapper'
-      - x-ballerina-event-type: "closed"
-        payload:
-          $ref: '#/components/schemas/PullRequestEventWrapper'
-      - x-ballerina-event-type: "reopened"
-        payload:
-          $ref: '#/components/schemas/PullRequestEventWrapper'
-      - x-ballerina-event-type: "assigned"
-        payload:
-          $ref: '#/components/schemas/PullRequestEventWrapper'
-      - x-ballerina-event-type: "unassigned"
-        payload:
-          $ref: '#/components/schemas/PullRequestEventWrapper'
-      - x-ballerina-event-type: "review_requested"
-        payload:
-          $ref: '#/components/schemas/PullRequestEventWrapper'
-      - x-ballerina-event-type: "review_request_removed"
-        payload:
-          $ref: '#/components/schemas/PullRequestEventWrapper'
-      - x-ballerina-event-type: "labeled"
-        payload:
-          $ref: '#/components/schemas/PullRequestEventWrapper'
-      - x-ballerina-event-type: "unlabeled"
-        payload:
-          $ref: '#/components/schemas/PullRequestEventWrapper'
-      - x-ballerina-event-type: "synchronize"
-        payload:
-          $ref: '#/components/schemas/PullRequestEventWrapper'
+        oneOf:
+          - x-ballerina-event-type: "opened"
+            payload:
+              $ref: '#/components/schemas/PullRequestEventWrapper'
+          - x-ballerina-event-type: "closed"
+            payload:
+              $ref: '#/components/schemas/PullRequestEventWrapper'
+          - x-ballerina-event-type: "reopened"
+            payload:
+              $ref: '#/components/schemas/PullRequestEventWrapper'
+          - x-ballerina-event-type: "assigned"
+            payload:
+              $ref: '#/components/schemas/PullRequestEventWrapper'
+          - x-ballerina-event-type: "unassigned"
+            payload:
+              $ref: '#/components/schemas/PullRequestEventWrapper'
+          - x-ballerina-event-type: "review_requested"
+            payload:
+              $ref: '#/components/schemas/PullRequestEventWrapper'
+          - x-ballerina-event-type: "review_request_removed"
+            payload:
+              $ref: '#/components/schemas/PullRequestEventWrapper'
+          - x-ballerina-event-type: "labeled"
+            payload:
+              $ref: '#/components/schemas/PullRequestEventWrapper'
+          - x-ballerina-event-type: "unlabeled"
+            payload:
+              $ref: '#/components/schemas/PullRequestEventWrapper'
+          - x-ballerina-event-type: "synchronize"
+            payload:
+              $ref: '#/components/schemas/PullRequestEventWrapper'
   pull-request-review:
     subscribe:
       message:
@@ -625,6 +677,60 @@ channels:
         x-ballerina-event-type: "created"
         payload:
           $ref: '#/components/schemas/SponsorshipEventWrapper'
+  pull-request-review-comment:
+    subscribe:
+      message:
+        name: pull_request_review_comment
+        title: PullRequestReviewCommentEvent
+        summary: Activity related to pull request review comments.
+        oneOf:
+          - x-ballerina-event-type: "created"
+            payload:
+              $ref: '#/components/schemas/PullRequestReviewCommentEventWrapper'
+          - x-ballerina-event-type: "edited"
+            payload:
+              $ref: '#/components/schemas/PullRequestReviewCommentEventWrapper'
+          - x-ballerina-event-type: "deleted"
+            payload:
+              $ref: '#/components/schemas/PullRequestReviewCommentEventWrapper'
+  label:
+    subscribe:
+      message:
+        name: label
+        title: LabelEvent
+        summary: Activity related to a label.
+        oneOf:
+          - x-ballerina-event-type: "created"
+            payload:
+              $ref: '#/components/schemas/LabelEventWrapper'
+          - x-ballerina-event-type: "edited"
+            payload:
+              $ref: '#/components/schemas/LabelEventWrapper'
+          - x-ballerina-event-type: "deleted"
+            payload:
+              $ref: '#/components/schemas/LabelEventWrapper'
+  milestone:
+    subscribe:
+      message:
+        name: milestone
+        title: MilestoneEvent
+        summary: Activity related to a milestone.
+        oneOf:
+          - x-ballerina-event-type: "created"
+            payload:
+              $ref: '#/components/schemas/MilestoneEventWrapper'
+          - x-ballerina-event-type: "edited"
+            payload:
+              $ref: '#/components/schemas/MilestoneEventWrapper'
+          - x-ballerina-event-type: "deleted"
+            payload:
+              $ref: '#/components/schemas/MilestoneEventWrapper'
+          - x-ballerina-event-type: "closed"
+            payload:
+              $ref: '#/components/schemas/MilestoneEventWrapper'
+          - x-ballerina-event-type: "opened"
+            payload:
+              $ref: '#/components/schemas/MilestoneEventWrapper'
   watch:
     subscribe:
       message:

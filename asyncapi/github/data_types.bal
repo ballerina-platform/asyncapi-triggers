@@ -1206,7 +1206,7 @@ public type PullRequestReviewEvent record {|
 # + sender - Pull request review comment sender
 # + organization - Webhook payloads contain the organization object when the webhook is configured for an organization or the event occurs from activity in a repository owned by an organization.
 public type PullRequestReviewCommentEvent record {|
-    string action;
+    PullRequestReviewCommentActions action;
     Changes changes?;
     PullRequest pull_request;
     PullRequestReviewComment comment;
