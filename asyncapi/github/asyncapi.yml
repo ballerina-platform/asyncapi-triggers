@@ -12,36 +12,6 @@ externalDocs:
   url: 'https://docs.github.com/en/developers/webhooks-and-events/events'
 components:
   schemas:
-    Enterprise:
-      type: object
-      properties:
-        id:
-          type: integer
-        slug:
-          type: string
-        name:
-          type: string
-        node_id:
-          type: string
-        avatar_url:
-          type: string
-        description:
-          type: string
-        website_url:
-          type: string
-        html_url:
-          type: string
-        created_at:
-          type: string
-        updated_at:
-          type: string
-    Installation:
-      type: object
-      properties:
-        id:
-          type: integer
-        node_id:
-          type: string
     GenericEventWrapper:
       additionalProperties: true 
       externalDocs:
@@ -102,10 +72,6 @@ components:
           comment:
             type: object
             description: The commit comment resource.
-          enterprise:
-            $ref: '#/components/schemas/Enterprise'
-          installation:
-            $ref: '#/components/schemas/Installation'
     CreateEventWrapper: 
       additionalProperties: true
       externalDocs:
@@ -126,10 +92,6 @@ components:
           description:
             type: string
             description: The repository's current description.
-          enterprise:
-            $ref: '#/components/schemas/Enterprise'
-          installation:
-            $ref: '#/components/schemas/Installation'
     DeleteEventWrapper: 
       additionalProperties: true
       externalDocs:
@@ -144,10 +106,6 @@ components:
           ref_type:
             type: string
             description: The type of Git ref oject deleted in the repository. Can be branch or tag.
-          enterprise:
-            $ref: '#/components/schemas/Enterprise'
-          installation:
-            $ref: '#/components/schemas/Installation'
     ForkEventWrapper:
       additionalProperties: true
       externalDocs:
@@ -159,10 +117,6 @@ components:
           forkee:
             type: object
             description: The created repository resource.
-          enterprise:
-            $ref: '#/components/schemas/Enterprise'
-          installation:
-            $ref: '#/components/schemas/Installation'
     GollumEventWrapper:
       additionalProperties: true
       externalDocs:
@@ -189,10 +143,6 @@ components:
           pages[][html_url]:
             type: string
             description: Points to the HTML wiki page.
-          enterprise:
-            $ref: '#/components/schemas/Enterprise'
-          installation:
-            $ref: '#/components/schemas/Installation'
     ProjectCardEventWrapper:
       additionalProperties: true
       externalDocs:
@@ -225,8 +175,6 @@ components:
           installation:
             type: object
             description: The GitHub app installation.
-          enterprise:
-            $ref: '#/components/schemas/Enterprise'
           sender:
             type: object
             description: The user that triggered the event.
@@ -253,10 +201,6 @@ components:
           comment:
             type: object
             description: The comment itself.
-          enterprise:
-            $ref: '#/components/schemas/Enterprise'
-          installation:
-            $ref: '#/components/schemas/Installation'
     IssueEventWrapper:
       additionalProperties: true
       externalDocs:
@@ -286,10 +230,6 @@ components:
           label:
             type: object
             description: The optional label that was added or removed from the issue.
-          enterprise:
-            $ref: '#/components/schemas/Enterprise'
-          installation:
-            $ref: '#/components/schemas/Installation'
     MemberEventWrapper:
       additionalProperties: true
       externalDocs:
@@ -310,10 +250,6 @@ components:
           changes[old_permission][from]: 
             type: string
             description: The previous permissions of the collaborator if the action was edited.
-          enterprise:
-            $ref: '#/components/schemas/Enterprise'
-          installation:
-            $ref: '#/components/schemas/Installation'
     PublicEventWrapper:
       additionalProperties: true
       externalDocs:
@@ -324,10 +260,6 @@ components:
         payload:
           type: object
           description: This event returns an empty payload object.
-          enterprise:
-            $ref: '#/components/schemas/Enterprise'
-          installation:
-            $ref: '#/components/schemas/Installation'
     PullRequestEventWrapper:
       additionalProperties: true
       externalDocs:
@@ -354,10 +286,6 @@ components:
           pull_request:
             type: object
             description: The pull request itself.
-          enterprise:
-            $ref: '#/components/schemas/Enterprise'
-          installation:
-            $ref: '#/components/schemas/Installation'
     PullRequestReviewEventWrapper:
       additionalProperties: true
       externalDocs:
@@ -375,10 +303,6 @@ components:
           review:
             type: object
             description: The review that was affected.
-          enterprise:
-            $ref: '#/components/schemas/Enterprise'
-          installation:
-            $ref: '#/components/schemas/Installation'
     PullRequestReviewCommnetEventWrapper:
       additionalProperties: true
       externalDocs:
@@ -402,10 +326,6 @@ components:
           comment:
             type: object
             description: The comment itself.
-          enterprise:
-            $ref: '#/components/schemas/Enterprise'
-          installation:
-            $ref: '#/components/schemas/Installation'
     PushEventWrapper:
       additionalProperties: true
       externalDocs:
@@ -457,10 +377,6 @@ components:
           commits[][distinct]:
             type: boolean
             description: Whether this commit is distinct from any that have been pushed before.
-          enterprise:
-            $ref: '#/components/schemas/Enterprise'
-          installation:
-            $ref: '#/components/schemas/Installation'
     ReleaseEventWrapper:
       additionalProperties: true
       externalDocs:
@@ -481,10 +397,6 @@ components:
           release:
             type: object
             description: 	The release object.
-          enterprise:
-            $ref: '#/components/schemas/Enterprise'
-          installation:
-            $ref: '#/components/schemas/Installation'
     SponsorshipEventWrapper:
       additionalProperties: true
       externalDocs:
@@ -505,10 +417,6 @@ components:
           changes[privacy_level][from]:
             type: string
             description: The edited event types include the details about the change when someone edits a sponsorship to change the privacy.
-          enterprise:
-            $ref: '#/components/schemas/Enterprise'
-          installation:
-            $ref: '#/components/schemas/Installation'
     WatchEventWrapper:
       additionalProperties: true
       externalDocs:
@@ -520,10 +428,6 @@ components:
         action:
           type: string
           description: The action that was performed. Currently, can only be started.
-        enterprise:
-          $ref: '#/components/schemas/Enterprise'
-        installation:
-          $ref: '#/components/schemas/Installation'
 channels:
   commit-comment:
     subscribe:
