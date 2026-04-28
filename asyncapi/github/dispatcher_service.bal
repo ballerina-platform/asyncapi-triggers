@@ -16,7 +16,6 @@
 
 import ballerina/crypto;
 import ballerina/http;
-import ballerina/lang.regexp;
 import ballerinax/asyncapi.native.handler;
 
 service class DispatcherService {
@@ -69,7 +68,7 @@ service class DispatcherService {
         }
         string signature = check request.getHeader("X-Hub-Signature-256");
         byte[] binaryPay = check request.getBinaryPayload();
-        string[] parts = regexp:split(re`=`, signature);
+        string[] parts = re `=`.split(signature);
         if parts.length() < 2 {
             return error("Unauthorized");
         }
