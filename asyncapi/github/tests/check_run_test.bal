@@ -77,7 +77,7 @@ function testWebhookNotificationOnCheckRunCreated() {
                 msg = "expected a 200/201 status code. Found " + response.statusCode.toBalString());
     }
     int counter = 10;
-    while (!checkRunCreatedNotified && counter >= 0) {
+    while (!checkRunCreatedNotified && counter > 0) {
         runtime:sleep(1);
         counter -= 1;
     }
@@ -104,7 +104,7 @@ function testWebhookNotificationOnCheckRunCompleted() {
                 msg = "expected a 200/201 status code. Found " + response.statusCode.toBalString());
     }
     int counter = 10;
-    while (!checkRunCompletedNotified && counter >= 0) {
+    while (!checkRunCompletedNotified && counter > 0) {
         runtime:sleep(1);
         counter -= 1;
     }
@@ -133,7 +133,7 @@ function testWebhookNotificationOnCheckRunCompletedWithFailure() {
                 msg = "expected a 200/201 status code. Found " + response.statusCode.toBalString());
     }
     int counter = 10;
-    while (!checkRunCompletedNotified && counter >= 0) {
+    while (!checkRunCompletedNotified && counter > 0) {
         runtime:sleep(1);
         counter -= 1;
     }
@@ -160,7 +160,7 @@ function testWebhookNotificationOnCheckRunRerequested() {
                 msg = "expected a 200/201 status code. Found " + response.statusCode.toBalString());
     }
     int counter = 10;
-    while (!checkRunRerequestedNotified && counter >= 0) {
+    while (!checkRunRerequestedNotified && counter > 0) {
         runtime:sleep(1);
         counter -= 1;
     }
@@ -189,7 +189,7 @@ function testWebhookNotificationOnCheckRunRequestedAction() {
                 msg = "expected a 200/201 status code. Found " + response.statusCode.toBalString());
     }
     int counter = 10;
-    while (!checkRunRequestedActionNotified && counter >= 0) {
+    while (!checkRunRequestedActionNotified && counter > 0) {
         runtime:sleep(1);
         counter -= 1;
     }

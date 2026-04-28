@@ -77,7 +77,7 @@ function testWebhookNotificationOnMilestoneCreated() {
                 msg = "expected a 200/201 status code. Found " + response.statusCode.toBalString());
     }
     int counter = 10;
-    while (!milestoneCreatedNotified && counter >= 0) {
+    while (!milestoneCreatedNotified && counter > 0) {
         runtime:sleep(1);
         counter -= 1;
     }
@@ -127,7 +127,7 @@ function testWebhookNotificationOnMilestoneEdited() {
                 msg = "expected a 200/201 status code. Found " + response.statusCode.toBalString());
     }
     int counter = 10;
-    while (!milestoneEditedNotified && counter >= 0) {
+    while (!milestoneEditedNotified && counter > 0) {
         runtime:sleep(1);
         counter -= 1;
     }
@@ -169,7 +169,7 @@ function testWebhookNotificationOnMilestoneOpened() {
                 msg = "expected a 200/201 status code. Found " + response.statusCode.toBalString());
     }
     int counter = 10;
-    while (!milestoneOpenedNotified && counter >= 0) {
+    while (!milestoneOpenedNotified && counter > 0) {
         runtime:sleep(1);
         counter -= 1;
     }
@@ -210,7 +210,7 @@ function testWebhookNotificationOnMilestoneClosed() {
                 msg = "expected a 200/201 status code. Found " + response.statusCode.toBalString());
     }
     int counter = 10;
-    while (!milestoneClosedNotified && counter >= 0) {
+    while (!milestoneClosedNotified && counter > 0) {
         runtime:sleep(1);
         counter -= 1;
     }
@@ -236,7 +236,7 @@ function testWebhookNotificationOnMilestoneDeleted() {
                 msg = "expected a 200/201 status code. Found " + response.statusCode.toBalString());
     }
     int counter = 10;
-    while (!milestoneDeletedNotified && counter >= 0) {
+    while (!milestoneDeletedNotified && counter > 0) {
         runtime:sleep(1);
         counter -= 1;
     }

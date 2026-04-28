@@ -96,7 +96,7 @@ function testWebhookNotificationOnWorkflowRunRequested() {
                 msg = "expected a 200/201 status code. Found " + response.statusCode.toBalString());
     }
     int counter = 10;
-    while (!workflowRunRequestedNotified && counter >= 0) {
+    while (!workflowRunRequestedNotified && counter > 0) {
         runtime:sleep(1);
         counter -= 1;
     }
@@ -124,7 +124,7 @@ function testWebhookNotificationOnWorkflowRunInProgress() {
                 msg = "expected a 200/201 status code. Found " + response.statusCode.toBalString());
     }
     int counter = 10;
-    while (!workflowRunInProgressNotified && counter >= 0) {
+    while (!workflowRunInProgressNotified && counter > 0) {
         runtime:sleep(1);
         counter -= 1;
     }
@@ -151,7 +151,7 @@ function testWebhookNotificationOnWorkflowRunCompleted() {
                 msg = "expected a 200/201 status code. Found " + response.statusCode.toBalString());
     }
     int counter = 10;
-    while (!workflowRunCompletedNotified && counter >= 0) {
+    while (!workflowRunCompletedNotified && counter > 0) {
         runtime:sleep(1);
         counter -= 1;
     }
@@ -181,7 +181,7 @@ function testWebhookNotificationOnWorkflowRunCompletedWithFailure() {
                 msg = "expected a 200/201 status code. Found " + response.statusCode.toBalString());
     }
     int counter = 10;
-    while (!workflowRunCompletedNotified && counter >= 0) {
+    while (!workflowRunCompletedNotified && counter > 0) {
         runtime:sleep(1);
         counter -= 1;
     }

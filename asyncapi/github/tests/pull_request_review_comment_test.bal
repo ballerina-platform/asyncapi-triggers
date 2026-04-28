@@ -114,7 +114,7 @@ function testWebhookNotificationOnPullRequestReviewCommentCreated() {
                 msg = "expected a 200/201 status code. Found " + response.statusCode.toBalString());
     }
     int counter = 10;
-    while (!prReviewCommentCreatedNotified && counter >= 0) {
+    while (!prReviewCommentCreatedNotified && counter > 0) {
         runtime:sleep(1);
         counter -= 1;
     }
@@ -177,7 +177,7 @@ function testWebhookNotificationOnPullRequestReviewCommentEdited() {
                 msg = "expected a 200/201 status code. Found " + response.statusCode.toBalString());
     }
     int counter = 10;
-    while (!prReviewCommentEditedNotified && counter >= 0) {
+    while (!prReviewCommentEditedNotified && counter > 0) {
         runtime:sleep(1);
         counter -= 1;
     }
@@ -205,7 +205,7 @@ function testWebhookNotificationOnPullRequestReviewCommentDeleted() {
                 msg = "expected a 200/201 status code. Found " + response.statusCode.toBalString());
     }
     int counter = 10;
-    while (!prReviewCommentDeletedNotified && counter >= 0) {
+    while (!prReviewCommentDeletedNotified && counter > 0) {
         runtime:sleep(1);
         counter -= 1;
     }

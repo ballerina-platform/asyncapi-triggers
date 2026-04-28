@@ -101,7 +101,7 @@ function testWebhookNotificationOnPush() {
                 msg = "expected a 200/201 status code. Found " + response.statusCode.toBalString());
     }
     int counter = 10;
-    while (!pushNotified && counter >= 0) {
+    while (!pushNotified && counter > 0) {
         runtime:sleep(1);
         counter -= 1;
     }
@@ -160,7 +160,7 @@ function testWebhookNotificationOnTagPush() {
                 msg = "expected a 200/201 status code. Found " + response.statusCode.toBalString());
     }
     int counter = 10;
-    while (!pushNotified && counter >= 0) {
+    while (!pushNotified && counter > 0) {
         runtime:sleep(1);
         counter -= 1;
     }
@@ -239,7 +239,7 @@ function testWebhookNotificationOnForcePush() {
                 msg = "expected a 200/201 status code. Found " + response.statusCode.toBalString());
     }
     int counter = 10;
-    while (!pushNotified && counter >= 0) {
+    while (!pushNotified && counter > 0) {
         runtime:sleep(1);
         counter -= 1;
     }

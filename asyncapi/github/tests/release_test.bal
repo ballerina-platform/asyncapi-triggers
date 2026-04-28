@@ -80,7 +80,7 @@ function testWebhookNotificationOnReleaseCreated() {
                 msg = "expected a 200/201 status code. Found " + response.statusCode.toBalString());
     }
     int counter = 10;
-    while (!releaseCreatedNotified && counter >= 0) {
+    while (!releaseCreatedNotified && counter > 0) {
         runtime:sleep(1);
         counter -= 1;
     }
@@ -107,7 +107,7 @@ function testWebhookNotificationOnReleasePublished() {
                 msg = "expected a 200/201 status code. Found " + response.statusCode.toBalString());
     }
     int counter = 10;
-    while (!releasePublishedNotified && counter >= 0) {
+    while (!releasePublishedNotified && counter > 0) {
         runtime:sleep(1);
         counter -= 1;
     }
@@ -133,7 +133,7 @@ function testWebhookNotificationOnReleaseReleased() {
                 msg = "expected a 200/201 status code. Found " + response.statusCode.toBalString());
     }
     int counter = 10;
-    while (!releaseReleasedNotified && counter >= 0) {
+    while (!releaseReleasedNotified && counter > 0) {
         runtime:sleep(1);
         counter -= 1;
     }
@@ -177,7 +177,7 @@ function testWebhookNotificationOnReleasePrereleased() {
                 msg = "expected a 200/201 status code. Found " + response.statusCode.toBalString());
     }
     int counter = 10;
-    while (!releasePrereleasedNotified && counter >= 0) {
+    while (!releasePrereleasedNotified && counter > 0) {
         runtime:sleep(1);
         counter -= 1;
     }
@@ -229,7 +229,7 @@ function testWebhookNotificationOnReleaseEdited() {
                 msg = "expected a 200/201 status code. Found " + response.statusCode.toBalString());
     }
     int counter = 10;
-    while (!releaseEditedNotified && counter >= 0) {
+    while (!releaseEditedNotified && counter > 0) {
         runtime:sleep(1);
         counter -= 1;
     }
@@ -256,7 +256,7 @@ function testWebhookNotificationOnReleaseUnpublished() {
                 msg = "expected a 200/201 status code. Found " + response.statusCode.toBalString());
     }
     int counter = 10;
-    while (!releaseUnpublishedNotified && counter >= 0) {
+    while (!releaseUnpublishedNotified && counter > 0) {
         runtime:sleep(1);
         counter -= 1;
     }
@@ -282,7 +282,7 @@ function testWebhookNotificationOnReleaseDeleted() {
                 msg = "expected a 200/201 status code. Found " + response.statusCode.toBalString());
     }
     int counter = 10;
-    while (!releaseDeletedNotified && counter >= 0) {
+    while (!releaseDeletedNotified && counter > 0) {
         runtime:sleep(1);
         counter -= 1;
     }

@@ -6172,6 +6172,8 @@ components:
         - ref_type
         - master_branch
         - pusher_type
+        - sender
+        - repository
       properties:
         ref:
           type: string
@@ -6210,6 +6212,8 @@ components:
         - ref
         - ref_type
         - pusher_type
+        - sender
+        - repository
       properties:
         ref:
           type: string
@@ -6239,6 +6243,8 @@ components:
       description: Payload for fork events
       required:
         - forkee
+        - sender
+        - repository
       properties:
         forkee:
           $ref: '#/components/schemas/Repository'
@@ -6287,6 +6293,8 @@ components:
       description: Payload for watch events (someone started watching the repository)
       required:
         - action
+        - sender
+        - repository
       properties:
         action:
           type: string
@@ -6370,6 +6378,8 @@ components:
         - deployment
         - workflow
         - workflow_run
+        - sender
+        - repository
       properties:
         action:
           type: string
@@ -6403,6 +6413,8 @@ components:
         - action
         - deployment
         - deployment_status
+        - sender
+        - repository
       properties:
         action:
           type: string
@@ -6557,6 +6569,8 @@ components:
       required:
         - action
         - member
+        - sender
+        - repository
       properties:
         action:
           type: string
@@ -6946,6 +6960,8 @@ components:
         - updated_at
         - commit
         - branches
+        - sender
+        - repository
       properties:
         id:
           type: integer
@@ -7472,6 +7488,8 @@ components:
       description: Payload for gollum (wiki) events
       required:
         - pages
+        - sender
+        - repository
       properties:
         pages:
           type: array
@@ -7719,6 +7737,9 @@ components:
       description: |
         Payload for public events. Fired when a repository visibility changes
         from private to public. No action field.
+      required:
+        - sender
+        - repository
       properties:
         sender:
           $ref: '#/components/schemas/User'

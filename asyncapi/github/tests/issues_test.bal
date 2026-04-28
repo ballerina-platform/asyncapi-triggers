@@ -78,7 +78,7 @@ function testWebhookNotificationOnIssueLabeling() {
         counter -= 1;
     }
     test:assertTrue(issueLabeledNotified, msg = "expected an issue label notification");
-    test:assertEquals(issueTitle, createdIssueTitle, msg = "invalid issue title");
+    test:assertEquals(issueLabels, "bug", msg = "expected labeled label name to match");
 }
 
 @test:Config {
@@ -106,7 +106,7 @@ function testWebhookNotificationOnIssueAssignment() {
         counter -= 1;
     }
     test:assertTrue(issueAssignedNotified, msg = "expected an issue assigned notification");
-    test:assertEquals(issueTitle, createdIssueTitle, msg = "invalid issue title");
+    test:assertEquals(issueAssignee, "ABCUser", msg = "expected assignee login to match");
 }
 
 json baseIssue = {

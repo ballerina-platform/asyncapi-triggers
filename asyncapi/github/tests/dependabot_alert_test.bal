@@ -97,7 +97,7 @@ function testWebhookNotificationOnDependabotAlertCreated() {
                 msg = "expected a 200/201 status code. Found " + response.statusCode.toBalString());
     }
     int counter = 10;
-    while (!dependabotAlertCreatedNotified && counter >= 0) {
+    while (!dependabotAlertCreatedNotified && counter > 0) {
         runtime:sleep(1);
         counter -= 1;
     }
@@ -125,7 +125,7 @@ function testWebhookNotificationOnDependabotAlertDismissed() {
                 msg = "expected a 200/201 status code. Found " + response.statusCode.toBalString());
     }
     int counter = 10;
-    while (!dependabotAlertDismissedNotified && counter >= 0) {
+    while (!dependabotAlertDismissedNotified && counter > 0) {
         runtime:sleep(1);
         counter -= 1;
     }
@@ -151,7 +151,7 @@ function testWebhookNotificationOnDependabotAlertReopened() {
                 msg = "expected a 200/201 status code. Found " + response.statusCode.toBalString());
     }
     int counter = 10;
-    while (!dependabotAlertReopenedNotified && counter >= 0) {
+    while (!dependabotAlertReopenedNotified && counter > 0) {
         runtime:sleep(1);
         counter -= 1;
     }
@@ -178,7 +178,7 @@ function testWebhookNotificationOnDependabotAlertFixed() {
                 msg = "expected a 200/201 status code. Found " + response.statusCode.toBalString());
     }
     int counter = 10;
-    while (!dependabotAlertFixedNotified && counter >= 0) {
+    while (!dependabotAlertFixedNotified && counter > 0) {
         runtime:sleep(1);
         counter -= 1;
     }
@@ -205,7 +205,7 @@ function testWebhookNotificationOnDependabotAlertAutoDismissed() {
                 msg = "expected a 200/201 status code. Found " + response.statusCode.toBalString());
     }
     int counter = 10;
-    while (!dependabotAlertAutoDismissedNotified && counter >= 0) {
+    while (!dependabotAlertAutoDismissedNotified && counter > 0) {
         runtime:sleep(1);
         counter -= 1;
     }
@@ -232,7 +232,7 @@ function testWebhookNotificationOnDependabotAlertReintroduced() {
                 msg = "expected a 200/201 status code. Found " + response.statusCode.toBalString());
     }
     int counter = 10;
-    while (!dependabotAlertReintroducedNotified && counter >= 0) {
+    while (!dependabotAlertReintroducedNotified && counter > 0) {
         runtime:sleep(1);
         counter -= 1;
     }

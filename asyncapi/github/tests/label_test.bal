@@ -61,7 +61,7 @@ function testWebhookNotificationOnLabelCreated() {
                 msg = "expected a 200/201 status code. Found " + response.statusCode.toBalString());
     }
     int counter = 10;
-    while (!labelCreatedNotified && counter >= 0) {
+    while (!labelCreatedNotified && counter > 0) {
         runtime:sleep(1);
         counter -= 1;
     }
@@ -105,7 +105,7 @@ function testWebhookNotificationOnLabelEdited() {
                 msg = "expected a 200/201 status code. Found " + response.statusCode.toBalString());
     }
     int counter = 10;
-    while (!labelEditedNotified && counter >= 0) {
+    while (!labelEditedNotified && counter > 0) {
         runtime:sleep(1);
         counter -= 1;
     }
@@ -132,7 +132,7 @@ function testWebhookNotificationOnLabelDeleted() {
                 msg = "expected a 200/201 status code. Found " + response.statusCode.toBalString());
     }
     int counter = 10;
-    while (!labelDeletedNotified && counter >= 0) {
+    while (!labelDeletedNotified && counter > 0) {
         runtime:sleep(1);
         counter -= 1;
     }

@@ -93,7 +93,7 @@ function testWebhookNotificationOnPullRequestOpened() {
                 msg = "expected a 200/201 status code. Found " + response.statusCode.toBalString());
     }
     int counter = 10;
-    while (!prOpenedNotified && counter >= 0) {
+    while (!prOpenedNotified && counter > 0) {
         runtime:sleep(1);
         counter -= 1;
     }
@@ -143,7 +143,7 @@ function testWebhookNotificationOnPullRequestClosed() {
                 msg = "expected a 200/201 status code. Found " + response.statusCode.toBalString());
     }
     int counter = 10;
-    while (!prClosedNotified && counter >= 0) {
+    while (!prClosedNotified && counter > 0) {
         runtime:sleep(1);
         counter -= 1;
     }
@@ -171,7 +171,7 @@ function testWebhookNotificationOnPullRequestReopened() {
                 msg = "expected a 200/201 status code. Found " + response.statusCode.toBalString());
     }
     int counter = 10;
-    while (!prReopenedNotified && counter >= 0) {
+    while (!prReopenedNotified && counter > 0) {
         runtime:sleep(1);
         counter -= 1;
     }
@@ -207,7 +207,7 @@ function testWebhookNotificationOnPullRequestEdited() {
                 msg = "expected a 200/201 status code. Found " + response.statusCode.toBalString());
     }
     int counter = 10;
-    while (!prEditedNotified && counter >= 0) {
+    while (!prEditedNotified && counter > 0) {
         runtime:sleep(1);
         counter -= 1;
     }
@@ -243,7 +243,7 @@ function testWebhookNotificationOnPullRequestLabeled() {
                 msg = "expected a 200/201 status code. Found " + response.statusCode.toBalString());
     }
     int counter = 10;
-    while (!prLabeledNotified && counter >= 0) {
+    while (!prLabeledNotified && counter > 0) {
         runtime:sleep(1);
         counter -= 1;
     }
@@ -278,7 +278,7 @@ function testWebhookNotificationOnPullRequestUnlabeled() {
                 msg = "expected a 200/201 status code. Found " + response.statusCode.toBalString());
     }
     int counter = 10;
-    while (!prUnlabeledNotified && counter >= 0) {
+    while (!prUnlabeledNotified && counter > 0) {
         runtime:sleep(1);
         counter -= 1;
     }
@@ -306,7 +306,7 @@ function testWebhookNotificationOnPullRequestAssigned() {
                 msg = "expected a 200/201 status code. Found " + response.statusCode.toBalString());
     }
     int counter = 10;
-    while (!prAssignedNotified && counter >= 0) {
+    while (!prAssignedNotified && counter > 0) {
         runtime:sleep(1);
         counter -= 1;
     }
@@ -334,7 +334,7 @@ function testWebhookNotificationOnPullRequestUnassigned() {
                 msg = "expected a 200/201 status code. Found " + response.statusCode.toBalString());
     }
     int counter = 10;
-    while (!prUnassignedNotified && counter >= 0) {
+    while (!prUnassignedNotified && counter > 0) {
         runtime:sleep(1);
         counter -= 1;
     }
@@ -362,7 +362,7 @@ function testWebhookNotificationOnPullRequestSynchronize() {
                 msg = "expected a 200/201 status code. Found " + response.statusCode.toBalString());
     }
     int counter = 10;
-    while (!prSynchronizeNotified && counter >= 0) {
+    while (!prSynchronizeNotified && counter > 0) {
         runtime:sleep(1);
         counter -= 1;
     }
@@ -411,7 +411,7 @@ function testWebhookNotificationOnPullRequestReadyForReview() {
                 msg = "expected a 200/201 status code. Found " + response.statusCode.toBalString());
     }
     int counter = 10;
-    while (!prReadyForReviewNotified && counter >= 0) {
+    while (!prReadyForReviewNotified && counter > 0) {
         runtime:sleep(1);
         counter -= 1;
     }
@@ -460,7 +460,7 @@ function testWebhookNotificationOnPullRequestConvertedToDraft() {
                 msg = "expected a 200/201 status code. Found " + response.statusCode.toBalString());
     }
     int counter = 10;
-    while (!prConvertedToDraftNotified && counter >= 0) {
+    while (!prConvertedToDraftNotified && counter > 0) {
         runtime:sleep(1);
         counter -= 1;
     }
@@ -499,7 +499,7 @@ function testWebhookNotificationOnPullRequestReviewRequested() {
                 msg = "expected a 200/201 status code. Found " + response.statusCode.toBalString());
     }
     int counter = 10;
-    while (!prReviewRequestedNotified && counter >= 0) {
+    while (!prReviewRequestedNotified && counter > 0) {
         runtime:sleep(1);
         counter -= 1;
     }
@@ -548,7 +548,7 @@ function testWebhookNotificationOnPullRequestLocked() {
                 msg = "expected a 200/201 status code. Found " + response.statusCode.toBalString());
     }
     int counter = 10;
-    while (!prLockedNotified && counter >= 0) {
+    while (!prLockedNotified && counter > 0) {
         runtime:sleep(1);
         counter -= 1;
     }
@@ -576,7 +576,7 @@ function testWebhookNotificationOnPullRequestUnlocked() {
                 msg = "expected a 200/201 status code. Found " + response.statusCode.toBalString());
     }
     int counter = 10;
-    while (!prUnlockedNotified && counter >= 0) {
+    while (!prUnlockedNotified && counter > 0) {
         runtime:sleep(1);
         counter -= 1;
     }

@@ -149,6 +149,7 @@ service IssuesService on githubListener {
     remote function onAssigned(IssuesEvent payload) returns error? {
        log:printInfo("Issue assigned");
        issueAssignedNotified = true;
+       issueAssignee = payload.assignee?.login ?: "";
     }
 
     remote function onClosed(IssuesEvent payload) returns error? {
@@ -159,6 +160,7 @@ service IssuesService on githubListener {
     remote function onLabeled(IssuesEvent payload) returns error? {
         log:printInfo("Issue labeled");
         issueLabeledNotified = true;
+        issueLabels = payload.label?.name ?: "";
     }
 
     remote function onOpened(IssuesEvent payload) returns error? {
