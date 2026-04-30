@@ -17,7 +17,7 @@ info:
     url: https://docs.github.com/en/site-policy/github-terms/github-terms-for-additional-products-and-features
 
 x-ballerina-event-identifier:
-  type: "header"
+  type: "composite"
   name: "X-GitHub-Event"
   path: "action"
 
