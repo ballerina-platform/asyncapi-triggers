@@ -14,1515 +14,1604 @@
 // specific language governing permissions and limitations
 // under the License.
 
-// Listener related configurations should be included here
-@display {label: "Listener Config"}
-public type ListenerConfig record {
-    @display {label: "Webhook Secret", "description": "Secret specified when adding the github webhook"}
-    string webhookSecret = DEFAULT_SECRET;
+
+import ballerina/http;
+
+public type ForkEvent record {
+    # The created (forked) repository
+    Repository forkee;
+    User sender;
+    Repository repository;
+    Organization organization?;
+    Installation installation?;
+    Enterprise enterprise?;
 };
 
-public type GenericEventWrapper record {
-    # The user that triggered the event.
-    record  { # The username of the actor.
-        string display_login?; # The URL of the actor's profile image.
-        string avatar_url?; # The unique identifier for the actor.
-        int id?; # The username of the actor.
-        string login?; # The unique identifier of the Gravatar profile for the actor.
-        string gravatar_id?; # The REST API URL used to retrieve the user object, which includes additional user information.
-        string url?;}  actor?;
-    # The repository object where the event occurred.
-    record  { # The name of the repository, which includes the owner and repository name.
-        string name?; # he unique identifier of the repository.
-        int id?; # The REST API URL used to retrieve the repository object, which includes additional repository information.
-        string url?;}  repo?;
-    # Unique identifier for the event
-    string id?;
-    # The type of event.Events uses PascalCase for the name
-    string 'type?;
+public type WorkflowRunEvent record {
+    string action;
+    WorkflowRun workflow_run;
+    # The workflow that is being run
+    record { int id?; string node_id?; string name?; string path?; string state?; string created_at?;
+            string updated_at?; string url?; string html_url?; string badge_url?;}  workflow;
+    User sender?;
+    Repository repository?;
+    Organization organization?;
+    Installation installation?;
+    Enterprise enterprise?;
 };
 
-# Represent the GitHub User payload.
-#
-# + login - The username used to login.
-# + id - User ID
-# + node_id - Node ID
-# + avatar_url - A URL pointing to the user's public avatar.
-# + gravatar_id - Graveter ID
-# + url - The HTTP URL for this user
-# + html_url - HTML url
-# + followers_url - Followers URL
-# + following_url - Following URL
-# + gists_url - Gists URL
-# + starred_url - Starred URL
-# + subscriptions_url - Subscription URL
-# + organizations_url - Organization URL
-# + repos_url - Repositories URL
-# + events_url - Events URL
-# + received_events_url - Received events URL.
-# + type - User type
-# + site_admin - is the user is Site Admin
-# + name - Name of the user
-# + email - Email of the user.
-public type User record {
-    string login;
+public type GollumEvent record {
+    # The pages that were updated
+    record { 
+        # The name of the page
+        string page_name; 
+        # The current page title
+        string title; 
+        # A summary of the changes
+        string summary?; 
+        string action; 
+        # The latest commit SHA of the page
+        string sha; 
+        string html_url;} [] pages;
+    User sender;
+    Repository repository;
+    Organization organization?;
+    Installation installation?;
+    Enterprise enterprise?;
+};
+
+public type ReleaseEvent record {
+    # The action that was performed
+    string action;
+    Release release;
+    # For edited events, the changes to the release
+    record {} changes?;
+    User sender;
+    Repository repository;
+    Organization organization?;
+    Installation installation?;
+    Enterprise enterprise?;
+};
+
+public type SecretScanningAlertLocationEvent record {
+    # The existing secret scanning alert the location was added to
+    record { int number; string secret_type;}  alert;
+    # The location where the secret was found
+    record { string 'type; # Location details; shape varies by type
+        record { string path?; int start_line?; int end_line?; int start_column?; int end_column?; string blob_sha?;
+                string blob_url?; string commit_sha?; string commit_url?;}  details?;}  location;
+    User sender?;
+    Repository repository?;
+    Organization organization?;
+    Installation installation?;
+    Enterprise enterprise?;
+};
+
+public type DeploymentReviewEvent record {
+    string action;
+    # The name of the environment that was approved or rejected
+    string environment;
+    # The reviewer's comment (for approved/rejected)
+    string comment?;
+    # ISO 8601 date of when the review was requested
+    string since;
+    # The reviewers who were requested or who reviewed
+    record { string 'type?; # A User or Team object depending on type
+        anydata reviewer?;} [] reviewers?;
+    # The workflow run associated with the deployment
+    record { int id; string name; string head_sha?; string head_branch?; int run_number?; string status?;
+            string conclusion?; string html_url?; record {}[] pull_requests?;}  workflow_run;
+    User sender?;
+    Repository repository?;
+    Organization organization?;
+    Installation installation?;
+    Enterprise enterprise?;
+};
+
+public type PullRequest record {
     int id;
     string node_id?;
-    string avatar_url;
-    string gravatar_id;
-    string url;
-    string html_url;
-    string followers_url;
-    string following_url;
-    string gists_url;
-    string starred_url;
-    string subscriptions_url;
-    string organizations_url;
-    string repos_url;
-    string events_url;
-    string received_events_url;
-    string 'type; //"type" in payload
-    boolean site_admin;
-    string name?;
-    string? email?;
-};
-
-# Represent the GitHub Repository payload.
-#
-# + id - ID o fthe Repository
-# + node_id - Node ID of the repository
-# + name - Name of the Repository
-# + full_name - Full name of the Repository
-# + owner - Owner of the repository
-# + private - Is the repository is private
-# + html_url - HTML URL of the repository.
-# + description - Description of the repository.
-# + fork - Is the repository is a fork
-# + url - URL of the repository
-# + forks_url - Fork URL of the repository.
-# + keys_url - Keys URl of the repository
-# + collaborators_url - Collaborators URL of the repository
-# + teams_url - Teams URL of the repository
-# + hooks_url - Hooks URL
-# + issue_events_url - Issue events URL
-# + events_url - Events URl
-# + assignees_url - Assignees URL
-# + branches_url - Branches URL
-# + tags_url - Tags URL
-# + blobs_url - Blobs URL
-# + git_tags_url - Git Tags URL
-# + git_refs_url - Git Refs URL
-# + trees_url - Trees URL
-# + statuses_url - Statuses URL
-# + languages_url - Languages URL.
-# + stargazers_url - Stargazers URL
-# + contributors_url - Contributors URL
-# + subscribers_url - Subscribers URL
-# + subscription_url - Subscription URL.
-# + commits_url - Commits URL
-# + git_commits_url - Git Commits URL
-# + comments_url - Comments URL
-# + issue_comment_url - Issue Comments URL
-# + contents_url - Contents URL
-# + compare_url - Compare URL
-# + merges_url - Merges URL
-# + archive_url - Archieve URL
-# + downloads_url - Downloads URL
-# + issues_url - Issues URL
-# + pulls_url - Pulls URL
-# + milestones_url - Milestone URLs
-# + notifications_url - Notification URLs
-# + labels_url - Labels URLs
-# + releases_url - Releases URL
-# + created_at - Created time
-# + pushed_at - Pushed time
-# + updated_at - Updated time
-# + git_url - Git URL
-# + ssh_url - SSH URL
-# + clone_url - Clone URL
-# + svn_url - SVN URL
-# + homepage - Home page URL
-# + size - Size of the repository 
-# + stargazers_count - Stargazers count
-# + watchers_count - Watchers count
-# + language - Language
-# + has_issues - Whether issues are available
-# + has_downloads - Whether downloads are available
-# + has_wiki - Wther Wikis are available
-# + has_pages - Whether GitHub pages available
-# + forks_count - Number of forks
-# + mirror_url - Mirror URl
-# + deployments_url - Deployment URL
-# + open_issues_count - Open issues count
-# + license - Licence URl
-# + forks - Forks
-# + open_issues - Open Issues
-# + watchers - Watches
-# + default_branch - Default branch
-# + archived - Whether archieved
-# + disabled - Whether disabled
-# + has_projects - Whether includes projects
-# + allow_squash_merge - Whether allow squash and merge
-# + allow_merge_commit - Whether allow merge commits
-# + allow_rebase_merge - Whether allow rebase merge
-# + delete_branch_on_merge - Whether delete branch on merge
-# + stargazers - Stargazers
-# + master_branch - Refrence to master branch
-public type Repository record {
-    int id;
-    string node_id;
-    string name;
-    string full_name;
-    User owner;
-    boolean 'private; //"private" in payload
-    string html_url;
-    string? description;
-    boolean 'fork;
-    string url;
-    string forks_url;
-    string keys_url;
-    string collaborators_url;
-    string teams_url;
-    string hooks_url;
-    string issue_events_url;
-    string events_url;
-    string assignees_url;
-    string branches_url;
-    string tags_url;
-    string blobs_url;
-    string git_tags_url;
-    string git_refs_url;
-    string trees_url;
-    string statuses_url;
-    string languages_url;
-    string stargazers_url;
-    string contributors_url;
-    string subscribers_url;
-    string subscription_url;
-    string commits_url;
-    string git_commits_url;
-    string comments_url;
-    string issue_comment_url;
-    string contents_url;
-    string compare_url;
-    string merges_url;
-    string archive_url;
-    string downloads_url;
-    string issues_url;
-    string pulls_url;
-    string milestones_url;
-    string notifications_url;
-    string labels_url;
-    string releases_url;
-    string|int created_at;
-    string updated_at;
-    string|int pushed_at;
-    string git_url;
-    string ssh_url;
-    string clone_url;
-    string svn_url;
-    string? homepage;
-    int size;
-    int stargazers_count;
-    int watchers_count;
-    string? language;
-    boolean has_issues;
-    boolean has_downloads;
-    boolean has_wiki;
-    boolean has_pages;
-    int forks_count;
-    string? mirror_url;
-    string deployments_url?;
-    int open_issues_count;
-    License? license;
-    int forks;
-    int open_issues;
-    int watchers;
-    string default_branch;
-    boolean archived?;
-    boolean disabled?;
-    boolean has_projects?;
-    boolean allow_squash_merge?;
-    boolean allow_merge_commit?;
-    boolean allow_rebase_merge?;
-    boolean delete_branch_on_merge?;
-    int stargazers?;
-    string master_branch?;
-};
-
-# Represent repository licence
-#
-# + key - License key
-# + name - License name
-# + spdx_id - Short identifier specified by https://spdx.org/licenses
-# + url - URL to the license on https://choosealicense.com
-# + node_id - GItHub node ID
-public type License record {
-    string key;
-    string name;
-    string? spdx_id;
-    string? url;
-    string node_id;
-};
-
-# Represents the Page payload.
-#
-# + page_name - Name of the page
-# + title - Title of the page
-# + summary - Summery
-# + action - Action
-# + sha - Sha of the page
-# + html_url - HTML URL of the page
-public type Page record {|
-    string page_name;
-    string title;
-    string? summary;
-    string action;
-    string sha;
-    string html_url;
-|};
-
-# Represents the GitHub Issue payload.
-#
-# + url - Url of the payload
-# + repository_url - Repository URl
-# + labels_url - Labels URl
-# + comments_url - Comments URl
-# + events_url - Events URL
-# + html_url - HTML URL
-# + id - ID
-# + node_id - Node ID
-# + number - Issue number
-# + title - Issue title
-# + user - Author of the issue
-# + labels - Labels assigned to the issue
-# + state - State of the issue.
-# + locked - Whether the issue is locked
-# + assignee - Assigne of the issue.
-# + assignees - Assignes of the issue.
-# + milestone - Milestone of the issue
-# + comments - Comments for the issue
-# + created_at - Created at date time
-# + updated_at - Updated date time
-# + closed_at - Closed date time
-# + author_association - Author associations
-# + active_lock_reason - Active lock reasons
-# + body - Description of the Issue
-# + performed_via_github_app -
-public type Issue record {
-    string url;
-    string repository_url;
-    string labels_url;
-    string comments_url;
-    string events_url;
-    string html_url;
-    int id;
-    string node_id;
-    int number;
-    string title;
-    User user;
-    Label[] labels;
-    string state;
-    boolean locked;
-    User? assignee;
-    User[] assignees;
-    Milestone? milestone;
-    int comments;
-    string created_at;
-    string updated_at;
-    string? closed_at;
-    string author_association;
-    string? active_lock_reason;
-    string? body;
-    string? performed_via_github_app;
-};
-
-# Represents the GitHub issue comment payload
-#
-# + url - Issue comment url
-# + html_url - HTML url for the issue comment
-# + issue_url - Issue URL
-# + id - ID
-# + node_id - Node ID
-# + user - Author of the comment
-# + created_at -  Created date time
-# + updated_at - Updated date time
-# + author_association - Author association
-# + body - Description of the issue comment
-# + performed_via_github_app - Whether performed via GitHub Apps
-public type IssueComment record {|
-    string url;
-    string html_url;
-    string issue_url;
-    int id;
-    string node_id;
-    User user;
-    string created_at;
-    string updated_at;
-    string author_association;
-    string body;
-    string? performed_via_github_app;
-|};
-
-# Represents the GitHub Label payload.
-#
-# + id - Label ID
-# + node_id - Node ID of the label
-# + url - Label URL
-# + name - Name of the label
-# + color - Color of the label
-# + description - Description of the label
-# + default - Whether a default label
-public type Label record {
-    int id;
-    string node_id;
-    string url;
-    string name;
-    string color;
-    string? description;
-    boolean 'default;
-};
-
-# Represents the GitHub Milestone payload.
-#
-# + url - Milestone URL
-# + html_url - HTML URL
-# + labels_url - Lables URL
-# + id - ID
-# + node_id - Node ID
-# + number - Milestone number
-# + title - Title of the milestone
-# + description - Description of the milestone
-# + creator - Author of the milestone
-# + open_issues - Number of open issues
-# + closed_issues - Number of closed issues
-# + state - State of the milestone
-# + created_at - Created date time
-# + updated_at - Updated date time
-# + due_on - Due of date time
-# + closed_at - Closed date time
-public type Milestone record {
-    string url;
-    string html_url;
-    string labels_url;
-    int id;
-    string node_id;
-    int number;
-    string title;
-    string? description;
-    User creator;
-    int open_issues;
-    int closed_issues;
-    string state;
-    string created_at;
-    string updated_at;
-    string? due_on;
-    string? closed_at;
-};
-
-# Represents the Change payload.
-#
-# + name - Name of the Change
-# + title - Title of the Change
-# + body - Body of the Change
-# + color - Color of the Change
-# + permission - Permission of the Change
-# + description - Description of the Change
-# + due_on - Due on date time
-# + note - Notes of the Change
-public type Changes record {
-    Name name?;
-    Title title?;
-    Body body?;
-    Color color?;
-    Permission permission?;
-    Description description?;
-    DueOn due_on?;
-    Note note?;
-};
-
-# Represents the title of a Change
-#
-# + from - From reference 
-public type Title record {|
-    string 'from;
-|};
-
-# Represents body of a Change occured
-#
-# + from - From reference
-public type Body record {|
-    string 'from;
-|};
-
-# Represents name of a Change occured
-#
-# + from - From reference
-public type Name record {|
-    string 'from;
-|};
-
-# Represents color of a Change occured
-#
-# + from - From reference
-public type Color record {|
-    string 'from;
-|};
-
-# Represents permission of a Change occured
-#
-# + from - From reference
-public type Permission record {|
-    string 'from;
-|};
-
-# Represents description of a Change occured
-#
-# + from - From reference
-public type Description record {
-    string 'from;
-};
-
-# Represents due on of a Change occured
-#
-# + from - From reference
-public type DueOn record {|
-    string 'from;
-|};
-
-# Represents note of a Change occured
-#
-# + from - From reference
-public type Note record {|
-    string 'from;
-|};
-
-# Represent Team payload.
-#
-# + name - Name of the Team
-# + id - ID
-# + node_id - Node ID
-# + slug - Slug of the Team
-# + description - Description of the Team
-# + privacy - Privacy link of the Team
-# + url - URL of the Team
-# + members_url - Members URL of the team
-# + repositories_url - Repositories URL of the Team
-# + permission - Permissions of the Team
-public type Team record {|
-    string name;
-    int id;
-    string node_id;
-    string slug;
-    string? description;
-    string privacy;
-    string url;
-    string members_url;
-    string repositories_url;
-    string permission;
-|};
-
-# Represents the payload of an Organization
-#
-# + login - Login name of the Organization
-# + id - ID of the organization
-# + node_id - Node ID
-# + url - URL of the organization
-# + name - Name of the organization
-# + repos_url - Reposiotries URL
-# + events_url - Events URL
-# + hooks_url - Hooks URL
-# + issues_url - Issues URL
-# + members_url - Members URl
-# + public_members_url - Public members URl
-# + avatar_url - Avatar URl
-# + description - Description URL
-public type Organization record {|
-    string login;
-    int id;
-    string node_id;
-    string url;
-    string name?;
-    string repos_url;
-    string events_url;
-    string hooks_url;
-    string issues_url;
-    string members_url;
-    string public_members_url;
-    string avatar_url;
-    string? description;
-|};
-
-# Represent the payload of GitHub Invitation
-#
-# + id - ID
-# + login - Login name for Invitation
-# + email - Email of the Invitation
-# + role - Role of the Invitation
-# + created_at - Created date time
-# + inviter - Inviter 
-# + team_count - Team count
-# + invitation_team_url - Invitation team url
-public type Invitation record {|
-    int id;
-    string login;
-    string email;
-    string role;
-    string created_at;
-    User inviter;
-    int team_count;
-    string invitation_team_url;
-|};
-
-# Represent the payload of GitHub Branch
-#
-# + label - Label name
-# + ref - Reference link
-# + sha - Sha of the branch
-# + user - Auther of the branch
-# + repo - Repository name
-public type Branch record {|
-    string label;
-    string ref;
-    string sha;
-    User user;
-    Repository repo;
-|};
-
-# Represent the payload of Github Links
-#
-# + self - Self link
-# + html - Html Link
-# + issue - Issue link
-# + comments - Comments link
-# + review_comments - Review comments link
-# + review_comment - Review comment
-# + commits - Commits 
-# + statuses - Statuses
-# + pull_request - Pull request
-public type Links record {|
-    SelfLink 'self?;
-    HtmlLink html?;
-    IssueLink issue?;
-    CommentsLink comments?;
-    ReviewCommentsLink review_comments?;
-    ReviewCommentLink review_comment?;
-    CommitsLink commits?;
-    StatusesLink statuses?;
-    PullRequestLink pull_request?;
-|};
-
-# Represent self link of GitHub Link
-#
-# + href - Hyper-reference of the Link 
-public type SelfLink record {|
-    string href;
-|};
-
-# Represent html link of GitHub Link
-#
-# + href - Hyper-reference of the Link
-public type HtmlLink record {|
-    string href;
-|};
-
-# Represent issue link of GitHub Link
-#
-# + href - Hyper-reference of the Link
-public type IssueLink record {|
-    string href;
-|};
-
-# Represent comments link of GitHub Link
-#
-# + href - Hyper-reference of the Link
-public type CommentsLink record {|
-    string href;
-|};
-
-# Represent review comments link of GitHub Link
-#
-# + href - Hyper-reference of the Link
-public type ReviewCommentsLink record {|
-    string href;
-|};
-
-# Represent a review comment link of GitHub Link
-#
-# + href - Hyper-reference of the Link
-public type ReviewCommentLink record {|
-    string href;
-|};
-
-# Represent commits link of GitHub Link
-#
-# + href - Hyper-reference of the Link
-public type CommitsLink record {|
-    string href;
-|};
-
-# Represent statuses link of GitHub Link
-#
-# + href - Hyper-reference of the Link
-public type StatusesLink record {|
-    string href;
-|};
-
-# Represent pull request link of GitHub Link
-#
-# + href - Hyper-reference of the Link
-public type PullRequestLink record {|
-    string href;
-|};
-
-# Represent payload of GitHub payload.
-#
-# + url - Pull request URL
-# + id - ID
-# + node_id - Node ID
-# + html_url - Html Url
-# + diff_url - Diff URL
-# + patch_url - Patch URl 
-# + issue_url - Issues URL
-# + number - Pull Request number
-# + state - State of the PR
-# + locked - Whether merge locked
-# + title - Title of the Pull Request
-# + user - Auther of the Pull Request
-# + body - Body of the pull request
-# + created_at - Created date time
-# + updated_at - Updated date time
-# + closed_at - Closed date time
-# + merged_at - Merged date time
-# + merge_commit_sha - Merge commit sha
-# + assignee - Assignee of the PR
-# + assignees - Assignees of the PR
-# + requested_reviewers - Requested reviewers list
-# + requested_teams - Requested Items
-# + labels - Labels list
-# + milestone - Milestone of the PR
-# + draft -  Whether the PR is a draft
-# + commits_url - Commits URL of the PR
-# + review_comments_url - Revew comments URL of the PR
-# + review_comment_url - Review comment URL
-# + comments_url - Comments URL
-# + statuses_url - Statuses URL
-# + head - Head ref of the PR
-# + base - base Ref of the PR
-# + _links - Links of the Pr
-# + author_association - Author association
-# + merged - Whether the PR is merged
-# + mergeable - Whether the PR is mergeable
-# + rebaseable - Whether the PR is rebaseble
-# + mergeable_state - Mergeable state of the PR
-# + merged_by - Merged User
-# + comments - List of comments
-# + review_comments - Review comments
-# + maintainer_can_modify - Whether maintainer can modify the PR
-# + commits - Commits
-# + additions - Addition changes
-# + deletions - Deletion changes
-# + changed_files - Change files references
-# + active_lock_reason - Active lock reason
-public type PullRequest record {
-    string url;
-    int id;
-    string node_id;
-    string html_url;
-    string diff_url;
-    string patch_url;
-    string? issue_url;
+    string url?;
+    string html_url?;
+    string diff_url?;
+    string patch_url?;
     int number;
     string state;
-    boolean locked;
+    boolean locked?;
     string title;
+    string body?;
     User user;
-    string? body;
-    string created_at;
-    string updated_at;
-    string? closed_at;
-    string? merged_at;
-    string? merge_commit_sha;
-    User? assignee;
-    User[] assignees;
-    User[] requested_reviewers;
-    Team[] requested_teams;
-    Label[] labels;
-    Milestone? milestone;
-    boolean draft;
-    string commits_url;
-    string review_comments_url;
-    string review_comment_url;
-    string comments_url;
-    string statuses_url;
-    Branch head;
-    Branch base;
-    Links _links;
-    string author_association;
+    Label[] labels?;
+    User assignee?;
+    User[] assignees?;
+    Milestone milestone?;
+    PullRequestRef head?;
+    PullRequestRef base?;
+    boolean draft?;
     boolean merged?;
-    boolean? mergeable?;
-    boolean? rebaseable?;
+    boolean mergeable?;
+    boolean rebaseable?;
     string mergeable_state?;
-    User? merged_by?;
+    string merge_commit_sha?;
     int comments?;
     int review_comments?;
-    boolean maintainer_can_modify?;
     int commits?;
     int additions?;
     int deletions?;
     int changed_files?;
-    string? active_lock_reason;
+    string created_at?;
+    string updated_at?;
+    string closed_at?;
+    string merged_at?;
+    User merged_by?;
+    string author_association?;
+    record {} auto_merge?;
 };
 
-# Represents GitHub Review payload.
-#
-# + id - ID of the Review
-# + node_id - Node ID
-# + user - Auther of the review
-# + body - Body of the review
-# + commit_id - Commit
-# + submitted_at - Submitted date time
-# + state - State of the review
-# + html_url - HTML of the Review
-# + pull_request_url - Pull request URL
-# + author_association - Author association
-# + _links - Links associations
-public type Review record {|
-    int id;
-    string node_id;
-    User user;
-    string? body;
-    string commit_id;
-    string submitted_at;
-    string state;
-    string html_url;
-    string pull_request_url;
-    string author_association;
-    Links _links;
-|};
-
-# Represent GitHub pull request review comment payload.
-#
-# + url - URL of the pull request review commment
-# + pull_request_review_id - Pull Request review id
-# + id - ID
-# + node_id - Node ID
-# + diff_hunk - Diff hunk of the PR review
-# + path - Path for the Pull Request Review Comment
-# + position - Position of the Review
-# + original_position - Original posiiton of the Change
-# + commit_id - Commit ID of the PR
-# + original_commit_id - Original commit id
-# + user - Author of the Pull Request Review
-# + body - Body of the Pull Request Review
-# + created_at - Created date time
-# + updated_at - Updated date time
-# + html_url - HTML url for the review
-# + pull_request_url - URL for the Pull Request
-# + author_association - Author association
-# + _links - Links associates
-# + start_line - Start line number of the review
-# + original_start_line - Original start line
-# + start_side - Start side of the review
-# + line - Line number
-# + original_line - Original line
-# + side - Side of the Pull Request Review
-# + in_reply_to_id - Reply to the PR ID
-public type PullRequestReviewComment record {|
-    string url;
-    int pull_request_review_id;
-    int id;
-    string node_id;
-    string diff_hunk;
-    string path;
-    int position;
-    int original_position;
-    string commit_id;
-    string original_commit_id;
-    User user;
-    string body;
-    string created_at;
-    string updated_at;
-    string html_url;
-    string pull_request_url;
-    string author_association;
-    Links _links;
-    string? start_line;
-    string? original_start_line;
-    string? start_side;
-    int line;
-    int original_line;
-    string side;
-    int in_reply_to_id?;
-|};
-
-# Represent GitHub commit payload.
-#
-# + id - ID
-# + sha - Commit sha
-# + message - Commit message
-# + author - Author of the commit
-# + url - Commit URL
-# + distinct - Whether the commit is distinct
-# + committer - Commit author
-# + tree_id - Tree Id
-# + timestamp - Timestamp of the commit
-# + added - Added changes
-# + removed - Removed parts 
-# + modified - Modified parts
-public type Commit record {|
-    string id?;
-    string sha?;
-    string message;
-    CommitAuthor author;
-    string url;
-    boolean 'distinct;
-    CommitAuthor committer?;
-    string tree_id?;
-    string timestamp?;
-    string[] added?;
-    string[] removed?;
-    string[] modified?;
-|};
-
-# Represent payload of GitHub commit author.
-#
-# + name - Name of the commit author
-# + email - Email of the commit author
-# + username - GitHub username of the commit author
-public type CommitAuthor record {|
-    string name;
-    string email;
-    string username?;
-|};
-
-# Represent GitHub Release payload.
-#
-# + url - Release URL
-# + assets_url - Assets URL
-# + upload_url - Upload URL 
-# + html_url - HTML URL
-# + id - ID
-# + node_id - Node ID
-# + tag_name - Tag name
-# + target_commitish - Target commitsh
-# + name - Name of the release
-# + draft - Whether release is in draft state
-# + author - Author of the release
-# + prerelease - Whether release is a pre-release
-# + created_at - Created date time
-# + published_at - Published date time
-# + assets - Release artifacts
-# + tarball_url - Tarball URL
-# + zipball_url - Zipball URL
-# + body - Release body
-public type Release record {|
-    string url;
-    string assets_url;
-    string upload_url;
-    string html_url;
-    int id;
-    string node_id;
-    string tag_name;
-    string target_commitish;
-    string? name;
-    boolean draft;
-    User author;
-    boolean prerelease;
-    string created_at;
-    string published_at;
-    Asset[] assets;
-    string tarball_url;
-    string zipball_url;
-    string? body;
-|};
-
-# Represent GitHub Asset payload.
-#
-# + url - Asset URL 
-# + browser_download_url - Download URL for assets
-# + id - Asset ID
-# + node_id - Node ID
-# + name - Name of the Asset
-# + label - Label name
-# + state - State of the assets
-# + content_type - Content-Type of the Asset
-# + size - Size of the asset
-# + download_count - Downloaded count
-# + created_at - Created date time
-# + updated_at - Updated date time
-# + uploader - Uploaded user
-public type Asset record {|
-    string url;
-    string browser_download_url;
-    int id;
-    string node_id;
-    string name;
-    string? label;
-    string state;
-    string content_type;
-    int size;
-    int download_count;
-    string created_at;
-    string updated_at;
-    User uploader;
-|};
-
-# Represent GitHub Hook payload.
-#
-# + type - Type of the Hook
-# + id - ID
-# + name - Name of the Hook
-# + active - Whether the Hook is active
-# + events - Events associated with the Hook
-# + config - Hook configuration
-# + updated_at - Updated date time
-# + created_at - Created date time
-# + url - Hook URL
-# + test_url - test URL
-# + ping_url - Ping URL
-# + last_response - Last Hook response
-public type Hook record {
+public type SecretScanningScanEvent record {
+    # What type of scan was completed
     string 'type;
-    int id;
-    string name;
-    boolean active;
-    string[] events;
-    HookConfig config;
-    string updated_at;
-    string created_at;
-    string url;
-    string test_url;
-    string ping_url;
-    HookLastResponse last_response;
+    # What type of content was scanned
+    string 'source;
+    # ISO 8601 timestamp when the scan started
+    string started_at;
+    # ISO 8601 timestamp when the scan completed
+    string completed_at;
+    # Patterns updated. Empty for normal backfill or custom pattern scans.
+    string[] secret_types?;
+    # If triggered by a custom pattern update, the name of that pattern
+    string custom_pattern_name?;
+    # If triggered by a custom pattern update, the scope of that pattern
+    string custom_pattern_scope?;
+    User sender?;
+    Repository repository?;
+    Organization organization?;
+    Installation installation?;
+    Enterprise enterprise?;
 };
 
-# Represent GitHub Hook config payload.
-#
-# + content_type - Content Type of the Hook request
-# + secret - Hook secret
-# + url - Hook registration URL
-# + insecure_ssl - Insecure SSL
-public type HookConfig record {
-    string content_type;
-    string secret?;
-    string url;
-    string insecure_ssl;
-};
-
-# Represent GitHub Hook last response.
-#
-# + code - Code associated with HookLastResponse
-# + status - Hook status
-# + message - Hook message
-public type HookLastResponse record {
-    string? code;
-    string status;
-    string? message;
-};
-# Represent GitHub ProjectCard payload
-# + url - Project card URL
-# + project_url - Project URL
-# + column_url - Project column URL
-# + column_id - Id of the column
-# + id -  ID
-# + node_id -Node ID
-# + note - Note of the  Project Card
-# + archived - Whether archieved
-# + created_at - Created date time
-# + updated_at - Updated date time
-# + content_url - Url of the issue
-# + creator - Author of the Project Card
-public type ProjectCard record{
-    string url;
-    string project_url;
-    string column_url;
-    int column_id;
-    int id;
-    string node_id;
-    string? note;
-    boolean archived;
-    string created_at;
-    string updated_at;
-    string content_url;
-    User creator;
-};
-# Represent GitHub fork event.
-#
-# + forkee - Forkee repository
-# + repository - Fork repository
-# + sender - Fork send user
-# + organization - Webhook payloads contain the organization object when the webhook is configured for an organization or the event occurs from activity in a repository owned by an organization.
-public type ForkEvent record {|
-    Repository forkee;
-    Repository repository;
-    User sender;
-    Organization organization?;
-|};
-
-# Repesent GitHub issue comment event.
-#
-# + action - Issue comment event action
-# + issue - Associated issue.
-# + changes - Changes associated to the Issue comment
-# + comment - Comment
-# + repository - Issue comment associated repository
-# + sender - Issue comment send user
-# + organization - Webhook payloads contain the organization object when the webhook is configured for an organization or the event occurs from activity in a repository owned by an organization.
-public type IssueCommentEvent record {|
-    IssueCommentActions action;
-    Issue issue;
-    Changes changes?;
-    IssueComment comment;
-    Repository repository;
-    User sender;
-    Organization organization?;
-|};
-
-# Represent GitHub issue event.
-#
-# + action - Issue event action  
-# + issue - Issue associated  
-# + changes - Changes associated with the issue  
-# + label - Label of the issue event  
-# + assignee - assignee of the issue event  
-# + milestone - Milestone associated with  
-# + repository - Repository of the issue events  
-# + sender - User associated with issue event  
-# + organization - Webhook payloads contain the organization object when the webhook is configured for an organization or the event occurs from activity in a repository owned by an organization.
-public type IssuesEvent record {|
-    IssuesActions action;
-    Issue issue;
-    Changes changes?;
-    Label label?;
-    User assignee?;
-    Milestone milestone?;
-    Repository repository;
-    User sender;
-    Organization organization?;
-|};
-# Represent GitHub project_card event
-# 
-#  + action - Project_card event action
-#  + project_card - Project card itself
-#  + repository - Repository associated with
-#  + sender - Sender of the project_card event
-#  + changes - The changes to the project card if the action was edited or converted.
-# + organization - Webhook payloads contain the organization object when the webhook is configured for an organization or the event occurs from activity in a repository owned by an organization.
-public type ProjectCardEvent record{
-    ProjectCardActions action;
-    ProjectCard project_card;
-    Repository repository;
-    Changes changes?;
-    User sender;
-    Organization organization?;
-};
-# Repesent GitHub label event.
-#
-# + action - Label event action
-# + label - Label payload
-# + issue - Issue associated with
-# + changes - Changes associated with
-# + repository - Repository associated with
-# + sender - Sender of the label event
-# + organization - Webhook payloads contain the organization object when the webhook is configured for an organization or the event occurs from activity in a repository owned by an organization.
-public type LabelEvent record {|
-    LabelActions action;
-    Label label;
-    Issue issue?;
-    Changes changes?;
-    Repository repository;
-    User sender;
-    Organization organization?;
-|};
-
-# Represent GitHub milestone event.
-#
-# + action - Milestone event action
-# + milestone - Milestone payload
-# + changes - Changes associated with 
-# + repository - Repository associated with
-# + sender - Sender of the label event
-# + organization - Webhook payloads contain the organization object when the webhook is configured for an organization or the event occurs from activity in a repository owned by an organization.
-public type MilestoneEvent record {|
-    MilestoneActions action;
-    Milestone milestone;
-    Changes changes?;
-    Repository repository;
-    User sender;
-    Organization organization?;
-|};
-
-# Represent GitHub Pull request event
-#
-# + action - Pull Request Event action
-# + number - Pull request number
-# + changes - Changes associated with
-# + pull_request - Pull Request payload
-# + assignee - Associated assignee to the Pull Request
-# + label - Labels associated with
-# + requested_reviewer - Requested reviewer 
-# + repository - Repository associated with
-# + sender - Pull request sender
-# + organization - Webhook payloads contain the organization object when the webhook is configured for an organization or the event occurs from activity in a repository owned by an organization.
-public type PullRequestEvent record {
-    PullRequestActions action;
-    int number;
-    Changes changes?;
-    PullRequest pull_request;
-    User assignee?;
-    Label label?;
-    User requested_reviewer?;
-    Repository repository;
-    User sender;
-    Organization organization?;
-};
-
-# Represent GitHub pull request review event.
-#
-# + action - Pull Request Review Event action
-# + review - Pull Request Review payload.
-# + pull_request - Pull Request associated with
-# + changes - Changes associated with
-# + repository - Repository associated with
-# + sender - Sender associated with
-# + organization - Webhook payloads contain the organization object when the webhook is configured for an organization or the event occurs from activity in a repository owned by an organization.
-public type PullRequestReviewEvent record {|
-    PullRequestReviewActions action;
-    Review review;
-    PullRequest pull_request;
-    Changes changes?;
-    Repository repository;
-    User sender;
-    Organization organization?;
-|};
-
-# Represent GitHub pull request review comment event.
-#
-# + action - Pull request review comment event action
-# + changes - Changes associated with
-# + pull_request - Pull request associated with
-# + comment - Comments associated with
-# + repository - Repository associated with
-# + sender - Pull request review comment sender
-# + organization - Webhook payloads contain the organization object when the webhook is configured for an organization or the event occurs from activity in a repository owned by an organization.
-public type PullRequestReviewCommentEvent record {|
+public type IssueCommentEvent record {
     string action;
-    Changes changes?;
-    PullRequest pull_request;
-    PullRequestReviewComment comment;
-    Repository repository;
+    Issue issue;
+    IssueComment comment;
+    # For edited events, the changes to the comment
+    record {} changes?;
     User sender;
-    Organization organization?;
-|};
-
-# Represent GitHub push event
-#
-# + ref - The full git ref that was pushed. Example: 
-# + before - The SHA of the most recent commit on ref before the push.
-# + after - The SHA of the most recent commit on ref after the push.
-# + created - Created date time
-# + deleted - Deleted date time
-# + forced - Forced psuh
-# + base_ref - Base git ref
-# + compare - Comparison
-# + commits - Array of commits
-# + head_commit - Head ref commit
-# + repository - The repository where the event occurred.
-# + pusher - The user who pushed the commits.
-# + sender - The user that triggered the event.
-# + organization - Webhook payloads contain the organization object when the webhook is configured for an organization or the event occurs from activity in a repository owned by an organization.
-public type PushEvent record {|
-    string ref;
-    string before;
-    string after;
-    boolean created;
-    boolean deleted;
-    boolean forced;
-    string? base_ref;
-    string compare;
-    Commit[] commits;
-    Commit? head_commit;
     Repository repository;
+    Organization organization?;
+    Installation installation?;
+    Enterprise enterprise?;
+};
+
+public type DeploymentStatusEvent record {
+    string action;
+    Deployment deployment;
+    DeploymentStatus deployment_status;
+    CheckRun check_run?;
+    record {} workflow?;
+    record {} workflow_run?;
+    User sender;
+    Repository repository;
+    Organization organization?;
+    Installation installation?;
+    Enterprise enterprise?;
+};
+
+public type OrganizationEvent record {
+    string action;
+    # The membership between the user and the organization.
+    # Not present when the action is member_invited.
+    record { string url?; string state?; string role?; string organization_url?; User user?;}  membership?;
+    # Present when action is member_invited
+    record {} invitation?;
+    # For renamed events, the old and new organization name
+    record {} changes?;
+    User sender?;
+    Organization organization?;
+    Installation installation?;
+    Enterprise enterprise?;
+};
+
+public type WebhookHeaders record {
+    # The name of the event that triggered the delivery
+    @http:Header {name: "X-GitHub-Event"}
+    string xGitHubEvent;
+    # A globally unique identifier (GUID) for this delivery
+    @http:Header {name: "X-GitHub-Delivery"}
+    string xGitHubDelivery;
+    # The unique identifier of the webhook
+    @http:Header {name: "X-GitHub-Hook-ID"}
+    int xGitHubHookID;
+    # The unique identifier of the resource where the webhook was created
+    @http:Header {name: "X-GitHub-Hook-Installation-Target-ID"}
+    int xGitHubHookInstallationTargetID?;
+    # The type of resource where the webhook was created
+    @http:Header {name: "X-GitHub-Hook-Installation-Target-Type"}
+    string xGitHubHookInstallationTargetType?;
+    # HMAC hex digest of the request body using SHA-1. Sent only when a
+    # webhook secret is configured. Use X-Hub-Signature-256 instead.
+    @http:Header {name: "X-Hub-Signature"}
+    string xHubSignature?;
+    # HMAC hex digest of the request body using SHA-256. Sent only when
+    # a webhook secret is configured. Preferred over X-Hub-Signature.
+    @http:Header {name: "X-Hub-Signature-256"}
+    string xHubSignature256?;
+    # Always has the prefix GitHub-Hookshot/
+    @http:Header {name: "User-Agent"}
+    string userAgent?;
+};
+
+public type RepositoryDispatchEvent record {
+    # The event_type specified in the dispatch request body
+    string action;
+    # The branch from which the dispatch was triggered
+    string branch;
+    # The client_payload from the dispatch request body
+    record {} client_payload;
+    Installation installation?;
+    User sender?;
+    Repository repository?;
+    Organization organization?;
+    Enterprise enterprise?;
+};
+
+public type MergeGroupEvent record {
+    string action;
+    # A group of pull requests grouped together by the merge queue
+    record { # The SHA of the merge group's head commit
+        string head_sha; # The full ref of the merge group targeting branch
+        string head_ref; # The SHA of the merge group's base branch
+        string base_sha; # The full ref of the branch being merged into
+        string base_ref; Commit head_commit?;}  merge_group;
+    # For destroyed action, the reason the merge group was destroyed
+    string reason?;
+    User sender?;
+    Repository repository?;
+    Organization organization?;
+    Installation installation?;
+    Enterprise enterprise?;
+};
+
+public type WorkflowJobEvent record {
+    string action;
+    WorkflowJob workflow_job;
+    # The deployment associated with the workflow job (if applicable)
+    Deployment deployment?;
+    User sender?;
+    Repository repository?;
+    Organization organization?;
+    Installation installation?;
+    Enterprise enterprise?;
+};
+
+public type OrgBlockEvent record {
+    string action;
+    User blocked_user;
+    User sender?;
+    Organization organization?;
+    Installation installation?;
+    Enterprise enterprise?;
+};
+
+public type DependabotAlertEvent record {
+    string action;
+    # A Dependabot alert
+    record { int number; string state; record { record { string ecosystem?; string name?;}  package?;
+            string manifest_path?; string scope?;}  dependency?; record { string ghsa_id?; string cve_id?;
+            string summary?; string description?; string severity?; record {}[] vulnerabilities?;}  security_advisory?;
+            record { record {} package?; string severity?; string vulnerable_version_range?;
+            record { string identifier?;}  first_patched_version?;}  security_vulnerability?; string url?;
+                    string html_url?; string created_at?; string updated_at?; string dismissed_at?; User dismissed_by?;
+                    string dismissed_reason?; string dismissed_comment?; string fixed_at?; string auto_dismissed_at?;
+                    User[] assignees?;}  alert;
+    User sender?;
+    Repository repository?;
+    Organization organization?;
+    Installation installation?;
+    Enterprise enterprise?;
+};
+
+public type CustomPropertyValuesEvent record {
+    string action;
+    # The new custom property values for the repository
+    record { string property_name; # String or array of strings
+        anydata value?;} [] new_property_values;
+    # The old custom property values for the repository
+    record { string property_name; # String or array of strings
+        anydata value?;} [] old_property_values;
+    User sender?;
+    Repository repository?;
+    Organization organization?;
+    Installation installation?;
+    Enterprise enterprise?;
+};
+
+public type SecretScanningAlertEvent record {
+    string action;
+    # The secret scanning alert
+    record { int number; string created_at?; string updated_at?; string url?; string html_url?; string locations_url?;
+    string state; string resolution?; string resolved_at?; User resolved_by?; string resolution_comment?;
+    # The type of secret that was detected
+        string secret_type?; string secret_type_display_name?; string validity?; boolean publicly_leaked?;
+        boolean multi_repo?; boolean push_protection_bypassed?; User push_protection_bypassed_by?;
+        string push_protection_bypassed_at?;}  alert;
+    # Present on assigned/unassigned actions
+    User assignee?;
+    User sender?;
+    Repository repository?;
+    Organization organization?;
+    Installation installation?;
+    Enterprise enterprise?;
+};
+
+public type PullRequestReviewThreadEvent record {
+    string action;
+    PullRequest pull_request;
+    # The review thread that was resolved or unresolved
+    record { string node_id?; PullRequestReviewComment[] comments?;}  thread;
+    string updated_at?;
+    User sender?;
+    Repository repository?;
+    Organization organization?;
+    Installation installation?;
+    Enterprise enterprise?;
+};
+
+public type IssueComment record {
+    int id;
+    string node_id?;
+    string url?;
+    string html_url?;
+    string body;
+    User user;
+    string created_at?;
+    string updated_at?;
+    string author_association?;
+};
+
+public type RegistryPackageEvent record {
+    string action;
+    # The registry package object
+    record { int id; string name; string namespace?; string description?; string ecosystem?; string package_type;
+    string html_url?; string created_at?; string updated_at?; User owner?; record { int id?; string 'version?;
+    string summary?; string html_url?; string target_commitish?; string target_oid?; boolean draft?;
+    boolean prerelease?; string created_at?; string updated_at?; record { string download_url?; int id?; string name?;
+    string 'sha256?; string content_type?; int size?; string created_at?; string updated_at?;} [] package_files?;
+    User author?; string installation_command?;}  package_version?; record { string about_url?; string name?;
+    string 'type?; string url?; string vendor?;}  registry?;}  registry_package;
+    User sender?;
+    Repository repository?;
+    Organization organization?;
+    Installation installation?;
+    Enterprise enterprise?;
+};
+
+public type CheckSuiteEvent record {
+    string action;
+    CheckSuite check_suite;
+    User sender?;
+    Repository repository?;
+    Organization organization?;
+    Installation installation?;
+    Enterprise enterprise?;
+};
+
+public type DiscussionCommentEvent record {
+    string action;
+    # The discussion comment
+    record { int id?; string node_id?; string html_url?; string body?; User user?; string created_at?;
+    string updated_at?; string author_association?;}  comment;
+    Discussion discussion;
+    # For edited events, the changes to the comment
+    record {} changes?;
+    User sender?;
+    Repository repository?;
+    Organization organization?;
+    Installation installation?;
+    Enterprise enterprise?;
+};
+
+public type Organization record {
+    string login?;
+    int id?;
+    string node_id?;
+    string url?;
+    string html_url?;
+    string repos_url?;
+    string avatar_url?;
+    string description?;
+};
+
+public type RepositoryImportEvent record {
+    # The final status of the import
+    string status;
+    User sender?;
+    Repository repository?;
+    Organization organization?;
+    Installation installation?;
+};
+
+public type RepositoryEvent record {
+    string action;
+    # For edited/renamed/transferred events, the changes that occurred
+    record {} changes?;
+    Repository repository?;
+    User sender?;
+    Organization organization?;
+    Installation installation?;
+    Enterprise enterprise?;
+};
+
+public type StarEvent record {
+    string action;
+    # The time the star was created (ISO 8601). Null for the deleted action.
+    string starred_at;
+    User sender?;
+    Repository repository?;
+    Organization organization?;
+    Installation installation?;
+    Enterprise enterprise?;
+};
+
+public type WatchEvent record {
+    string action;
+    User sender;
+    Repository repository;
+    Organization organization?;
+    Installation installation?;
+    Enterprise enterprise?;
+};
+
+public type PackageEvent record {
+    string action;
+    # Information about the package
+    record { int id; string name; string namespace?; string description?; string ecosystem?; string package_type?;
+    string html_url?; string created_at?; string updated_at?; User owner?; record { int id?; string 'version?;
+    string summary?; string name?; string description?; string body?; string body_html?; record {} release?;
+    string manifest?; string html_url?; string tag_name?; string target_commitish?; string target_oid?; boolean draft?;
+    boolean prerelease?; string created_at?; string updated_at?; record {}[] metadata?; record {} container_metadata?;
+    record {} npm_metadata?; record {}[] nuget_metadata?; record {}[] rubygems_metadata?; record {}[] package_files?;
+    string package_url?; User author?; string source_url?; string installation_command?;}  package_version?;
+    record { string about_url?; string name?; string 'type?; string url?; string vendor?;}  registry?;}  package;
+    User sender?;
+    Repository repository?;
+    Organization organization?;
+    Installation installation?;
+    Enterprise enterprise?;
+};
+
+public type WorkflowDispatchEvent record {
+    # The inputs provided when manually triggering the workflow
+    record {} inputs?;
+    # The branch or tag ref from which the workflow was triggered
+    string ref;
+    # The path to the workflow file (e.g. .github/workflows/main.yml)
+    string workflow;
+    User sender?;
+    Repository repository?;
+    Organization organization?;
+    Installation installation?;
+    Enterprise enterprise?;
+};
+
+public type SponsorshipEvent record {
+    string action;
+    # The sponsorship object
+    record { string node_id; string created_at; string privacy_level; # The tier the sponsor has chosen
+        record { string node_id; string created_at?; string description?; int monthly_price_in_cents;
+        int monthly_price_in_dollars; string name; boolean is_one_time?; boolean is_custom_amount?;}  tier;
+        User sponsor; User sponsorable;}  sponsorship;
+    # For edited, tier_changed, and pending_tier_change events
+    record { record { # The previous tier object (same shape as sponsorship.tier)
+            record {} 'from?;}  tier?; record { string 'from?;}  privacy_level?;}  changes?;
+    # For pending_cancellation and pending_tier_change, the date the
+    # change takes effect (ISO 8601 date).
+    string effective_date?;
+    User sender?;
+    Organization organization?;
+    Installation installation?;
+};
+
+public type SubIssuesEvent record {
+    string action;
+    int parent_issue_id;
+    Issue parent_issue;
+    Repository parent_issue_repo;
+    int sub_issue_id;
+    Issue sub_issue;
+    User sender?;
+    Repository repository?;
+    Organization organization?;
+    Installation installation?;
+    Enterprise enterprise?;
+};
+
+public type ProjectColumnEvent record {
+    string action;
+    # A column in a classic project board
+    record { int id; string node_id; string url?; string project_url?; string cards_url?; string name;
+    # The ID of the column this column was moved after
+        int after_id?; string created_at?; string updated_at?;}  project_column;
+    # For edited events, the changes made to the column
+    record { record { string 'from?;}  name?;}  changes?;
+    User sender?;
+    Repository repository?;
+    Organization organization?;
+    Installation installation?;
+    Enterprise enterprise?;
+};
+
+public type Team record {
+    int id;
+    string node_id?;
+    string name;
+    string slug;
+    string description?;
+    string privacy?;
+    string notification_setting?;
+    string permission?;
+    string url?;
+    string html_url?;
+    string members_url?;
+    string repositories_url?;
+    record {} parent?;
+};
+
+public type MarketplacePurchaseEvent record {
+    string action;
+    # The GitHub Marketplace purchase
+    record { record { string 'type; int id; string node_id?; string login; string organization_billing_email?;}  account;
+    string billing_cycle; int unit_count; boolean on_free_trial?; string free_trial_ends_on?; string next_billing_date?;
+    record { int id; string name; string description; int monthly_price_in_cents; int yearly_price_in_cents;
+    string price_model; boolean has_free_trial?; string unit_name?; string[] bullets?;}  plan;}  marketplace_purchase;
+    # The previous purchase state (for changed/pending_change events)
+    record {} previous_marketplace_purchase?;
+    # ISO 8601 date when the change takes effect
+    string effective_date;
+    User sender;
+    Installation installation?;
+};
+
+public type PushEvent record {
+    # The full git ref that was pushed (e.g. refs/heads/main or refs/tags/v3.14.1)
+    string ref;
+    # The SHA of the most recent commit on ref before the push
+    string before;
+    # The SHA of the most recent commit on ref after the push
+    string after;
+    # The base ref for the push (if applicable)
+    string base_ref?;
+    # Whether this push created the ref
+    boolean created;
+    # Whether this push deleted the ref
+    boolean deleted;
+    # Whether this push was a force push of the ref
+    boolean forced;
+    # URL showing the changes in this ref update
+    string compare;
+    # Array of commit objects (maximum 2048)
+    Commit[] commits;
+    Commit head_commit?;
+    # Metaproperties for the Git author/committer
     CommitAuthor pusher;
     User sender;
-    Organization organization?;
-|};
-
-# Represent GitHub release event.
-#
-# + action - The action that was performed.
-# + release - The release object.
-# + repository - The repository where the event occurred.
-# + sender - The user that triggered the event.
-# + changes - The previous version of the body if the action was edited.
-# + organization - Webhook payloads contain the organization object when the webhook is configured for an organization or the event occurs from activity in a repository owned by an organization.
-public type ReleaseEvent record {
-    ReleaseActions action;
-    Release release;
     Repository repository;
-    User sender;
-    Changes changes?;
     Organization organization?;
+    Installation installation?;
+    Enterprise enterprise?;
 };
 
-# Represent GitHub watch event.
-#
-# + action - The action that was performed. Currently, can only be started.
-# + repository - The repository where the event occurred.
-# + sender - The user that triggered the event.
-# + organization - Webhook payloads contain the organization object when the webhook is configured for an organization or the event occurs from activity in a repository owned by an organization.
-public type WatchEvent record {|
-    WatchActions action;
-    Repository repository;
-    User sender;
-    Organization organization?;
-|};
-
-# Represent GitHub ping event.
-#
-# + zen - Random string of GitHub zen.
-# + hook_id - The ID of the webhook that triggered the ping.
-# + hook - The webhook configuration.
-# + repository - The repository where the event occurred.
-# + sender - The user that triggered the event.
-# + organization - Webhook payloads contain the organization object when the webhook is configured for an organization or the event occurs from activity in a repository owned by an organization.
-public type PingEvent record {|
-    string zen;
-    int hook_id;
-    Hook hook;
-    Repository repository;
-    User sender;
-    Organization organization?;
-|};
-
-# Represent GitHub create event.
-#
-# + ref - The git ref resource.
-# + ref_type - The type of Git ref object created in the repository. Can be either branch or tag.
-# + master_branch - The name of the repository's default branch (usually main).
-# + description - The repository's current description.
-# + repository - The repository where the event occurred.
-# + organization - Webhook payloads contain the organization object when the webhook is configured for an organization or the event occurs from activity in a repository owned by an organization.
-# + sender - The user that triggered the event.
-public type CreateEvent record {
-    string ref;
-    string ref_type;
-    string master_branch;
-    string? description;
-    Repository repository;
-    Organization organization?;
-    User sender;
+public type Installation record {
+    int id?;
+    string node_id?;
 };
-# Represent project card event action types
-# 
-# + PROJECT_CARD_CREATED - Project card created
-# + PROJECT_CARD_EDITED - Project card edited
-# + PROJECT_CARD_MOVED -  Project card moved
-# + PROJECT_CARD_CONVERTED - Project card converted
-# + PROJECT_CARD_DELETED - Project card deleted
-public enum ProjectCardActions{
-    PROJECT_CARD_CREATED = "created",
-    PROJECT_CARD_EDITED = "edited",
-    PROJECT_CARD_MOVED = "moved",
-    PROJECT_CARD_CONVERTED = "converted",
-    PROJECT_CARD_DELETED = "deleted"
-}
 
-# Represent GitHub meta event.
-#
-# + action - Action of the meta event
-# + hook_id - The ID of the webhook that triggered the ping.
-# + hook - The webhook configuration.
-# + repository - The repository where the event occurred.
-# + sender - The user that triggered the event.
-# + organization - Webhook payloads contain the organization object when the webhook is configured for an organization or the event occurs from activity in a repository owned by an organization.
-public type MetaEvent record {|
+public type BranchProtectionRuleEvent record {
     string action;
-    int hook_id;
-    Hook hook;
-    Repository repository;
-    User sender;
+    # The branch protection rule. Includes name and all branch protection
+    # settings applied to matching branches. Binary settings are boolean;
+    # multi-level configs are off, non_admins, or everyone; actor and
+    # build lists are arrays of strings.
+    record { int id?; int repository_id?; string name?; string created_at?; string updated_at?;
+    string pull_request_reviews_enforcement_level?; int required_approving_review_count?;
+    boolean dismiss_stale_reviews_on_push?; boolean require_code_owner_review?; boolean authorized_dismissal_actors_only?;
+    boolean ignore_approvals_from_contributors?; boolean require_last_push_approval?; string[] required_status_checks?;
+    string required_status_checks_enforcement_level?; boolean strict_required_status_checks_policy?;
+    string signature_requirement_enforcement_level?; string linear_history_requirement_enforcement_level?;
+    boolean admin_enforced?; string allow_force_pushes_enforcement_level?; string allow_deletions_enforcement_level?;
+    string merge_queue_enforcement_level?; string required_deployments_enforcement_level?;
+    string required_conversation_resolution_level?; boolean authorized_actors_only?;
+    string[] authorized_actor_names?;}  rule;
+    # For edited events, the changes to the rule
+    record {} changes?;
+    User sender?;
+    Repository repository?;
     Organization organization?;
-|};
-
-
-# Represent issue event action types.
-#
-# + ISSUE_OPENED - Issue opened
-# + ISSUE_ASSIGNED - Issue assigned
-# + ISSUE_UNASSIGNED - Issued unassigned
-# + ISSUE_LABELED - Issue labeled
-# + ISSUE_UNLABELED - Issue un-labeled
-# + ISSUE_EDITED - Issue edited
-# + ISSUE_MILESTONED - Issue milestoned
-# + ISSUE_DEMILESTONED - Issue de-milestoned
-# + ISSUE_CLOSED - Issue closed
-# + ISSUE_REOPENED - Issue re-opened
-public enum IssuesActions {
-    ISSUE_OPENED = "opened",
-    ISSUE_ASSIGNED = "assigned",
-    ISSUE_UNASSIGNED = "unassigned",
-    ISSUE_LABELED = "labeled",
-    ISSUE_UNLABELED = "unlabeled",
-    ISSUE_EDITED = "edited",
-    ISSUE_MILESTONED = "milestoned",
-    ISSUE_DEMILESTONED = "demilestoned",
-    ISSUE_CLOSED = "closed",
-    ISSUE_REOPENED = "reopened"
-}
-# Represent label event action types.
-#
-# + LABEL_CREATED - Label created
-# + LABEL_EDITED - Label edited
-# + LABEL_DELETED - Label deleted
-public enum LabelActions {
-    LABEL_CREATED = "created",
-    LABEL_EDITED = "edited",
-    LABEL_DELETED = "deleted"
-}
-
-# Represent issue comment event action types.
-#
-# + ISSUE_COMMENT_CREATED - Issue comment created
-# + ISSUE_COMMENT_EDITED - Issue comment edited
-# + ISSUE_COMMENT_DELETED - Issue comment deleted
-public enum IssueCommentActions {
-    ISSUE_COMMENT_CREATED = "created",
-    ISSUE_COMMENT_EDITED = "edited",
-    ISSUE_COMMENT_DELETED = "deleted"
-}
-
-# Represent milestone event action types.
-#
-# + MILESTONE_CREATED - Milestone created
-# + MILESTONE_CLOSED - Milestone closed
-# + MILESTONE_OPENED - Milestone opened
-# + MILESTONE_EDITED - Milestone edited
-# + MILESTONE_DELETED - Milestone deleted
-public enum MilestoneActions {
-    MILESTONE_CREATED = "created",
-    MILESTONE_CLOSED = "closed",
-    MILESTONE_OPENED = "opened",
-    MILESTONE_EDITED = "edited",
-    MILESTONE_DELETED = "deleted"
-}
-
-# Represent pull request event action types.
-#
-# + PULL_REQUEST_ASSIGNED - Pull request assigned
-# + PULL_REQUEST_UNASSIGNED - Pull request un-assigned
-# + PULL_REQUEST_REVIEW_REQUESTED - Pull request review requested
-# + PULL_REQUEST_REVIEW_REQUEST_REMOVED - Pull request review request removed
-# + PULL_REQUEST_LABELED - Pull request labeled
-# + PULL_REQUEST_UNLABELED - Pull request un-labeled
-# + PULL_REQUEST_OPENED - Pull request opened
-# + PULL_REQUEST_EDITED - Pull request edited
-# + PULL_REQUEST_CLOSED - Pull request closed
-# + PULL_REQUEST_REOPENED - Pull request re-opened
-public enum PullRequestActions {
-    PULL_REQUEST_ASSIGNED = "assigned",
-    PULL_REQUEST_UNASSIGNED = "unassigned",
-    PULL_REQUEST_REVIEW_REQUESTED = "review_requested",
-    PULL_REQUEST_REVIEW_REQUEST_REMOVED = "review_request_removed",
-    PULL_REQUEST_LABELED = "labeled",
-    PULL_REQUEST_UNLABELED = "unlabeled",
-    PULL_REQUEST_OPENED = "opened",
-    PULL_REQUEST_EDITED = "edited",
-    PULL_REQUEST_CLOSED = "closed",
-    PULL_REQUEST_REOPENED = "reopened"
-}
-
-# Represent pull request review event action types.
-#
-# + PULL_REQUEST_REVIEW_SUBMITTED - Pull request review submitted
-# + PULL_REQUEST_REVIEW_EDITED - Pull request review edited
-# + PULL_REQUEST_REVIEW_DISMISSED - Pull request review dismissed
-public enum PullRequestReviewActions {
-    PULL_REQUEST_REVIEW_SUBMITTED = "submitted",
-    PULL_REQUEST_REVIEW_EDITED = "edited",
-    PULL_REQUEST_REVIEW_DISMISSED = "dismissed"
-}
-
-# Represent pull request review comment event action types.
-#
-# + PULL_REQUEST_REVIEW_COMMENT_CREATED - Pull request review comment created
-# + PULL_REQUEST_REVIEW_COMMENT_EDITED - Pull request reveiw comment edited
-# + PULL_REQUEST_REVIEW_COMMENT_DELETED - Pull request review comment deleted
-public enum PullRequestReviewCommentActions {
-    PULL_REQUEST_REVIEW_COMMENT_CREATED = "created",
-    PULL_REQUEST_REVIEW_COMMENT_EDITED = "edited",
-    PULL_REQUEST_REVIEW_COMMENT_DELETED = "deleted"
-}
-
-# Represent release event action types.
-#
-# + RELEASE_PUBLISHED - Released published
-# + RELEASE_UNPUBLISHED - Release un-published
-# + RELEASE_CREATED - Release created
-# + RELEASE_EDITED - Release edited
-# + RELEASE_DELETED - Release deleted
-# + RELEASE_PRE_RELEASED - Release pre-released.
-# + RELEASE_RELEASED - Release released.
-public enum ReleaseActions {
-    RELEASE_PUBLISHED = "published",
-    RELEASE_UNPUBLISHED = "unpublished",
-    RELEASE_CREATED = "created",
-    RELEASE_EDITED = "edited",
-    RELEASE_DELETED = "deleted",
-    RELEASE_PRE_RELEASED = "prereleased",
-    RELEASE_RELEASED = "released"
-}
-
-# Represent watch event action types.
-#
-# + WATCH_STARTED - Watch started 
-public enum WatchActions {
-    WATCH_STARTED = "started"
-}
-
-# Represent event Payload
-#
-# + eventType - Event type.
-# + eventData - Event data.
-public type Payload record {|
-    string eventType;
-    json eventData;
-|};
-
-# Represent event startup message.
-#
-# + hubName - Hub name
-# + subscriberId - Subscriber Id
-public type StartupMessage record {
-    string hubName;
-    string subscriberId;
+    Installation installation?;
+    Enterprise enterprise?;
 };
 
-# Represent event notification payload.
-#
-# + hubName - Hub name
-# + eventId - Event Id
-# + message - Message
-public type EventNotification record {
-    string hubName;
-    string eventId;
+public type PullRequestReviewCommentEvent record {
+    string action;
+    PullRequestReviewComment comment;
+    PullRequest pull_request;
+    # For edited events, the changes to the comment
+    record {} changes?;
+    User sender;
+    Repository repository;
+    Organization organization?;
+    Installation installation?;
+    Enterprise enterprise?;
+};
+
+public type PullRequestRef record {
+    string label?;
+    string ref?;
+    string sha?;
+    User user?;
+    Repository repo?;
+};
+
+public type 'ProjectsV2ItemEvent record {
+    string action;
+    # An item belonging to a Projects v2 project
+    record { int id; string node_id; string project_node_id; string content_node_id; string content_type;
+    string created_at?; string updated_at?; string archived_at?; User creator?;}  'projects_v2_item;
+    # The changes made to the item (for edited events)
+    record { record { string field_node_id?; string field_type?;}  field_value?;}  changes;
+    User sender?;
+    Organization organization?;
+    Installation installation?;
+};
+
+public type PingEvent record {
+    # Random string of GitHub zen
+    string zen?;
+    # The ID of the webhook that triggered the ping
+    int hook_id?;
+    # The webhook that is being pinged
+    record { string 'type?; int id?; string name?; boolean active?; string[] events?; record { string content_type?;
+    string insecure_ssl?; string url?;}  config?; string updated_at?; string created_at?; string url?;}  hook?;
+    User sender?;
+    Repository repository?;
+    Organization organization?;
+};
+
+public type CreateEvent record {
+    # The git ref resource (branch or tag name)
+    string ref;
+    # The type of Git ref object created
+    string ref_type;
+    # The name of the repository's default branch (usually main)
+    string master_branch;
+    # The repository's current description
+    string description?;
+    # The pusher type; either user or a deploy key
+    string pusher_type;
+    User sender;
+    Repository repository;
+    Organization organization?;
+    Installation installation?;
+    Enterprise enterprise?;
+};
+
+public type Repository record {
+    int id;
+    string node_id?;
+    # The repository name
+    string name;
+    # The full repository name including owner (e.g. octocat/Hello-World)
+    string full_name;
+    User owner;
+    # Whether the repository is private
+    boolean 'private;
+    string html_url?;
+    string description?;
+    boolean 'fork?;
+    string url?;
+    string homepage?;
+    string language?;
+    int forks_count?;
+    int stargazers_count?;
+    int watchers_count?;
+    int size?;
+    string default_branch?;
+    int open_issues_count?;
+    string[] topics?;
+    boolean has_issues?;
+    boolean has_projects?;
+    boolean has_wiki?;
+    boolean has_pages?;
+    boolean has_downloads?;
+    boolean archived?;
+    boolean disabled?;
+    string visibility?;
+    string pushed_at?;
+    string created_at?;
+    string updated_at?;
+    record { string 'key?; string name?; string spdx_id?; string url?;}  license?;
+};
+
+public type PullRequestReviewComment record {
+    int id;
+    string node_id?;
+    int pull_request_review_id?;
+    string url?;
+    string html_url?;
+    string body;
+    string diff_hunk?;
+    string path?;
+    int position?;
+    int original_position?;
+    string commit_id?;
+    string original_commit_id?;
+    User user;
+    string created_at?;
+    string updated_at?;
+    string author_association?;
+    string side?;
+    string start_side?;
+};
+
+public type TeamEvent record {
+    string action;
+    Team team;
+    # For edited events, the changes to the team
+    record { record { string 'from?;}  description?; record { string 'from?;}  name?; record { string 'from?;}  privacy?;
+    record { string 'from?;}  notification_setting?; # For added_to_repository/removed_from_repository events
+        record {} repository?;}  changes?;
+    # Present for added_to_repository and removed_from_repository actions
+    Repository repository?;
+    User sender?;
+    Organization organization?;
+    Installation installation?;
+    Enterprise enterprise?;
+};
+
+public type Enterprise record {
+    int id?;
+    string slug?;
+    string name?;
+    string node_id?;
+    string avatar_url?;
+    string description?;
+    string website_url?;
+    string html_url?;
+    string created_at?;
+    string updated_at?;
+};
+
+public type ProjectEvent record {
+    string action;
+    # A classic project board
+    record { int id; string node_id; string url?; string html_url?; string columns_url?; string name; string body?;
+    int number; string state; User creator?; string created_at?; string updated_at?;}  project;
+    # For edited events, the changes made to the project
+    record { record { string 'from?;}  name?; record { string 'from?;}  body?;}  changes?;
+    User sender?;
+    Repository repository?;
+    Organization organization?;
+    Installation installation?;
+    Enterprise enterprise?;
+};
+
+public type InstallationTargetEvent record {
+    string action;
+    # The account (user or organization) where the app is installed
+    record { int id; string node_id?; string login; string 'type; string avatar_url?; string html_url?;
+    boolean site_admin?;}  account;
+    string target_type;
+    # The changes made to the account
+    record { record { string 'from?;}  login?; record { string 'from?;}  slug?;}  changes;
+    Installation installation?;
+};
+
+public type DeploymentStatus record {
+    int id;
+    string node_id?;
+    string state;
+    User creator?;
+    string description?;
+    string environment?;
+    string environment_url?;
+    string log_url?;
+    string target_url?;
+    string deployment_url?;
+    string repository_url?;
+    string created_at?;
+    string updated_at?;
+    record {} performed_via_github_app?;
+};
+
+public type InstallationRepositoriesEvent record {
+    string action;
+    # Repositories added to the installation
+    record { int id?; string node_id?; string name?; string full_name?; boolean 'private?;} [] repositories_added;
+    # Repositories removed from the installation
+    record { int id?; string node_id?; string name?; string full_name?; boolean 'private?;} [] repositories_removed;
+    # Whether all repositories or a selection are accessible
+    string repository_selection;
+    User requester;
+    Installation installation?;
+    User sender?;
+    Organization organization?;
+    Enterprise enterprise?;
+};
+
+public type Issue record {
+    int id;
+    string node_id?;
+    string url?;
+    string html_url?;
+    int number;
+    string title;
+    string body?;
+    string state;
+    boolean locked?;
+    User user;
+    Label[] labels?;
+    User assignee?;
+    User[] assignees?;
+    Milestone milestone?;
+    int comments?;
+    string created_at?;
+    string updated_at?;
+    string closed_at?;
+    string author_association?;
+    string active_lock_reason?;
+};
+
+public type Label record {
+    int id;
+    string node_id?;
+    string url?;
+    string name;
+    # 6-character hex color code
+    string color;
+    boolean 'default?;
+    string description?;
+};
+
+public type Deployment record {
+    int id;
+    string node_id?;
+    string sha;
+    string ref;
+    string task;
+    record {} payload?;
+    string original_environment?;
+    string environment;
+    string description?;
+    User creator?;
+    string created_at?;
+    string updated_at?;
+    string statuses_url?;
+    string repository_url?;
+    boolean transient_environment?;
+    boolean production_environment?;
+    record {} performed_via_github_app?;
+};
+
+public type BranchProtectionConfigurationEvent record {
+    # disabled — all branch protections were disabled. enabled — all were enabled.
+    string action;
+    User sender?;
+    Repository repository?;
+    Organization organization?;
+    Installation installation?;
+    Enterprise enterprise?;
+};
+
+public type RepositoryRulesetEvent record {
+    string action;
+    # A set of rules to apply when specified conditions are met
+    record { int id; string name; string target?; string source_type?; string 'source?; string enforcement;
+    record {} conditions?; record { string 'type?; record {} parameters?;} [] rules?; record { int actor_id?;
+    string actor_type?; string bypass_mode?;} [] bypass_actors?; string created_at?;
+    string updated_at?;}  repository_ruleset;
+    # For edited events, the changes made to the ruleset
+    record {} changes?;
+    User sender?;
+    Repository repository?;
+    Organization organization?;
+    Installation installation?;
+    Enterprise enterprise?;
+};
+
+public type SecurityAndAnalysisEvent record {
+    # The security and analysis settings that changed
+    record { # Change to GitHub Advanced Security enablement
+        record { string 'from?; string to?;}  advanced_security?; # Change to Dependabot alerts enablement
+        record { string 'from?; string to?;}  dependabot_alerts?; # Change to Dependabot security updates enablement
+        record { string 'from?; string to?;}  dependabot_security_updates?; # Change to secret scanning enablement
+        record { string 'from?; string to?;}  secret_scanning?; # Change to secret scanning push protection enablement
+        record { string 'from?; string to?;}  secret_scanning_push_protection?;
+        # Change to non-provider pattern scanning enablement
+        record { string 'from?; string to?;}  secret_scanning_non_provider_patterns?;}  changes;
+    User sender?;
+    Repository repository?;
+    Organization organization?;
+    Installation installation?;
+    Enterprise enterprise?;
+};
+
+public type CommitAuthor record {
+    string name?;
+    string email?;
+    string username?;
+};
+
+public type DeployKeyEvent record {
+    string action;
+    # The deploy key resource
+    record { int id; # The public key
+        string 'key; string url?; string title?; boolean verified?; string created_at?; boolean read_only?;
+        string added_by?; string last_used?;}  'key;
+    User sender?;
+    Repository repository?;
+    Organization organization?;
+    Installation installation?;
+    Enterprise enterprise?;
+};
+
+public type IssueDependenciesEvent record {
+    string action;
+    int blocked_issue_id?;
+    Issue blocked_issue?;
+    int blocking_issue_id?;
+    Issue blocking_issue?;
+    Repository blocking_issue_repo?;
+    User sender?;
+    Repository repository?;
+    Organization organization?;
+    Installation installation?;
+    Enterprise enterprise?;
+};
+
+public type RepositoryAdvisoryEvent record {
+    string action;
+    # A repository security advisory
+    record { # The GitHub Security Advisory identifier
+        string ghsa_id; string cve_id; string url?; string html_url?; string summary; string description?;
+        string severity; User author?; User publisher?; record { string 'type?; string value?;} [] identifiers?;
+        string state; string created_at?; string updated_at?; string published_at?; string withdrawn_at?;
+        record {} submission?; record { record { string ecosystem?; string name?;}  package?;
+        string vulnerable_version_range?; string patched_versions?; string[] vulnerable_functions?;} [] vulnerabilities?;
+        record { string vector_string?; decimal score?;}  cvss?; record { string cwe_id?; string name?;} [] cwes?;
+        record { User user?; string 'type?;} [] credits?;}  repository_advisory;
+    User sender?;
+    Repository repository?;
+    Organization organization?;
+    Installation installation?;
+    Enterprise enterprise?;
+};
+
+public type RepositoryVulnerabilityAlertEvent record {
+    string action;
+    # The security alert of the vulnerable dependency
+    record { int id; string affected_package_name; string affected_range; string fixed_in?; string severity;
+    string ghsa_id?; string external_identifier?; string external_reference?; string created_at?;
+    string auto_dismissed_at?; string dismiss_reason?; string dismissed_at?; User dismissed_by?; int number?;}  alert;
+    User sender?;
+    Repository repository?;
+    Organization organization?;
+    Installation installation?;
+};
+
+public type Milestone record {
+    int id?;
+    string node_id?;
+    int number?;
+    string title?;
+    string description?;
+    string state?;
+    int open_issues?;
+    int closed_issues?;
+    string created_at?;
+    string updated_at?;
+    string due_on?;
+    string closed_at?;
+    User creator?;
+};
+
+public type IssuesEvent record {
+    # The action that was performed
+    string action;
+    Issue issue;
+    User assignee?;
+    Label label?;
+    # For edited events, the changes to the issue
+    record {} changes?;
+    Milestone milestone?;
+    User sender;
+    Repository repository;
+    Organization organization?;
+    Installation installation?;
+    Enterprise enterprise?;
+};
+
+public type CodeScanningAlertEvent record {
+    string action;
+    # The code scanning alert involved in the event
+    record { int number; string created_at?; string updated_at?; string url?; string html_url?; string state;
+    string fixed_at?; User dismissed_by?; string dismissed_at?; string dismissed_reason?; string dismissed_comment?;
+    record { string id?; string severity?; string security_severity_level?; string description?; string name?;
+    string full_description?; string[] tags?; string help?;}  rule?; record { string name?; string guid?;
+    string 'version?;}  tool?; record { string ref?; string analysis_key?; string environment?; string state?;
+    string commit_sha?; record {} location?;}  most_recent_instance?;}  alert;
+    # The commit SHA of the alert. Empty when action is reopened_by_user
+    # or closed_by_user.
+    string commit_oid;
+    # The git ref of the alert. Empty when action is reopened_by_user
+    # or closed_by_user.
+    string ref;
+    User sender?;
+    Repository repository?;
+    Organization organization?;
+    Installation installation?;
+    Enterprise enterprise?;
+};
+
+public type PullRequestReviewEvent record {
+    string action;
+    PullRequestReview review;
+    PullRequest pull_request;
+    # For edited events, the changes to the review
+    record {} changes?;
+    User sender;
+    Repository repository;
+    Organization organization?;
+    Installation installation?;
+    Enterprise enterprise?;
+};
+
+public type 'ProjectsV2Event record {
+    string action;
+    # A Projects v2 project
+    record { int id; string node_id; User owner; User creator?; string title; string description?; boolean 'public?;
+    string closed_at?; string created_at?; string updated_at?; string deleted_at?; User deleted_by?; int number?;
+    string short_description?; string status?;}  'projects_v2;
+    User sender?;
+    Organization organization?;
+    Installation installation?;
+};
+
+public type PersonalAccessTokenRequestEvent record {
+    string action;
+    # A fine-grained personal access token request
+    record { int id; User owner; # Permissions added by the request
+        record { record {} organization?; record {} repository?; record {} other?;}  permissions_added?;
+        # Permissions upgraded from existing token
+        record { record {} organization?; record {} repository?; record {} other?;}  permissions_upgraded?;
+        # The resulting full set of permissions if approved
+        record { record {} organization?; record {} repository?; record {} other?;}  permissions_result?;
+        string repository_selection?; string repositories_url?; Repository[] repositories?; boolean token_expired?;
+        string token_expires_at?; string token_last_used_at?; string created_at?;}  personal_access_token_request;
+    User sender?;
+    Organization organization?;
+    Installation installation?;
+    Enterprise enterprise?;
+};
+
+public type InstallationEvent record {
+    string action;
+    Installation installation;
+    # An array of repositories the installation can access
+    record { int id?; string node_id?; string name?; string full_name?; boolean 'private?;} [] repositories?;
+    User requester?;
+    User sender?;
+    Organization organization?;
+    Enterprise enterprise?;
+};
+
+public type WorkflowRun record {
+    int id;
+    string name;
+    string node_id?;
+    int check_suite_id?;
+    string check_suite_node_id?;
+    string head_branch?;
+    string head_sha?;
+    int run_number?;
+    string event?;
+    string status;
+    string conclusion?;
+    int workflow_id?;
+    string url?;
+    string html_url?;
+    record {}[] pull_requests?;
+    string created_at?;
+    string updated_at?;
+    int run_attempt?;
+    string run_started_at?;
+    User actor?;
+    User triggering_actor?;
+    string jobs_url?;
+    string logs_url?;
+    string check_suite_url?;
+    string artifacts_url?;
+    string cancel_url?;
+    string rerun_url?;
+    string workflow_url?;
+    Commit head_commit?;
+    Repository repository?;
+};
+
+public type DiscussionEvent record {
+    string action;
+    Discussion discussion;
+    # Present on answered action — the comment marked as answer
+    record {} answer?;
+    Label label?;
+    # For edited/category_changed events, the changes made
+    record {} changes?;
+    User sender?;
+    Repository repository?;
+    Organization organization?;
+    Installation installation?;
+    Enterprise enterprise?;
+};
+
+public type CheckSuite record {
+    int id;
+    string node_id?;
+    string head_branch?;
+    string head_sha?;
+    string status?;
+    string conclusion?;
+    string url?;
+    string before?;
+    string after?;
+    record {}[] pull_requests?;
+    record {} app?;
+    string created_at?;
+    string updated_at?;
+};
+
+public type StatusEvent record {
+    # The unique identifier of the status
+    int id;
+    # The commit SHA
+    string sha;
+    # The repository name
+    string name;
+    # The new state of the commit status
+    string state;
+    # The status context identifier
+    string context;
+    # The optional human-readable description
+    string description?;
+    # The optional link added to the status
+    string target_url?;
+    string avatar_url?;
+    # The commit the status is associated with
+    record { string sha?; record {} 'commit?; string url?; string html_url?; User author?; User committer?;}  'commit;
+    # Array of branches containing the status SHA (max 10)
+    record { string name?; record { string sha?; string url?;}  'commit?; boolean protected?;} [] branches;
+    string created_at;
+    string updated_at;
+    User sender;
+    Repository repository;
+    Organization organization?;
+    Installation installation?;
+    Enterprise enterprise?;
+};
+
+public type 'ProjectsV2StatusUpdateEvent record {
+    string action;
+    # A status update belonging to a Projects v2 project
+    record { int id; string node_id; string project_node_id; string status?; string body?; string created_at?;
+    string updated_at?; string start_date?; string target_date?; User creator?;}  'projects_v2_status_update;
+    User sender?;
+    Organization organization?;
+    Installation installation?;
+};
+
+public type CommonEvent record {
+    User sender?;
+    Repository repository?;
+    Organization organization?;
+    Installation installation?;
+    Enterprise enterprise?;
+};
+
+public type Discussion record {
+    int id;
+    string node_id?;
+    int number;
+    string title;
+    string body?;
+    string state;
+    record { int id?; string node_id?; int repository_id?; string emoji?; string name?; string description?;
+    string created_at?; string updated_at?; string slug?; boolean is_answerable?;}  category?;
+    User user?;
+    string html_url?;
+    int comments?;
+    Label[] labels?;
+    boolean locked?;
+    string active_lock_reason?;
+    string answer_html_url?;
+    string answer_chosen_at?;
+    User answer_chosen_by?;
+    string created_at?;
+    string updated_at?;
+};
+
+public type User record {
+    # The user's GitHub username
+    string login;
+    # The user's unique numeric identifier
+    int id;
+    string node_id?;
+    string avatar_url?;
+    string gravatar_id?;
+    string url?;
+    string html_url?;
+    string 'type?;
+    boolean site_admin?;
+};
+
+public type PullRequestReview record {
+    int id;
+    string node_id?;
+    User user;
+    string body?;
+    string state;
+    string html_url?;
+    string pull_request_url?;
+    string submitted_at?;
+    string commit_id?;
+    string author_association?;
+};
+
+public type DeleteEvent record {
+    # The git ref resource (branch or tag name)
+    string ref;
+    # The type of Git ref object deleted
+    string ref_type;
+    # The pusher type; either user or a deploy key
+    string pusher_type;
+    User sender;
+    Repository repository;
+    Organization organization?;
+    Installation installation?;
+    Enterprise enterprise?;
+};
+
+public type MetaEvent record {
+    # Always deleted — the webhook that triggered this event was deleted
+    string action;
+    # The id of the modified webhook
+    int hook_id;
+    # The deleted webhook. Fields vary by webhook type (repository,
+    # organization, business, app, or GitHub Marketplace).
+    record { string 'type; int id; string name; boolean active; string[] events?; record { string content_type?;
+    string insecure_ssl?; string url?;
+            # Omitted from payloads for security
+            string secret?;}  config?; string updated_at?; string created_at?;}  hook;
+    User sender?;
+    Repository repository?;
+    Organization organization?;
+    Installation installation?;
+    Enterprise enterprise?;
+};
+
+public type DeploymentEvent record {
+    string action;
+    Deployment deployment;
+    # The workflow that triggered the deployment (if applicable)
+    record {} workflow;
+    # The workflow run that triggered the deployment (if applicable)
+    record {} workflow_run;
+    User sender;
+    Repository repository;
+    Organization organization?;
+    Installation installation?;
+    Enterprise enterprise?;
+};
+
+public type DeploymentProtectionRuleEvent record {
+    # The name of the environment that has the deployment protection rule
+    string environment?;
+    # The event that triggered the deployment protection rule
+    string event?;
+    # The commit SHA that triggered the workflow
+    string sha?;
+    # The branch or tag ref that triggered the workflow
+    string ref?;
+    # The URL to call to approve or reject the deployment
+    string deployment_callback_url?;
+    # A request for a specific ref to be deployed
+    Deployment deployment?;
+    # The pull requests associated with the deployment
+    record { int number?; string url?; PullRequestRef head?; PullRequestRef base?;} [] pull_requests?;
+    User sender?;
+    Installation installation?;
+    Repository repository?;
+    Organization organization?;
+};
+
+public type LabelEvent record {
+    string action;
+    Label label;
+    # For edited events, the changes to the label
+    record { record { string 'from?;}  color?; record { string 'from?;}  name?;
+    record { string 'from?;}  description?;}  changes?;
+    User sender;
+    Repository repository;
+    Organization organization?;
+    Installation installation?;
+    Enterprise enterprise?;
+};
+
+public type GithubAppAuthorizationEvent record {
+    # Always revoked — a user revoked their GitHub App authorization
+    string action;
+    User sender?;
+    Installation installation?;
+};
+
+public type PageBuildEvent record {
+    # The unique identifier of the page build
+    int id;
+    # The GitHub Pages build object
+    record { string url; # Current build status
+        string status; # Error information if the build failed
+        record { string message;}  'error; User pusher; # The SHA of the commit that triggered the build
+        string 'commit; # Duration of the build in milliseconds
+        int duration; string created_at; string updated_at;}  build;
+    User sender?;
+    Repository repository?;
+    Organization organization?;
+    Installation installation?;
+    Enterprise enterprise?;
+};
+
+public type ProjectCardEvent record {
+    string action;
+    # A card on a classic project board
+    record { int id; string node_id; string url?; int column_id; string column_url?; string project_url?; string note?;
+    # Link to the issue or PR if the card is content-based
+        string content_url?; # The ID of the card this card was moved after
+        int after_id?; User creator?; string created_at?; string updated_at?;}  project_card;
+    # For edited/moved events, the changes made
+    record { record { string 'from?;}  note?; record { int 'from?;}  column_id?;}  changes?;
+    User sender?;
+    Repository repository?;
+    Organization organization?;
+    Installation installation?;
+    Enterprise enterprise?;
+};
+
+public type PullRequestEvent record {
+    # The action that was performed
+    string action;
+    # The pull request number
+    int number;
+    PullRequest pull_request;
+    User assignee;
+    # For edited events, the changes to the pull request
+    record {} changes?;
+    User requested_reviewer?;
+    Label label?;
+    Milestone milestone?;
+    User sender;
+    Repository repository;
+    Organization organization?;
+    Installation installation?;
+    Enterprise enterprise?;
+};
+
+public type TeamAddEvent record {
+    # The team that was granted access to the repository
+    record { int id; string node_id; string url?; string html_url?; string name; string slug; string description?;
+    string privacy?; string notification_setting?; string permission?; string members_url?; string repositories_url?;
+    # The parent team, if this is a child team
+        record { int id?; string node_id?; string name?; string slug?; string description?; string privacy?;
+        string permission?; string members_url?; string repositories_url?; string html_url?;}  parent?;}  team;
+    User sender?;
+    Repository repository?;
+    Organization organization?;
+    Installation installation?;
+    Enterprise enterprise?;
+};
+
+public type WorkflowJob record {
+    int id;
+    int run_id?;
+    string run_url?;
+    int run_attempt?;
+    string node_id?;
+    string head_sha?;
+    string url?;
+    string html_url?;
+    string status;
+    string conclusion?;
+    string created_at?;
+    string started_at?;
+    string completed_at?;
+    string name;
+    record { string name?; string status?; string conclusion?; int number?; string started_at?;
+    string completed_at?;} [] steps?;
+    string check_run_url?;
+    string[] labels?;
+    int runner_id?;
+    string runner_name?;
+    int runner_group_id?;
+    string runner_group_name?;
+    string workflow_name?;
+    string head_branch?;
+};
+
+public type Release record {
+    int id;
+    string node_id?;
+    string url?;
+    string html_url?;
+    string assets_url?;
+    string upload_url?;
+    string tag_name;
+    string name;
+    string body?;
+    boolean draft?;
+    boolean prerelease?;
+    string target_commitish?;
+    User author?;
+    record {}[] assets?;
+    string created_at?;
+    string published_at?;
+};
+
+public type CustomPropertyEvent record {
+    string action;
+    # Custom property defined on an organization
+    record { string property_name; string value_type; string required?; # Default value (string or array of strings)
+        anydata default_value?; string description?; string[] allowed_values?;}  definition;
+    User sender?;
+    Organization organization?;
+    Installation installation?;
+    Enterprise enterprise?;
+};
+
+public type PublicEvent record {
+    User sender;
+    Repository repository;
+    Organization organization?;
+    Installation installation?;
+    Enterprise enterprise?;
+};
+
+public type MemberEvent record {
+    string action;
+    User member;
+    # For edited events, the changes to the member's permissions
+    record { record { string 'from?;}  old_permission?; record { string 'from?; string to?;}  permission?;}  changes?;
+    User sender;
+    Repository repository;
+    Organization organization?;
+    Installation installation?;
+    Enterprise enterprise?;
+};
+
+public type MilestoneEvent record {
+    string action;
+    Milestone milestone;
+    # For edited events, the changes to the milestone
+    record { record { string 'from?;}  description?; record { string 'from?;}  due_on?;
+    record { string 'from?;}  title?;}  changes?;
+    User sender;
+    Repository repository;
+    Organization organization?;
+    Installation installation?;
+    Enterprise enterprise?;
+};
+
+public type SecurityAdvisoryEvent record {
+    string action;
+    # The details of the global security advisory, including summary,
+    # description, severity, and affected packages.
+    record { string schema_version?; string ghsa_id; string cve_id?; string url?; string html_url?; string summary;
+    string description?; string severity; record { string value?; string 'type?;} [] identifiers?;
+    record { string url?;} [] references?; string published_at?; string updated_at?; string withdrawn_at?;
+    record { record { string ecosystem?; string name?;}  package?; string severity?; string vulnerable_version_range?;
+        record { string identifier?;}  first_patched_version?;} [] vulnerabilities?; record { string vector_string?;
+        decimal score?;}  cvss?; record { string cwe_id?; string name?;} [] cwes?;}  security_advisory;
+    Installation installation?;
+};
+
+public type CheckRunEvent record {
+    string action;
+    CheckRun check_run;
+    # Present for requested_action events
+    record { string identifier?;}  requested_action?;
+    User sender?;
+    Repository repository?;
+    Organization organization?;
+    Installation installation?;
+    Enterprise enterprise?;
+};
+
+public type CommitCommentEvent record {
+    string action;
+    # The commit comment resource
+    record { int id; string node_id?; string url?; string html_url?; string body;
+    # The relative path of the file being commented on
+        string path?; # The line index in the diff
+        int position?; # The line of the blob the comment refers to
+        int line?; string commit_id?; User user?; string created_at?; string updated_at?;
+        string author_association?;}  comment;
+    User sender?;
+    Repository repository?;
+    Organization organization?;
+    Installation installation?;
+    Enterprise enterprise?;
+};
+
+public type Commit record {
+    # The commit SHA
+    string id;
+    string tree_id?;
+    # Whether this commit is distinct from any that have been pushed before
+    boolean 'distinct?;
     string message;
+    string timestamp?;
+    string url?;
+    CommitAuthor author?;
+    CommitAuthor committer?;
+    # Files added in this commit
+    string[] added?;
+    # Files removed in this commit
+    string[] removed?;
+    # Files modified in this commit
+    string[] modified?;
 };
 
-# Represent common response payload.
-#
-# + headers - Headers
-# + body - Body
-type CommonResponse record {|
-    map<string|string[]> headers?;
-    map<string> body?;
-|};
-
-# Represent webhook acknowledgement
-public type Acknowledgement record {
-    *CommonResponse;
+public type CheckRun record {
+    int id;
+    string name;
+    string node_id?;
+    string head_sha?;
+    string external_id?;
+    string url?;
+    string html_url?;
+    string details_url?;
+    string status?;
+    string conclusion?;
+    string started_at?;
+    string completed_at?;
+    record { string title?; string summary?; string text?; int annotations_count?; string annotations_url?;}  output?;
+    record { int id?;}  check_suite?;
+    record {} app?;
+    record {}[] pull_requests?;
 };
 
-public type GenericDataType PingEvent|ProjectCardEvent|WatchEvent|ReleaseEvent|PushEvent|PullRequestReviewCommentEvent
-                        |PullRequestReviewEvent|PullRequestEvent|ForkEvent|IssueCommentEvent|IssuesEvent|LabelEvent
-                        |MilestoneEvent|CreateEvent|MetaEvent;
+public type MembershipEvent record {
+    string action;
+    User member;
+    # The scope of the membership (currently always "team")
+    string scope;
+    Team team;
+    User sender?;
+    Organization organization?;
+    Installation installation?;
+    Enterprise enterprise?;
+};
+
+public type GenericDataType ForkEvent|WorkflowRunEvent|GollumEvent|ReleaseEvent
+|SecretScanningAlertLocationEvent|DeploymentReviewEvent|PullRequest|SecretScanningScanEvent|IssueCommentEvent|IssuesEvent
+|DeploymentStatusEvent|OrganizationEvent|WebhookHeaders|RepositoryDispatchEvent|MergeGroupEvent
+|WorkflowJobEvent|OrgBlockEvent|DependabotAlertEvent|CustomPropertyValuesEvent|SecretScanningAlertEvent
+|PullRequestReviewThreadEvent|IssueComment|RegistryPackageEvent|CheckSuiteEvent|DiscussionCommentEvent
+|Organization|RepositoryImportEvent|RepositoryEvent|StarEvent|WatchEvent|PackageEvent|WorkflowDispatchEvent
+|SponsorshipEvent|SubIssuesEvent|ProjectColumnEvent|Team|MarketplacePurchaseEvent|PushEvent|Installation
+|BranchProtectionRuleEvent|PullRequestReviewCommentEvent|PullRequestRef|'ProjectsV2ItemEvent|PingEvent
+|CreateEvent|Repository|PullRequestReviewComment|TeamEvent|Enterprise|ProjectEvent|InstallationTargetEvent
+|DeploymentStatus|InstallationRepositoriesEvent|Issue|Label|Deployment|BranchProtectionConfigurationEvent
+|RepositoryRulesetEvent|SecurityAndAnalysisEvent|CommitAuthor|DeployKeyEvent|IssueDependenciesEvent
+|RepositoryAdvisoryEvent|RepositoryVulnerabilityAlertEvent|Milestone|CodeScanningAlertEvent
+|PullRequestReviewEvent|'ProjectsV2Event|PersonalAccessTokenRequestEvent|InstallationEvent|WorkflowRun
+|DiscussionEvent|CheckSuite|StatusEvent|'ProjectsV2StatusUpdateEvent|CommonEvent|Discussion|User
+|PullRequestReview|DeleteEvent|MetaEvent|DeploymentEvent|DeploymentProtectionRuleEvent|LabelEvent
+|GithubAppAuthorizationEvent|PageBuildEvent|ProjectCardEvent|PullRequestEvent|TeamAddEvent|WorkflowJob
+|Release|CustomPropertyEvent|PublicEvent|MemberEvent|MilestoneEvent|SecurityAdvisoryEvent|CheckRunEvent
+|CommitCommentEvent|Commit|CheckRun|MembershipEvent;

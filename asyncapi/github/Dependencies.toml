@@ -49,7 +49,7 @@ dependencies = [
 [[package]]
 org = "ballerina"
 name = "crypto"
-version = "2.9.2"
+version = "2.11.0"
 dependencies = [
 	{org = "ballerina", name = "jballerina.java"},
 	{org = "ballerina", name = "time"}
@@ -70,7 +70,7 @@ dependencies = [
 [[package]]
 org = "ballerina"
 name = "file"
-version = "1.12.0"
+version = "1.13.0"
 dependencies = [
 	{org = "ballerina", name = "io"},
 	{org = "ballerina", name = "jballerina.java"},
@@ -81,7 +81,7 @@ dependencies = [
 [[package]]
 org = "ballerina"
 name = "http"
-version = "2.15.0"
+version = "2.16.1"
 dependencies = [
 	{org = "ballerina", name = "auth"},
 	{org = "ballerina", name = "cache"},
@@ -229,7 +229,7 @@ dependencies = [
 [[package]]
 org = "ballerina"
 name = "log"
-version = "2.14.0"
+version = "2.17.0"
 dependencies = [
 	{org = "ballerina", name = "io"},
 	{org = "ballerina", name = "jballerina.java"},
@@ -243,7 +243,7 @@ modules = [
 [[package]]
 org = "ballerina"
 name = "mime"
-version = "2.12.0"
+version = "2.12.1"
 dependencies = [
 	{org = "ballerina", name = "io"},
 	{org = "ballerina", name = "jballerina.java"},
@@ -267,7 +267,7 @@ dependencies = [
 [[package]]
 org = "ballerina"
 name = "observe"
-version = "1.5.1"
+version = "1.7.1"
 dependencies = [
 	{org = "ballerina", name = "jballerina.java"}
 ]
@@ -284,7 +284,7 @@ dependencies = [
 [[package]]
 org = "ballerina"
 name = "task"
-version = "2.11.0"
+version = "2.11.1"
 dependencies = [
 	{org = "ballerina", name = "jballerina.java"},
 	{org = "ballerina", name = "time"},
@@ -359,7 +359,7 @@ modules = [
 [[package]]
 org = "ballerinax"
 name = "trigger.github"
-version = "0.11.0"
+version = "0.12.0"
 dependencies = [
 	{org = "ballerina", name = "cloud"},
 	{org = "ballerina", name = "crypto"},
