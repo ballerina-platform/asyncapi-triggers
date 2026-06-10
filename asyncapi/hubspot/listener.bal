@@ -16,7 +16,7 @@
 
 import ballerina/http;
 
-@display {label: "HubSpot", iconPath: "docs/icon.png"}
+# The HubSpot webhook listener that receives events and dispatches them to the attached services.
 public class Listener {
     private http:Listener httpListener;
     private DispatcherService dispatcherService;
@@ -60,8 +60,14 @@ public class Listener {
             return "ContactService";
         } else if serviceRef is ConversationService {
             return "ConversationService";
-        } else {
+        } else if serviceRef is DealService {
             return "DealService";
+        } else if serviceRef is TicketService {
+            return "TicketService";
+        } else if serviceRef is ProductService {
+            return "ProductService";
+        } else {
+            return "LineItemService";
         }
     }
 }

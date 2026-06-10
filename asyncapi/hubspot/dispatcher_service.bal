@@ -125,6 +125,15 @@ service class DispatcherService {
             "company.propertyChange" => {
                 check self.executeRemoteFunc(genericDataType, "company.propertyChange", "CompanyService", "onCompanyPropertychange");
             }
+            "company.associationChange" => {
+                check self.executeRemoteFunc(genericDataType, "company.associationChange", "CompanyService", "onCompanyAssociationchange");
+            }
+            "company.merge" => {
+                check self.executeRemoteFunc(genericDataType, "company.merge", "CompanyService", "onCompanyMerge");
+            }
+            "company.restore" => {
+                check self.executeRemoteFunc(genericDataType, "company.restore", "CompanyService", "onCompanyRestore");
+            }
             "contact.creation" => {
                 check self.executeRemoteFunc(genericDataType, "contact.creation", "ContactService", "onContactCreation");
             }
@@ -133,6 +142,18 @@ service class DispatcherService {
             }
             "contact.propertyChange" => {
                 check self.executeRemoteFunc(genericDataType, "contact.propertyChange", "ContactService", "onContactPropertychange");
+            }
+            "contact.associationChange" => {
+                check self.executeRemoteFunc(genericDataType, "contact.associationChange", "ContactService", "onContactAssociationchange");
+            }
+            "contact.merge" => {
+                check self.executeRemoteFunc(genericDataType, "contact.merge", "ContactService", "onContactMerge");
+            }
+            "contact.restore" => {
+                check self.executeRemoteFunc(genericDataType, "contact.restore", "ContactService", "onContactRestore");
+            }
+            "contact.privacyDeletion" => {
+                check self.executeRemoteFunc(genericDataType, "contact.privacyDeletion", "ContactService", "onContactPrivacydeletion");
             }
             "conversation.creation" => {
                 check self.executeRemoteFunc(genericDataType, "conversation.creation", "ConversationService", "onConversationCreation");
@@ -143,6 +164,12 @@ service class DispatcherService {
             "conversation.propertyChange" => {
                 check self.executeRemoteFunc(genericDataType, "conversation.propertyChange", "ConversationService", "onConversationPropertychange");
             }
+            "conversation.privacyDeletion" => {
+                check self.executeRemoteFunc(genericDataType, "conversation.privacyDeletion", "ConversationService", "onConversationPrivacydeletion");
+            }
+            "conversation.newMessage" => {
+                check self.executeRemoteFunc(genericDataType, "conversation.newMessage", "ConversationService", "onConversationNewmessage");
+            }
             "deal.creation" => {
                 check self.executeRemoteFunc(genericDataType, "deal.creation", "DealService", "onDealCreation");
             }
@@ -151,6 +178,66 @@ service class DispatcherService {
             }
             "deal.propertyChange" => {
                 check self.executeRemoteFunc(genericDataType, "deal.propertyChange", "DealService", "onDealPropertychange");
+            }
+            "deal.associationChange" => {
+                check self.executeRemoteFunc(genericDataType, "deal.associationChange", "DealService", "onDealAssociationchange");
+            }
+            "deal.merge" => {
+                check self.executeRemoteFunc(genericDataType, "deal.merge", "DealService", "onDealMerge");
+            }
+            "deal.restore" => {
+                check self.executeRemoteFunc(genericDataType, "deal.restore", "DealService", "onDealRestore");
+            }
+            "ticket.creation" => {
+                check self.executeRemoteFunc(genericDataType, "ticket.creation", "TicketService", "onTicketCreation");
+            }
+            "ticket.deletion" => {
+                check self.executeRemoteFunc(genericDataType, "ticket.deletion", "TicketService", "onTicketDeletion");
+            }
+            "ticket.propertyChange" => {
+                check self.executeRemoteFunc(genericDataType, "ticket.propertyChange", "TicketService", "onTicketPropertychange");
+            }
+            "ticket.associationChange" => {
+                check self.executeRemoteFunc(genericDataType, "ticket.associationChange", "TicketService", "onTicketAssociationchange");
+            }
+            "ticket.merge" => {
+                check self.executeRemoteFunc(genericDataType, "ticket.merge", "TicketService", "onTicketMerge");
+            }
+            "ticket.restore" => {
+                check self.executeRemoteFunc(genericDataType, "ticket.restore", "TicketService", "onTicketRestore");
+            }
+            "product.creation" => {
+                check self.executeRemoteFunc(genericDataType, "product.creation", "ProductService", "onProductCreation");
+            }
+            "product.deletion" => {
+                check self.executeRemoteFunc(genericDataType, "product.deletion", "ProductService", "onProductDeletion");
+            }
+            "product.propertyChange" => {
+                check self.executeRemoteFunc(genericDataType, "product.propertyChange", "ProductService", "onProductPropertychange");
+            }
+            "product.merge" => {
+                check self.executeRemoteFunc(genericDataType, "product.merge", "ProductService", "onProductMerge");
+            }
+            "product.restore" => {
+                check self.executeRemoteFunc(genericDataType, "product.restore", "ProductService", "onProductRestore");
+            }
+            "line_item.creation" => {
+                check self.executeRemoteFunc(genericDataType, "line_item.creation", "LineItemService", "onLineItemCreation");
+            }
+            "line_item.deletion" => {
+                check self.executeRemoteFunc(genericDataType, "line_item.deletion", "LineItemService", "onLineItemDeletion");
+            }
+            "line_item.propertyChange" => {
+                check self.executeRemoteFunc(genericDataType, "line_item.propertyChange", "LineItemService", "onLineItemPropertychange");
+            }
+            "line_item.associationChange" => {
+                check self.executeRemoteFunc(genericDataType, "line_item.associationChange", "LineItemService", "onLineItemAssociationchange");
+            }
+            "line_item.merge" => {
+                check self.executeRemoteFunc(genericDataType, "line_item.merge", "LineItemService", "onLineItemMerge");
+            }
+            "line_item.restore" => {
+                check self.executeRemoteFunc(genericDataType, "line_item.restore", "LineItemService", "onLineItemRestore");
             }
         }
     }
