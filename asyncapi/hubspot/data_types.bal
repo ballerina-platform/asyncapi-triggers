@@ -17,11 +17,10 @@
 import ballerina/time;
 
 // Listener related configurations should be included here
-@display {label: "Listener Config"}
 public type ListenerConfig record {
-    @display {label: "Client Secret", "description": "The Client Secret of HubSpot App"}
+    # The Client Secret of HubSpot App
     string clientSecret;
-    @display {label: "Callback URL", "description": "The Callback URL"}
+    # The Callback URL
     string callbackURL;
 };
 
@@ -36,13 +35,13 @@ public type WebhookEvent record {
     decimal occurredAt?;
     # Type of the event
     string subscriptionType?;
-    # The name of the property changed.
+    # The name of the property changed. Present for propertyChange events.
     string propertyName?;
     # The customer's (HubSpot account ID)[https://knowledge.hubspot.com/account/manage-multiple-hubspot-accounts?_ga=2.56562472.2054080341.1656611011-2068059512.1656469161#check-your-current-account] where the event occurred.
     decimal portalId?;
     # The ID of the HubSpot application
     decimal appId?;
-    # Then value of the property changed.
+    # The new value set for the property that triggered the notification. Present for propertyChange events.
     string propertyValue?;
     # Flag of the change.
     string changeFlag?;
@@ -50,6 +49,28 @@ public type WebhookEvent record {
     decimal subscriptionId?;
     # The ID of the object that was created, changed, or deleted. For contacts this is the contact ID; for companies, the company ID; for deals, the deal ID; and for conversations the thread ID
     decimal objectId?;
+    # The type of the association (e.g. CONTACT_TO_COMPANY, DEAL_TO_LINE_ITEM). Present for associationChange events.
+    string associationType?;
+    # The ID of the record that the association change was made from. Present for associationChange events.
+    decimal fromObjectId?;
+    # The ID of the secondary record in the association event. Present for associationChange events.
+    decimal toObjectId?;
+    # Whether the association was removed (true) or added (false). Present for associationChange events.
+    boolean associationRemoved?;
+    # Whether the secondary record is the primary association. Present for associationChange events.
+    boolean isPrimaryAssociation?;
+    # The ID of the merge winner, which is the record that remains after the merge. Present for merge events.
+    decimal primaryObjectId?;
+    # An array of IDs that represent the records merged into the winner. Present for merge events.
+    decimal[] mergedObjectIds?;
+    # The ID of the record created as a result of the merge. Present for merge events.
+    decimal newObjectId?;
+    # How many properties were transferred during the merge. Present for merge events.
+    decimal numberOfPropertiesMoved?;
+    # The ID of the new message. Present for conversation.newMessage events.
+    decimal messageId?;
+    # The type of the new message, either MESSAGE or COMMENT. Present for conversation.newMessage events.
+    string messageType?;
 };
 
 public type GenericDataType WebhookEvent;

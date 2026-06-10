@@ -1,18 +1,14 @@
 ## Overview
 
-The [Ballerina](https://ballerina.io/) listener for Hubspot allows you to listen to the following events in a HubSpot account.
-* `onCompanyCreation`
-* `onCompanyDeletion`
-* `onCompanyPropertyChange`
-* `onContactCreation`
-* `onContactDeletion`
-* `onContactPropertyChange`
-* `onConversationCreation`
-* `onConversationDeletion`
-* `onConversationPropertyChange`
-* `onDealCreation`
-* `onDealDeletion`
-* `onDealPropertyChange`
+The [Ballerina](https://ballerina.io/) listener for Hubspot allows you to listen to the following events in a HubSpot account, grouped by the CRM object they relate to.
+
+* **Company** (`CompanyService`): `onCompanyCreation`, `onCompanyDeletion`, `onCompanyPropertychange`, `onCompanyAssociationchange`, `onCompanyMerge`, `onCompanyRestore`
+* **Contact** (`ContactService`): `onContactCreation`, `onContactDeletion`, `onContactPropertychange`, `onContactAssociationchange`, `onContactMerge`, `onContactRestore`, `onContactPrivacydeletion`
+* **Conversation** (`ConversationService`): `onConversationCreation`, `onConversationDeletion`, `onConversationPropertychange`, `onConversationPrivacydeletion`, `onConversationNewmessage`
+* **Deal** (`DealService`): `onDealCreation`, `onDealDeletion`, `onDealPropertychange`, `onDealAssociationchange`, `onDealMerge`, `onDealRestore`
+* **Ticket** (`TicketService`): `onTicketCreation`, `onTicketDeletion`, `onTicketPropertychange`, `onTicketAssociationchange`, `onTicketMerge`, `onTicketRestore`
+* **Product** (`ProductService`): `onProductCreation`, `onProductDeletion`, `onProductPropertychange`, `onProductMerge`, `onProductRestore`
+* **Line item** (`LineItemService`): `onLineItemCreation`, `onLineItemDeletion`, `onLineItemPropertychange`, `onLineItemAssociationchange`, `onLineItemMerge`, `onLineItemRestore`
 
 ## Prerequisites
 
@@ -93,9 +89,13 @@ https://xxxx-xxx-xxx-xxx.ngrok-free.app
           "type": "oauth",
           "redirectUrls": ["http://localhost:3000/oauth-callback"],
           "requiredScopes": [
+            "oauth",
             "crm.objects.contacts.read",
             "crm.objects.companies.read",
-            "crm.objects.deals.read"
+            "crm.objects.deals.read",
+            "tickets",
+            "e-commerce",
+            "conversations.read"
           ],
           "optionalScopes": [],
           "conditionallyRequiredScopes": []
@@ -115,6 +115,17 @@ https://xxxx-xxx-xxx-xxx.ngrok-free.app
     }
     ```
 
+    The `requiredScopes` above is the full set covering every object this listener supports. **Cherry-pick only the scopes for the objects you intend to subscribe to** — each object's events require its corresponding scope:
+
+    | Object | Required scope(s) |
+    |--------|-------------------|
+    | Contact | `crm.objects.contacts.read`|
+    | Company | `crm.objects.companies.read` |
+    | Deal | `crm.objects.deals.read` |
+    | Ticket | `tickets` |
+    | Product / Line item | `e-commerce` |
+    | Conversation | `conversations.read` |
+
 ### Step 6: Configure Webhook Subscriptions
 
 Replace the contents of `src/app/webhooks/webhook-hsmeta.json` with the following. Replace `<YOUR_NGROK_URL>` with the ngrok URL you copied in Step 4.
@@ -130,22 +141,62 @@ Replace the contents of `src/app/webhooks/webhook-hsmeta.json` with the followin
     },
     "subscriptions": {
       "legacyCrmObjects": [
-        { "subscriptionType": "contact.creation", "active": true },
-        { "subscriptionType": "contact.deletion", "active": true },
-        { "subscriptionType": "contact.propertyChange", "propertyName": "email", "active": true },
         { "subscriptionType": "company.creation", "active": true },
         { "subscriptionType": "company.deletion", "active": true },
         { "subscriptionType": "company.propertyChange", "propertyName": "name", "active": true },
+        { "subscriptionType": "company.associationChange", "active": true },
+        { "subscriptionType": "company.merge", "active": true },
+        { "subscriptionType": "company.restore", "active": true },
+
+        { "subscriptionType": "contact.creation", "active": true },
+        { "subscriptionType": "contact.deletion", "active": true },
+        { "subscriptionType": "contact.propertyChange", "propertyName": "email", "active": true },
+        { "subscriptionType": "contact.associationChange", "active": true },
+        { "subscriptionType": "contact.merge", "active": true },
+        { "subscriptionType": "contact.restore", "active": true },
+
         { "subscriptionType": "deal.creation", "active": true },
         { "subscriptionType": "deal.deletion", "active": true },
-        { "subscriptionType": "deal.propertyChange", "propertyName": "dealname", "active": true }
+        { "subscriptionType": "deal.propertyChange", "propertyName": "dealname", "active": true },
+        { "subscriptionType": "deal.associationChange", "active": true },
+        { "subscriptionType": "deal.merge", "active": true },
+        { "subscriptionType": "deal.restore", "active": true },
+
+        { "subscriptionType": "ticket.creation", "active": true },
+        { "subscriptionType": "ticket.deletion", "active": true },
+        { "subscriptionType": "ticket.propertyChange", "propertyName": "subject", "active": true },
+        { "subscriptionType": "ticket.associationChange", "active": true },
+        { "subscriptionType": "ticket.merge", "active": true },
+        { "subscriptionType": "ticket.restore", "active": true },
+
+        { "subscriptionType": "product.creation", "active": true },
+        { "subscriptionType": "product.deletion", "active": true },
+        { "subscriptionType": "product.propertyChange", "propertyName": "name", "active": true },
+        { "subscriptionType": "product.merge", "active": true },
+        { "subscriptionType": "product.restore", "active": true },
+
+        { "subscriptionType": "line_item.creation", "active": true },
+        { "subscriptionType": "line_item.deletion", "active": true },
+        { "subscriptionType": "line_item.propertyChange", "propertyName": "quantity", "active": true },
+        { "subscriptionType": "line_item.associationChange", "active": true },
+        { "subscriptionType": "line_item.merge", "active": true },
+        { "subscriptionType": "line_item.restore", "active": true }
+      ],
+      "hubEvents": [
+        { "subscriptionType": "contact.privacyDeletion", "active": true },
+
+        { "subscriptionType": "conversation.creation", "active": true },
+        { "subscriptionType": "conversation.deletion", "active": true },
+        { "subscriptionType": "conversation.propertyChange", "propertyName": "status", "active": true },
+        { "subscriptionType": "conversation.privacyDeletion", "active": true },
+        { "subscriptionType": "conversation.newMessage", "active": true }
       ]
     }
   }
 }
 ```
 
-> **Note:** Add additional `propertyChange` entries for any other properties you want to monitor. Each property requires its own subscription entry with a `propertyName` field.
+> **Note:** Subscribe only to the events your application needs — each entry above is optional. `propertyChange` subscriptions require a `propertyName`, and you can add one entry per property you want to monitor. `contact.privacyDeletion` and the `conversation.*` events are declared under `hubEvents` rather than `legacyCrmObjects`.
 
 Upload the project to HubSpot:
 
@@ -193,8 +244,10 @@ The app must be installed in a HubSpot account for that account's events to trig
     ```
     CLIENT_ID=<YOUR_CLIENT_ID>
     CLIENT_SECRET=<YOUR_CLIENT_SECRET>
-    SCOPES=crm.objects.contacts.read,crm.objects.companies.read,crm.objects.deals.read
+    SCOPES=oauth,crm.objects.contacts.read,crm.objects.contacts.write,crm.objects.companies.read,crm.objects.deals.read,tickets,e-commerce,conversations.read
     ```
+
+    > Keep this `SCOPES` list in sync with the `requiredScopes` you chose in Step 5.
 
     Start the server:
 
@@ -216,7 +269,7 @@ The app must be installed in a HubSpot account for that account's events to trig
 
 |                               | Version                       |
 |-------------------------------|-------------------------------|
-| Ballerina Language            | Ballerina Swan Lake 2201.11.0 |
+| Ballerina Language            | Ballerina Swan Lake 2201.12.0 |
 
 ## Quickstart
 
@@ -265,6 +318,8 @@ For example, you can configure the Ballerina listener to listen to company creat
 
 Listen to HubSpot Company Creation and Deletion
 
+A service attached to one of the listener's service types must implement **all** of that type's remote functions. For example, `CompanyService` exposes six:
+
 ```ballerina
 service hubspot:CompanyService on hubspotWebhook {
     remote function onCompanyCreation(hubspot:WebhookEvent event) returns error? {
@@ -276,6 +331,18 @@ service hubspot:CompanyService on hubspotWebhook {
     }
 
     remote function onCompanyPropertychange(hubspot:WebhookEvent event) returns error? {
+        io:println(event);
+    }
+
+    remote function onCompanyAssociationchange(hubspot:WebhookEvent event) returns error? {
+        io:println(event);
+    }
+
+    remote function onCompanyMerge(hubspot:WebhookEvent event) returns error? {
+        io:println(event);
+    }
+
+    remote function onCompanyRestore(hubspot:WebhookEvent event) returns error? {
         io:println(event);
     }
 }

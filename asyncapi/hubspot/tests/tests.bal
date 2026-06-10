@@ -24,7 +24,7 @@ listener Listener hubspotWebhook = new (listenerConfig = {clientSecret, callback
 service CompanyService on hubspotWebhook {
 
     remote function onCompanyCreation(WebhookEvent event) returns error? {
-        io:println("company created : ", event);
+        io:println("Company created : ", event);
     }
 
     remote function onCompanyDeletion(WebhookEvent event) returns error? {
@@ -33,6 +33,18 @@ service CompanyService on hubspotWebhook {
 
     remote function onCompanyPropertychange(WebhookEvent event) returns error? {
         io:println("Company updated : ", event);
+    }
+
+    remote function onCompanyAssociationchange(WebhookEvent event) returns error? {
+        io:println("Company association changed : ", event);
+    }
+
+    remote function onCompanyMerge(WebhookEvent event) returns error? {
+        io:println("Company merged : ", event);
+    }
+
+    remote function onCompanyRestore(WebhookEvent event) returns error? {
+        io:println("Company restored : ", event);
     }
 }
 
@@ -49,6 +61,22 @@ service ContactService on hubspotWebhook {
     remote function onContactPropertychange(WebhookEvent event) returns error? {
         io:println("Contact updated : ", event);
     }
+
+    remote function onContactAssociationchange(WebhookEvent event) returns error? {
+        io:println("Contact association changed : ", event);
+    }
+
+    remote function onContactMerge(WebhookEvent event) returns error? {
+        io:println("Contact merged : ", event);
+    }
+
+    remote function onContactRestore(WebhookEvent event) returns error? {
+        io:println("Contact restored : ", event);
+    }
+
+    remote function onContactPrivacydeletion(WebhookEvent event) returns error? {
+        io:println("Contact privacy deleted : ", event);
+    }
 }
 
 service DealService on hubspotWebhook {
@@ -64,10 +92,22 @@ service DealService on hubspotWebhook {
     remote function onDealPropertychange(WebhookEvent event) returns error? {
         io:println("Deal updated : ", event);
     }
+
+    remote function onDealAssociationchange(WebhookEvent event) returns error? {
+        io:println("Deal association changed : ", event);
+    }
+
+    remote function onDealMerge(WebhookEvent event) returns error? {
+        io:println("Deal merged : ", event);
+    }
+
+    remote function onDealRestore(WebhookEvent event) returns error? {
+        io:println("Deal restored : ", event);
+    }
 }
 
 service ConversationService on hubspotWebhook {
-    
+
     remote function onConversationCreation(WebhookEvent event) returns error? {
         io:println("Conversation created : ", event);
     }
@@ -78,5 +118,90 @@ service ConversationService on hubspotWebhook {
 
     remote function onConversationPropertychange(WebhookEvent event) returns error? {
         io:println("Conversation updated : ", event);
+    }
+
+    remote function onConversationPrivacydeletion(WebhookEvent event) returns error? {
+        io:println("Conversation privacy deleted : ", event);
+    }
+
+    remote function onConversationNewmessage(WebhookEvent event) returns error? {
+        io:println("Conversation new message : ", event);
+    }
+}
+
+service TicketService on hubspotWebhook {
+
+    remote function onTicketCreation(WebhookEvent event) returns error? {
+        io:println("Ticket created : ", event);
+    }
+
+    remote function onTicketDeletion(WebhookEvent event) returns error? {
+        io:println("Ticket deleted : ", event);
+    }
+
+    remote function onTicketPropertychange(WebhookEvent event) returns error? {
+        io:println("Ticket updated : ", event);
+    }
+
+    remote function onTicketAssociationchange(WebhookEvent event) returns error? {
+        io:println("Ticket association changed : ", event);
+    }
+
+    remote function onTicketMerge(WebhookEvent event) returns error? {
+        io:println("Ticket merged : ", event);
+    }
+
+    remote function onTicketRestore(WebhookEvent event) returns error? {
+        io:println("Ticket restored : ", event);
+    }
+}
+
+service ProductService on hubspotWebhook {
+
+    remote function onProductCreation(WebhookEvent event) returns error? {
+        io:println("Product created : ", event);
+    }
+
+    remote function onProductDeletion(WebhookEvent event) returns error? {
+        io:println("Product deleted : ", event);
+    }
+
+    remote function onProductPropertychange(WebhookEvent event) returns error? {
+        io:println("Product updated : ", event);
+    }
+
+    remote function onProductMerge(WebhookEvent event) returns error? {
+        io:println("Product merged : ", event);
+    }
+
+    remote function onProductRestore(WebhookEvent event) returns error? {
+        io:println("Product restored : ", event);
+    }
+}
+
+service LineItemService on hubspotWebhook {
+
+    remote function onLineItemCreation(WebhookEvent event) returns error? {
+        io:println("Line item created : ", event);
+    }
+
+    remote function onLineItemDeletion(WebhookEvent event) returns error? {
+        io:println("Line item deleted : ", event);
+    }
+
+    remote function onLineItemPropertychange(WebhookEvent event) returns error? {
+        io:println("Line item updated : ", event);
+    }
+
+    remote function onLineItemAssociationchange(WebhookEvent event) returns error? {
+        io:println("Line item association changed : ", event);
+    }
+
+    remote function onLineItemMerge(WebhookEvent event) returns error? {
+        io:println("Line item merged : ", event);
+    }
+
+    remote function onLineItemRestore(WebhookEvent event) returns error? {
+        io:println("Line item restored : ", event);
     }
 }
