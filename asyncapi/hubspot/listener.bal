@@ -16,6 +16,7 @@
 
 import ballerina/http;
 
+# The HubSpot webhook listener that receives events and dispatches them to the attached services.
 public class Listener {
     private http:Listener httpListener;
     private DispatcherService dispatcherService;

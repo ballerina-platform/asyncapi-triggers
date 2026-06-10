@@ -16,7 +16,7 @@
 
 import ballerina/time;
 
-// Listener related configurations should be included here
+# Configurations required to initialize the HubSpot listener.
 public type ListenerConfig record {
     # The Client Secret of HubSpot App
     string clientSecret;
@@ -24,6 +24,7 @@ public type ListenerConfig record {
     string callbackURL;
 };
 
+# HubSpot webhook event notification payload.
 public type WebhookEvent record {
     # Starting at 0, which number attempt this is to notify your service of this event. If your service times-out or throws an error as describe in the Retries section below, HubSpot will attempt to send the notification again.
     decimal attemptNumber?;
@@ -73,6 +74,7 @@ public type WebhookEvent record {
     string messageType?;
 };
 
+# The generic data type that holds a HubSpot webhook event payload.
 public type GenericDataType WebhookEvent;
 
 final time:Seconds FIVE_MINUTES_IN_MILLISECONDS = 300000;
