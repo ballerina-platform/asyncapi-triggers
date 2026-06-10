@@ -55,7 +55,7 @@ ngrok http 8090
 
 Copy the HTTPS forwarding URL from the ngrok terminal output. It looks like:
 
-```
+```text
 https://xxxx-xxx-xxx-xxx.ngrok-free.app
 ```
 
@@ -206,7 +206,7 @@ hs project upload
 
 Wait for both the build and deploy to succeed:
 
-```
+```text
 ✔ Built hubspot-webhook-app #1
 ✔ Deployed hubspot-webhook-app #1
 ```
@@ -241,7 +241,7 @@ The app must be installed in a HubSpot account for that account's events to trig
 
     Create a `.env` file in the project directory:
 
-    ```
+    ```dotenv
     CLIENT_ID=<YOUR_CLIENT_ID>
     CLIENT_SECRET=<YOUR_CLIENT_SECRET>
     SCOPES=oauth,crm.objects.contacts.read,crm.objects.contacts.write,crm.objects.companies.read,crm.objects.deals.read,tickets,e-commerce,conversations.read
@@ -260,10 +260,10 @@ The app must be installed in a HubSpot account for that account's events to trig
 
     <img src=https://raw.githubusercontent.com/ballerina-platform/asyncapi-triggers/main/asyncapi/hubspot/docs/setup/resources/test-install-url.png alt="Test Install URL" width="70%">
 
-5. When prompted, select your **developer test account** as the account to install into.
+4. When prompted, select your **developer test account** as the account to install into.
     <img src=https://raw.githubusercontent.com/ballerina-platform/asyncapi-triggers/main/asyncapi/hubspot/docs/setup/resources/choose-dev-account.png alt="HubSpot OAuth authorization screen showing the test account" width="70%">
 
-6. After authorizing, the browser redirects to `http://localhost:3000`. The page displays an access token and a sample contact name, confirming the installation was successful.
+5. After authorizing, the browser redirects to `http://localhost:3000`. The page displays an access token and a sample contact name, confirming the installation was successful.
 
 ### Compatibility
 
@@ -287,6 +287,7 @@ To import the `ballerinax/trigger.hubspot` module into the Ballerina project, ad
 
 ```ballerina
 import ballerinax/trigger.hubspot;
+import ballerina/io;
 ```
 
 ### Step 2: Create a new listener instance
