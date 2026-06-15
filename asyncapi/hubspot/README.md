@@ -1,6 +1,6 @@
 ## Overview
 
-The [Ballerina](https://ballerina.io/) listener for Hubspot allows you to listen to the following events in a HubSpot account, grouped by the CRM object they relate to.
+The [Ballerina](https://ballerina.io/) listener for HubSpot allows you to listen to the following events in a HubSpot account, grouped by the CRM object they relate to.
 
 * **Company** (`CompanyService`): `onCompanyCreation`, `onCompanyDeletion`, `onCompanyPropertychange`, `onCompanyAssociationchange`, `onCompanyMerge`, `onCompanyRestore`
 * **Contact** (`ContactService`): `onContactCreation`, `onContactDeletion`, `onContactPropertychange`, `onContactAssociationchange`, `onContactMerge`, `onContactRestore`, `onContactPrivacydeletion`
