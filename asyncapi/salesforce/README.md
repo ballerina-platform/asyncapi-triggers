@@ -1,3 +1,5 @@
+> **Deprecation Notice:** This connector is deprecated and will no longer be maintained or updated. Use [`ballerinax/salesforce`](https://central.ballerina.io/ballerinax/salesforce/latest) instead.
+
 ## Overview
 
 The `ballerinax/trigger.salesforce` module provides a Listener to grasp events triggered from a Salesforce org. This functionality is provided by [Salesforce Streaming API](https://developer.salesforce.com/docs/atlas.en-us.api_streaming.meta/api_streaming/intro_stream.htm).
