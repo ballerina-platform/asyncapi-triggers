@@ -19,7 +19,7 @@ public type DeleteService service object {
 };
 
 public type MetaService service object {
-    remote function onMeta(MetaEvent payload) returns error?;
+    remote function onMetaDeleted(MetaEvent payload) returns error?;
 };
 
 public type WorkflowDispatchService service object {
@@ -86,7 +86,7 @@ public type LabelService service object {
 };
 
 public type DeploymentService service object {
-    remote function onDeployment(DeploymentEvent payload) returns error?;
+    remote function onDeploymentCreated(DeploymentEvent payload) returns error?;
 };
 
 public type TeamAddService service object {
@@ -226,7 +226,7 @@ public type SecretScanningAlertLocationService service object {
 };
 
 public type InstallationTargetService service object {
-    remote function onInstallationTarget(InstallationTargetEvent payload) returns error?;
+    remote function onInstallationTargetRenamed(InstallationTargetEvent payload) returns error?;
 };
 
 public type CheckSuiteService service object {
@@ -355,11 +355,11 @@ public type GollumService service object {
 };
 
 public type GithubAppAuthorizationService service object {
-    remote function onGithubAppAuthorization(GithubAppAuthorizationEvent payload) returns error?;
+    remote function onGithubAppAuthorizationRevoked(GithubAppAuthorizationEvent payload) returns error?;
 };
 
 public type WatchService service object {
-    remote function onWatch(WatchEvent payload) returns error?;
+    remote function onWatchStarted(WatchEvent payload) returns error?;
 };
 
 public type TeamService service object {
@@ -396,7 +396,7 @@ public type InstallationService service object {
 };
 
 public type CommitCommentService service object {
-    remote function onCommitComment(CommitCommentEvent payload) returns error?;
+    remote function onCommitCommentCreated(CommitCommentEvent payload) returns error?;
 };
 
 public type DiscussionCommentService service object {
@@ -439,7 +439,7 @@ public type DeploymentProtectionRuleService service object {
 };
 
 public type CustomPropertyValuesService service object {
-    remote function onCustomPropertyValues(CustomPropertyValuesEvent payload) returns error?;
+    remote function onCustomPropertyValuesUpdated(CustomPropertyValuesEvent payload) returns error?;
 };
 
 public type InstallationRepositoriesService service object {
@@ -489,7 +489,7 @@ public type DependabotAlertService service object {
 };
 
 public type DeploymentStatusService service object {
-    remote function onDeploymentStatus(DeploymentStatusEvent payload) returns error?;
+    remote function onDeploymentStatusCreated(DeploymentStatusEvent payload) returns error?;
 };
 
 public type RepositoryAdvisoryService service object {

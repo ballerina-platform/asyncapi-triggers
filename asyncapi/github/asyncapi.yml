@@ -2712,7 +2712,7 @@ components:
       name: watch
       title: Watch Event
       summary: Someone started watching a repository
-      x-ballerina-event-type: "watch"
+      x-ballerina-event-type: "watch_started"
       headers:
         $ref: '#/components/schemas/WebhookHeaders'
       payload:
@@ -2785,7 +2785,7 @@ components:
       name: deployment
       title: Deployment Event
       summary: A deployment was created
-      x-ballerina-event-type: "deployment"
+      x-ballerina-event-type: "deployment_created"
       headers:
         $ref: '#/components/schemas/WebhookHeaders'
       payload:
@@ -2795,7 +2795,7 @@ components:
       name: deployment_status
       title: Deployment Status Event
       summary: A new deployment status was created
-      x-ballerina-event-type: "deployment_status"
+      x-ballerina-event-type: "deployment_status_created"
       headers:
         $ref: '#/components/schemas/WebhookHeaders'
       payload:
@@ -3375,7 +3375,7 @@ components:
       name: installation_target
       title: Installation Target Event
       summary: The account where a GitHub App is installed was renamed
-      x-ballerina-event-type: "installation_target"
+      x-ballerina-event-type: "installation_target_renamed"
       headers:
         $ref: '#/components/schemas/WebhookHeaders'
       payload:
@@ -3812,7 +3812,7 @@ components:
       name: custom_property_values
       title: Custom Property Values Event
       summary: The custom property values of a repository were updated
-      x-ballerina-event-type: "custom_property_values"
+      x-ballerina-event-type: "custom_property_values_updated"
       headers:
         $ref: '#/components/schemas/WebhookHeaders'
       payload:
@@ -4121,7 +4121,7 @@ components:
       name: github_app_authorization
       title: GitHub App Authorization Event
       summary: A user revoked their GitHub App authorization
-      x-ballerina-event-type: "github_app_authorization"
+      x-ballerina-event-type: "github_app_authorization_revoked"
       headers:
         $ref: '#/components/schemas/WebhookHeaders'
       payload:
@@ -4131,7 +4131,7 @@ components:
       name: meta
       title: Meta Event
       summary: A webhook was deleted
-      x-ballerina-event-type: "meta"
+      x-ballerina-event-type: "meta_deleted"
       headers:
         $ref: '#/components/schemas/WebhookHeaders'
       payload:
@@ -4267,7 +4267,7 @@ components:
       name: commit_comment
       title: Commit Comment Event
       summary: Someone commented on a commit
-      x-ballerina-event-type: "commit_comment"
+      x-ballerina-event-type: "commit_comment_created"
       headers:
         $ref: '#/components/schemas/WebhookHeaders'
       payload:

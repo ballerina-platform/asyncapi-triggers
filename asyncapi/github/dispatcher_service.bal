@@ -186,8 +186,8 @@ service class DispatcherService {
 
     private function matchRemoteFuncForMeta(GenericDataType genericDataType, string eventIdentifier) returns error? {
         match eventIdentifier {
-            "meta" => {
-                check self.executeRemoteFunc(genericDataType, "meta", "MetaService", "onMeta");
+            "meta_deleted" => {
+                check self.executeRemoteFunc(genericDataType, "meta_deleted", "MetaService", "onMetaDeleted");
             }
         }
     }
@@ -351,8 +351,8 @@ service class DispatcherService {
 
     private function matchRemoteFuncForDeployment(GenericDataType genericDataType, string eventIdentifier) returns error? {
         match eventIdentifier {
-            "deployment" => {
-                check self.executeRemoteFunc(genericDataType, "deployment", "DeploymentService", "onDeployment");
+            "deployment_created" => {
+                check self.executeRemoteFunc(genericDataType, "deployment_created", "DeploymentService", "onDeploymentCreated");
             }
         }
     }
@@ -679,8 +679,8 @@ service class DispatcherService {
 
     private function matchRemoteFuncForInstallationTarget(GenericDataType genericDataType, string eventIdentifier) returns error? {
         match eventIdentifier {
-            "installation_target" => {
-                check self.executeRemoteFunc(genericDataType, "installation_target", "InstallationTargetService", "onInstallationTarget");
+            "installation_target_renamed" => {
+                check self.executeRemoteFunc(genericDataType, "installation_target_renamed", "InstallationTargetService", "onInstallationTargetRenamed");
             }
         }
     }
@@ -994,16 +994,16 @@ service class DispatcherService {
 
     private function matchRemoteFuncForGithubAppAuthorization(GenericDataType genericDataType, string eventIdentifier) returns error? {
         match eventIdentifier {
-            "github_app_authorization" => {
-                check self.executeRemoteFunc(genericDataType, "github_app_authorization", "GithubAppAuthorizationService", "onGithubAppAuthorization");
+            "github_app_authorization_revoked" => {
+                check self.executeRemoteFunc(genericDataType, "github_app_authorization_revoked", "GithubAppAuthorizationService", "onGithubAppAuthorizationRevoked");
             }
         }
     }
 
     private function matchRemoteFuncForWatch(GenericDataType genericDataType, string eventIdentifier) returns error? {
         match eventIdentifier {
-            "watch" => {
-                check self.executeRemoteFunc(genericDataType, "watch", "WatchService", "onWatch");
+            "watch_started" => {
+                check self.executeRemoteFunc(genericDataType, "watch_started", "WatchService", "onWatchStarted");
             }
         }
     }
@@ -1093,8 +1093,8 @@ service class DispatcherService {
 
     private function matchRemoteFuncForCommitComment(GenericDataType genericDataType, string eventIdentifier) returns error? {
         match eventIdentifier {
-            "commit_comment" => {
-                check self.executeRemoteFunc(genericDataType, "commit_comment", "CommitCommentService", "onCommitComment");
+            "commit_comment_created" => {
+                check self.executeRemoteFunc(genericDataType, "commit_comment_created", "CommitCommentService", "onCommitCommentCreated");
             }
         }
     }
@@ -1194,8 +1194,8 @@ service class DispatcherService {
 
     private function matchRemoteFuncForCustomPropertyValues(GenericDataType genericDataType, string eventIdentifier) returns error? {
         match eventIdentifier {
-            "custom_property_values" => {
-                check self.executeRemoteFunc(genericDataType, "custom_property_values", "CustomPropertyValuesService", "onCustomPropertyValues");
+            "custom_property_values_updated" => {
+                check self.executeRemoteFunc(genericDataType, "custom_property_values_updated", "CustomPropertyValuesService", "onCustomPropertyValuesUpdated");
             }
         }
     }
@@ -1312,8 +1312,8 @@ service class DispatcherService {
 
     private function matchRemoteFuncForDeploymentStatus(GenericDataType genericDataType, string eventIdentifier) returns error? {
         match eventIdentifier {
-            "deployment_status" => {
-                check self.executeRemoteFunc(genericDataType, "deployment_status", "DeploymentStatusService", "onDeploymentStatus");
+            "deployment_status_created" => {
+                check self.executeRemoteFunc(genericDataType, "deployment_status_created", "DeploymentStatusService", "onDeploymentStatusCreated");
             }
         }
     }
