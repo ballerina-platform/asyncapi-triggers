@@ -79,7 +79,9 @@ service class DispatcherService {
                 check caller->respond(res);
             }
         } else {
-            check caller->respond(http:STATUS_OK);
+            http:Response invalidRequestRes = new;
+            invalidRequestRes.statusCode = http:STATUS_OK;
+            check caller->respond(invalidRequestRes);
         }
     }
 

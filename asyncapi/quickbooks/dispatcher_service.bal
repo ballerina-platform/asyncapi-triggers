@@ -65,7 +65,9 @@ service class DispatcherService {
 
         CommonResponseType genericDataType = check payload.cloneWithType(CommonResponseType);
         check self.matchRemoteFunc(genericDataType);
-        return caller->respond(http:STATUS_OK);
+        http:Response ackRes = new;
+        ackRes.statusCode = http:STATUS_OK;
+        return caller->respond(ackRes);
     }
 
     private function matchRemoteFunc(CommonResponseType genericDataType) returns error? {

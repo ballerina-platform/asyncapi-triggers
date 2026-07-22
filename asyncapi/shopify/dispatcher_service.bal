@@ -64,7 +64,9 @@ service class DispatcherService {
             }
         }    
         check self.matchRemoteFunc(payload, eventName);
-        return caller->respond(http:STATUS_OK);
+        http:Response ackRes = new;
+        ackRes.statusCode = http:STATUS_OK;
+        return caller->respond(ackRes);
     }
 
     private function matchRemoteFunc(json payload, string eventName) returns error? {

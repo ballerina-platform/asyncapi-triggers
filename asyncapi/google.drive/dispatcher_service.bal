@@ -111,7 +111,9 @@ service class DispatcherService {
                     check self.mapEvents(<@untainted>item, <@untainted>self.driveConfig);
                 }
             }
-            check caller->respond(http:STATUS_OK);
+            http:Response ackRes = new;
+            ackRes.statusCode = http:STATUS_OK;
+            check caller->respond(ackRes);
         }
     }
 

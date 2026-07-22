@@ -104,13 +104,19 @@ service class DispatcherService {
                 log:printDebug(NEXT_HISTORY_ID + lastHistoryId);
             }
             if historyFetchFailed {
-                check caller->respond(http:STATUS_INTERNAL_SERVER_ERROR);
+                http:Response errorRes = new;
+                errorRes.statusCode = http:STATUS_INTERNAL_SERVER_ERROR;
+                check caller->respond(errorRes);
             } else {
-                check caller->respond(http:STATUS_OK);
+                http:Response ackRes = new;
+                ackRes.statusCode = http:STATUS_OK;
+                check caller->respond(ackRes);
             }
         } else {
             log:printWarn(WARN_UNKNOWN_PUSH_NOTIFICATION + incomingSubscription);
-            check caller->respond(http:STATUS_OK);
+            http:Response unknownSubscriptionRes = new;
+            unknownSubscriptionRes.statusCode = http:STATUS_OK;
+            check caller->respond(unknownSubscriptionRes);
         }
     }
 
