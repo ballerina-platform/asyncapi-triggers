@@ -2,6 +2,17 @@ asyncapi: 3.0.0
 x-ballerina-event-identifier:
   type: "body"
   path: "subscriptionType"
+  batched: true
+x-ballerina-auth:
+  header: "X-HubSpot-Signature-v3"
+  signature:
+    algorithm: "sha256"
+    encoding: "base64"
+    headerFormat: "$signature"
+    input: "$method . $config('callbackUrl') . $body . $header('X-HubSpot-Request-Timestamp')"
+  freshness:
+    header: "X-HubSpot-Request-Timestamp"
+    toleranceMillis: 300000
 info:
   title: HubSpot Subscription API
   version: 1.0.0

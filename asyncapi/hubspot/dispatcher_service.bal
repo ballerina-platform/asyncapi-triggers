@@ -1,6 +1,6 @@
-// Copyright (c) 2022, WSO2 LLC. (http://www.wso2.org) All Rights Reserved.
+// Copyright (c) 2026, WSO2 LLC. (http://www.wso2.com) All Rights Reserved.
 //
-// WSO2 Inc. licenses this file to you under the Apache License,
+// WSO2 LLC. licenses this file to you under the Apache License,
 // Version 2.0 (the "License"); you may not use this file except
 // in compliance with the License.
 // You may obtain a copy of the License at
@@ -14,21 +14,22 @@
 // specific language governing permissions and limitations
 // under the License.
 
-import ballerina/http;
-import ballerinax/asyncapi.native.handler;
 import ballerina/crypto;
+import ballerina/http;
 import ballerina/log;
 import ballerina/time;
+import ballerinax/asyncapi.native.handler;
 
 service class DispatcherService {
     *http:Service;
     private map<GenericServiceType> services = {};
     private handler:NativeHandler nativeHandler = new ();
+    private string webhookSecret;
+    private string callbackUrl;
 
-    private ListenerConfig listenerConfig;
-
-    public function init(ListenerConfig listenerConfig) {
-        self.listenerConfig = listenerConfig;
+    function init(string webhookSecret, string callbackUrl) {
+        self.webhookSecret = webhookSecret;
+        self.callbackUrl = callbackUrl;
     }
 
     isolated function addServiceRef(string serviceType, GenericServiceType genericService) returns error? {
@@ -45,160 +46,92 @@ service class DispatcherService {
         _ = self.services.remove(serviceType);
     }
 
-    // We are not using the (@http:payload GenericEventWrapperEvent g) notation because of a bug in Ballerina.
-    // Issue: https://github.com/ballerina-platform/ballerina-lang/issues/32859
-    resource function post .(http:Caller caller, http:Request request) returns http:Response|error? {
-        json payload = check request.getJsonPayload();
-        json[] eventsPayload = check payload.ensureType();
-        http:Response response = new;
-
-        error? validateRequestResult = self.validateRequest(request, payload);
-        if validateRequestResult is error {
-            string errorMessage = string `${eventValidationError} | ${validateRequestResult.message()}`;
-            log:printError(errorMessage);
-            response.statusCode = http:STATUS_NOT_ACCEPTABLE;
-            response.setPayload(errorMessage);
-            return response;
+    resource function post .(http:Caller caller, http:Request request) returns error? {
+        error? verifyResult = self.verifyWebhookSignature(request, self.webhookSecret);
+        if verifyResult is error {
+            http:Response r = new;
+            r.statusCode = http:STATUS_UNAUTHORIZED;
+            check caller->respond(r);
+            return;
         }
-
-        // Iterate event payload and emit each event
-        foreach var event in eventsPayload {
-            GenericDataType genericDataType = check event.cloneWithType(GenericDataType);
-            error? matchRemoteFuncResult = self.matchRemoteFunc(genericDataType);
-            if matchRemoteFuncResult is error {
-                WebhookEvent failedEvent = check genericDataType.ensureType(WebhookEvent);
-                log:printError(string `Error processing the event. EventID: ${failedEvent.eventId}`);
-                log:printError(matchRemoteFuncResult.toString());
+        json payload = check request.getJsonPayload();
+        json[] eventsArray = check payload.ensureType();
+        http:Response ackResponse = new;ackResponse.statusCode = http:STATUS_OK; check caller->respond(ackResponse);
+        foreach json event in eventsArray {
+            json|error eventTypeField = event.subscriptionType;
+            if eventTypeField is error {
+                log:printError("DISPATCH_FAILED", eventTypeField);
+                continue;
+            }
+            string eventType = eventTypeField.toString();
+            GenericDataType|error genericDataTypeResult = event.cloneWithType(GenericDataType);
+            if genericDataTypeResult is error {
+                log:printError("DISPATCH_FAILED", genericDataTypeResult);
+                continue;
+            }
+            error? dispatchResult = self.matchRemoteFunc(genericDataTypeResult, eventType);
+            if dispatchResult is error {
+                log:printError("DISPATCH_FAILED", dispatchResult);
             }
         }
+    }
 
-        check caller->respond(http:STATUS_OK);
+    private function verifyWebhookSignature(http:Request request, string webhookSecret) returns error? {
+        if !request.hasHeader("X-HubSpot-Request-Timestamp") {
+            return error("Unauthorized: Missing Freshness Header");
+        }
+        string freshnessHeaderValue = let var headerValue = trap request.getHeader("X-HubSpot-Request-Timestamp") in (headerValue is string ? headerValue : "");
+        decimal freshnessTimestamp = check decimal:fromString(freshnessHeaderValue);
+        decimal freshnessNowMillis = <decimal>time:utcNow()[0] * 1000;
+        if (freshnessNowMillis - freshnessTimestamp) > <decimal>300000 {
+            return error("Unauthorized: Request Timestamp Expired");
+        }
+        if !request.hasHeader("X-HubSpot-Signature-v3") {
+            return error("Unauthorized: Missing Signature Header");
+        }
+        string receivedHeader = let var headerValue = trap request.getHeader("X-HubSpot-Signature-v3") in (headerValue is string ? headerValue : "");
+        map<string> extractedHeaderValues = {};
+        int headerCursor = 0;
+        extractedHeaderValues["signature"] = receivedHeader.substring(headerCursor);
+        headerCursor = receivedHeader.length();
+        if !extractedHeaderValues.hasKey("signature") {
+            return error("Unauthorized: Missing Header Component: signature");
+        }
+        string signature = extractedHeaderValues["signature"] ?: "";
+        if !extractedHeaderValues.hasKey("signature") {
+            return error("Unauthorized: Missing Signature Value");
+        }
+        string extractedSignature = extractedHeaderValues["signature"] ?: "";
+        string payloadToHash = string `${request.method}${self.callbackUrl}${check request.getTextPayload()}${let var headerValue = trap request.getHeader("X-HubSpot-Request-Timestamp") in (headerValue is string ? headerValue : "")}`;
+        byte[] computedDigest = check crypto:hmacSha256(payloadToHash.toBytes(), webhookSecret.toBytes());
+        string computedSignature = computedDigest.toBase64();
+        string expectedHeader = string `${computedSignature}`;
+        if !crypto:equalConstantTime(receivedHeader.toBytes(), expectedHeader.toBytes()) {
+            return error("Unauthorized: Signature Mismatch");
+        }
         return;
     }
 
-    // Validate the request using request headers `X-HubSpot-Signature-v3` and `X-HubSpot-Request-Timestamp`
-    // Documentation : https://developers.hubspot.com/docs/api/webhooks/validating-requests#validate-the-v3-request-signature
-    private function validateRequest(http:Request request, json payload) returns error? {
-        string signatureV3 = check request.getHeader("X-HubSpot-Signature-v3");
-        decimal timestamp = check decimal:fromString(check request.getHeader("X-HubSpot-Request-Timestamp"));
-        error? validateTimestampResult = self.validateTimestamp(timestamp);
-        if validateTimestampResult is error {
-            return validateTimestampResult;
-        }
-        error? validateSignatureResult = self.validateSignature(signatureV3, timestamp, payload);
-        if validateSignatureResult is error {
-            return validateSignatureResult;
-        }
+    private function matchRemoteFunc(GenericDataType genericDataType, string eventType) returns error? {
+        check self.matchRemoteFuncForTicket(genericDataType);
+        check self.matchRemoteFuncForCompany(genericDataType);
+        check self.matchRemoteFuncForLineItem(genericDataType);
+        check self.matchRemoteFuncForProduct(genericDataType);
+        check self.matchRemoteFuncForConversation(genericDataType);
+        check self.matchRemoteFuncForDeal(genericDataType);
+        check self.matchRemoteFuncForContact(genericDataType);
     }
 
-    // Payload verification step 1
-    // Reject the request if the timestamp is older than 5 minutes.
-    // Documentation : https://developers.hubspot.com/docs/api/webhooks/validating-requests#validate-the-v3-request-signature
-    private function validateTimestamp(decimal timestamp) returns error? {
-        decimal timeDifference = <decimal>time:utcNow()[0] * 1000 - timestamp;
-        if timeDifference > FIVE_MINUTES_IN_MILLISECONDS {
-            return error(requestTimeoutFailure);
-        }
-    }
-
-    // Payload verification step 2
-    // Compare the generated Hash value to the `X-HubSpot-Signature-v3` header value. 
-    // If they're equal then this request has been verified as originating from HubSpot.
-    // Documentation: https://developers.hubspot.com/docs/api/webhooks/validating-requests#validate-the-v3-request-signature
-    private function validateSignature(string signatureV3, decimal timestamp, json payload) returns error? {
-        string generatedHash = string `POST${self.listenerConfig.callbackURL}${payload.toString()}${timestamp}`;
-        byte[] digest = check crypto:hmacSha256(generatedHash.toBytes(), self.listenerConfig.clientSecret.toBytes());
-        string computedHmac = digest.toBase64();
-        if (signatureV3 != computedHmac) {
-            return error(signatureVerificationFailure);
-        }
-    }
-
-    private function matchRemoteFunc(GenericDataType genericDataType) returns error? {
+    private function matchRemoteFuncForTicket(GenericDataType genericDataType) returns error? {
         match genericDataType.subscriptionType {
-            "company.creation" => {
-                check self.executeRemoteFunc(genericDataType, "company.creation", "CompanyService", "onCompanyCreation");
-            }
-            "company.deletion" => {
-                check self.executeRemoteFunc(genericDataType, "company.deletion", "CompanyService", "onCompanyDeletion");
-            }
-            "company.propertyChange" => {
-                check self.executeRemoteFunc(genericDataType, "company.propertyChange", "CompanyService", "onCompanyPropertychange");
-            }
-            "company.associationChange" => {
-                check self.executeRemoteFunc(genericDataType, "company.associationChange", "CompanyService", "onCompanyAssociationchange");
-            }
-            "company.merge" => {
-                check self.executeRemoteFunc(genericDataType, "company.merge", "CompanyService", "onCompanyMerge");
-            }
-            "company.restore" => {
-                check self.executeRemoteFunc(genericDataType, "company.restore", "CompanyService", "onCompanyRestore");
-            }
-            "contact.creation" => {
-                check self.executeRemoteFunc(genericDataType, "contact.creation", "ContactService", "onContactCreation");
-            }
-            "contact.deletion" => {
-                check self.executeRemoteFunc(genericDataType, "contact.deletion", "ContactService", "onContactDeletion");
-            }
-            "contact.propertyChange" => {
-                check self.executeRemoteFunc(genericDataType, "contact.propertyChange", "ContactService", "onContactPropertychange");
-            }
-            "contact.associationChange" => {
-                check self.executeRemoteFunc(genericDataType, "contact.associationChange", "ContactService", "onContactAssociationchange");
-            }
-            "contact.merge" => {
-                check self.executeRemoteFunc(genericDataType, "contact.merge", "ContactService", "onContactMerge");
-            }
-            "contact.restore" => {
-                check self.executeRemoteFunc(genericDataType, "contact.restore", "ContactService", "onContactRestore");
-            }
-            "contact.privacyDeletion" => {
-                check self.executeRemoteFunc(genericDataType, "contact.privacyDeletion", "ContactService", "onContactPrivacydeletion");
-            }
-            "conversation.creation" => {
-                check self.executeRemoteFunc(genericDataType, "conversation.creation", "ConversationService", "onConversationCreation");
-            }
-            "conversation.deletion" => {
-                check self.executeRemoteFunc(genericDataType, "conversation.deletion", "ConversationService", "onConversationDeletion");
-            }
-            "conversation.propertyChange" => {
-                check self.executeRemoteFunc(genericDataType, "conversation.propertyChange", "ConversationService", "onConversationPropertychange");
-            }
-            "conversation.privacyDeletion" => {
-                check self.executeRemoteFunc(genericDataType, "conversation.privacyDeletion", "ConversationService", "onConversationPrivacydeletion");
-            }
-            "conversation.newMessage" => {
-                check self.executeRemoteFunc(genericDataType, "conversation.newMessage", "ConversationService", "onConversationNewmessage");
-            }
-            "deal.creation" => {
-                check self.executeRemoteFunc(genericDataType, "deal.creation", "DealService", "onDealCreation");
-            }
-            "deal.deletion" => {
-                check self.executeRemoteFunc(genericDataType, "deal.deletion", "DealService", "onDealDeletion");
-            }
-            "deal.propertyChange" => {
-                check self.executeRemoteFunc(genericDataType, "deal.propertyChange", "DealService", "onDealPropertychange");
-            }
-            "deal.associationChange" => {
-                check self.executeRemoteFunc(genericDataType, "deal.associationChange", "DealService", "onDealAssociationchange");
-            }
-            "deal.merge" => {
-                check self.executeRemoteFunc(genericDataType, "deal.merge", "DealService", "onDealMerge");
-            }
-            "deal.restore" => {
-                check self.executeRemoteFunc(genericDataType, "deal.restore", "DealService", "onDealRestore");
-            }
-            "ticket.creation" => {
-                check self.executeRemoteFunc(genericDataType, "ticket.creation", "TicketService", "onTicketCreation");
+            "ticket.propertyChange" => {
+                check self.executeRemoteFunc(genericDataType, "ticket.propertyChange", "TicketService", "onTicketPropertyChange");
             }
             "ticket.deletion" => {
                 check self.executeRemoteFunc(genericDataType, "ticket.deletion", "TicketService", "onTicketDeletion");
             }
-            "ticket.propertyChange" => {
-                check self.executeRemoteFunc(genericDataType, "ticket.propertyChange", "TicketService", "onTicketPropertychange");
-            }
-            "ticket.associationChange" => {
-                check self.executeRemoteFunc(genericDataType, "ticket.associationChange", "TicketService", "onTicketAssociationchange");
+            "ticket.creation" => {
+                check self.executeRemoteFunc(genericDataType, "ticket.creation", "TicketService", "onTicketCreation");
             }
             "ticket.merge" => {
                 check self.executeRemoteFunc(genericDataType, "ticket.merge", "TicketService", "onTicketMerge");
@@ -206,14 +139,65 @@ service class DispatcherService {
             "ticket.restore" => {
                 check self.executeRemoteFunc(genericDataType, "ticket.restore", "TicketService", "onTicketRestore");
             }
-            "product.creation" => {
-                check self.executeRemoteFunc(genericDataType, "product.creation", "ProductService", "onProductCreation");
+            "ticket.associationChange" => {
+                check self.executeRemoteFunc(genericDataType, "ticket.associationChange", "TicketService", "onTicketAssociationChange");
+            }
+        }
+    }
+
+    private function matchRemoteFuncForCompany(GenericDataType genericDataType) returns error? {
+        match genericDataType.subscriptionType {
+            "company.deletion" => {
+                check self.executeRemoteFunc(genericDataType, "company.deletion", "CompanyService", "onCompanyDeletion");
+            }
+            "company.restore" => {
+                check self.executeRemoteFunc(genericDataType, "company.restore", "CompanyService", "onCompanyRestore");
+            }
+            "company.merge" => {
+                check self.executeRemoteFunc(genericDataType, "company.merge", "CompanyService", "onCompanyMerge");
+            }
+            "company.propertyChange" => {
+                check self.executeRemoteFunc(genericDataType, "company.propertyChange", "CompanyService", "onCompanyPropertyChange");
+            }
+            "company.creation" => {
+                check self.executeRemoteFunc(genericDataType, "company.creation", "CompanyService", "onCompanyCreation");
+            }
+            "company.associationChange" => {
+                check self.executeRemoteFunc(genericDataType, "company.associationChange", "CompanyService", "onCompanyAssociationChange");
+            }
+        }
+    }
+
+    private function matchRemoteFuncForLineItem(GenericDataType genericDataType) returns error? {
+        match genericDataType.subscriptionType {
+            "line_item.merge" => {
+                check self.executeRemoteFunc(genericDataType, "line_item.merge", "LineItemService", "onLineItemMerge");
+            }
+            "line_item.deletion" => {
+                check self.executeRemoteFunc(genericDataType, "line_item.deletion", "LineItemService", "onLineItemDeletion");
+            }
+            "line_item.propertyChange" => {
+                check self.executeRemoteFunc(genericDataType, "line_item.propertyChange", "LineItemService", "onLineItemPropertyChange");
+            }
+            "line_item.restore" => {
+                check self.executeRemoteFunc(genericDataType, "line_item.restore", "LineItemService", "onLineItemRestore");
+            }
+            "line_item.associationChange" => {
+                check self.executeRemoteFunc(genericDataType, "line_item.associationChange", "LineItemService", "onLineItemAssociationChange");
+            }
+            "line_item.creation" => {
+                check self.executeRemoteFunc(genericDataType, "line_item.creation", "LineItemService", "onLineItemCreation");
+            }
+        }
+    }
+
+    private function matchRemoteFuncForProduct(GenericDataType genericDataType) returns error? {
+        match genericDataType.subscriptionType {
+            "product.propertyChange" => {
+                check self.executeRemoteFunc(genericDataType, "product.propertyChange", "ProductService", "onProductPropertyChange");
             }
             "product.deletion" => {
                 check self.executeRemoteFunc(genericDataType, "product.deletion", "ProductService", "onProductDeletion");
-            }
-            "product.propertyChange" => {
-                check self.executeRemoteFunc(genericDataType, "product.propertyChange", "ProductService", "onProductPropertychange");
             }
             "product.merge" => {
                 check self.executeRemoteFunc(genericDataType, "product.merge", "ProductService", "onProductMerge");
@@ -221,23 +205,77 @@ service class DispatcherService {
             "product.restore" => {
                 check self.executeRemoteFunc(genericDataType, "product.restore", "ProductService", "onProductRestore");
             }
-            "line_item.creation" => {
-                check self.executeRemoteFunc(genericDataType, "line_item.creation", "LineItemService", "onLineItemCreation");
+            "product.creation" => {
+                check self.executeRemoteFunc(genericDataType, "product.creation", "ProductService", "onProductCreation");
             }
-            "line_item.deletion" => {
-                check self.executeRemoteFunc(genericDataType, "line_item.deletion", "LineItemService", "onLineItemDeletion");
+        }
+    }
+
+    private function matchRemoteFuncForConversation(GenericDataType genericDataType) returns error? {
+        match genericDataType.subscriptionType {
+            "conversation.creation" => {
+                check self.executeRemoteFunc(genericDataType, "conversation.creation", "ConversationService", "onConversationCreation");
             }
-            "line_item.propertyChange" => {
-                check self.executeRemoteFunc(genericDataType, "line_item.propertyChange", "LineItemService", "onLineItemPropertychange");
+            "conversation.propertyChange" => {
+                check self.executeRemoteFunc(genericDataType, "conversation.propertyChange", "ConversationService", "onConversationPropertyChange");
             }
-            "line_item.associationChange" => {
-                check self.executeRemoteFunc(genericDataType, "line_item.associationChange", "LineItemService", "onLineItemAssociationchange");
+            "conversation.privacyDeletion" => {
+                check self.executeRemoteFunc(genericDataType, "conversation.privacyDeletion", "ConversationService", "onConversationPrivacyDeletion");
             }
-            "line_item.merge" => {
-                check self.executeRemoteFunc(genericDataType, "line_item.merge", "LineItemService", "onLineItemMerge");
+            "conversation.newMessage" => {
+                check self.executeRemoteFunc(genericDataType, "conversation.newMessage", "ConversationService", "onConversationNewMessage");
             }
-            "line_item.restore" => {
-                check self.executeRemoteFunc(genericDataType, "line_item.restore", "LineItemService", "onLineItemRestore");
+            "conversation.deletion" => {
+                check self.executeRemoteFunc(genericDataType, "conversation.deletion", "ConversationService", "onConversationDeletion");
+            }
+        }
+    }
+
+    private function matchRemoteFuncForDeal(GenericDataType genericDataType) returns error? {
+        match genericDataType.subscriptionType {
+            "deal.deletion" => {
+                check self.executeRemoteFunc(genericDataType, "deal.deletion", "DealService", "onDealDeletion");
+            }
+            "deal.creation" => {
+                check self.executeRemoteFunc(genericDataType, "deal.creation", "DealService", "onDealCreation");
+            }
+            "deal.merge" => {
+                check self.executeRemoteFunc(genericDataType, "deal.merge", "DealService", "onDealMerge");
+            }
+            "deal.propertyChange" => {
+                check self.executeRemoteFunc(genericDataType, "deal.propertyChange", "DealService", "onDealPropertyChange");
+            }
+            "deal.restore" => {
+                check self.executeRemoteFunc(genericDataType, "deal.restore", "DealService", "onDealRestore");
+            }
+            "deal.associationChange" => {
+                check self.executeRemoteFunc(genericDataType, "deal.associationChange", "DealService", "onDealAssociationChange");
+            }
+        }
+    }
+
+    private function matchRemoteFuncForContact(GenericDataType genericDataType) returns error? {
+        match genericDataType.subscriptionType {
+            "contact.creation" => {
+                check self.executeRemoteFunc(genericDataType, "contact.creation", "ContactService", "onContactCreation");
+            }
+            "contact.associationChange" => {
+                check self.executeRemoteFunc(genericDataType, "contact.associationChange", "ContactService", "onContactAssociationChange");
+            }
+            "contact.deletion" => {
+                check self.executeRemoteFunc(genericDataType, "contact.deletion", "ContactService", "onContactDeletion");
+            }
+            "contact.privacyDeletion" => {
+                check self.executeRemoteFunc(genericDataType, "contact.privacyDeletion", "ContactService", "onContactPrivacyDeletion");
+            }
+            "contact.propertyChange" => {
+                check self.executeRemoteFunc(genericDataType, "contact.propertyChange", "ContactService", "onContactPropertyChange");
+            }
+            "contact.merge" => {
+                check self.executeRemoteFunc(genericDataType, "contact.merge", "ContactService", "onContactMerge");
+            }
+            "contact.restore" => {
+                check self.executeRemoteFunc(genericDataType, "contact.restore", "ContactService", "onContactRestore");
             }
         }
     }

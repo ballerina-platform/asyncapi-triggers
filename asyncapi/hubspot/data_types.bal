@@ -1,6 +1,6 @@
-// Copyright (c) 2022, WSO2 LLC. (http://www.wso2.org) All Rights Reserved.
+// Copyright (c) 2026, WSO2 LLC. (http://www.wso2.com) All Rights Reserved.
 //
-// WSO2 Inc. licenses this file to you under the Apache License,
+// WSO2 LLC. licenses this file to you under the Apache License,
 // Version 2.0 (the "License"); you may not use this file except
 // in compliance with the License.
 // You may obtain a copy of the License at
@@ -14,44 +14,41 @@
 // specific language governing permissions and limitations
 // under the License.
 
-import ballerina/time;
+const string DEFAULT_SECRET = "";
 
-# Configurations required to initialize the HubSpot listener.
 public type ListenerConfig record {
-    # The Client Secret of HubSpot App
-    string clientSecret;
-    # The Callback URL
-    string callbackURL;
+    @display {label: "Webhook Secret"}
+    string webhookSecret = DEFAULT_SECRET;
+    string callbackUrl = "";
 };
 
-# HubSpot webhook event notification payload.
 public type WebhookEvent record {
-    # Starting at 0, which number attempt this is to notify your service of this event. If your service times-out or throws an error as describe in the Retries section below, HubSpot will attempt to send the notification again.
-    int attemptNumber?;
     # The ID of the event that triggered this notification. This value is not guaranteed to be unique.
     int eventId;
-    # The source of the change. This can be any of the change sources that appear in contact property histories.
-    string changeSource?;
-    # The ID of the source of the change. The format depends on the change source (for example, "userId:12345" for changes made by a user in the CRM UI).
-    string sourceId?;
-    # When this event occurred as a millisecond timestamp.
-    int occurredAt?;
-    # Type of the event
-    string subscriptionType?;
-    # The name of the property changed. Present for propertyChange events.
-    string propertyName?;
+    # The ID of the subscription that triggered a notification about the event.
+    int subscriptionId?;
     # The customer's (HubSpot account ID)[https://knowledge.hubspot.com/account/manage-multiple-hubspot-accounts?_ga=2.56562472.2054080341.1656611011-2068059512.1656469161#check-your-current-account] where the event occurred.
     int portalId?;
     # The ID of the HubSpot application
     int appId?;
-    # The new value set for the property that triggered the notification. Present for propertyChange events.
-    string propertyValue?;
-    # Flag of the change.
-    string changeFlag?;
-    # The ID of the subscription that triggered a notification about the event.
-    int subscriptionId?;
+    # When this event occurred as a millisecond timestamp.
+    int occurredAt?;
+    # Type of the event
+    string subscriptionType?;
+    # Starting at 0, which number attempt this is to notify your service of this event. If your service times-out or throws an error as describe in the Retries section below, HubSpot will attempt to send the notification again.
+    int attemptNumber?;
     # The ID of the object that was created, changed, or deleted. For contacts this is the contact ID; for companies, the company ID; for deals, the deal ID; and for conversations the thread ID
     int objectId?;
+    # The source of the change. This can be any of the change sources that appear in contact property histories.
+    string changeSource?;
+    # The ID of the source of the change. The format depends on the change source (for example, "userId:12345" for changes made by a user in the CRM UI).
+    string sourceId?;
+    # Flag of the change.
+    string changeFlag?;
+    # The name of the property changed. Present for propertyChange events.
+    string propertyName?;
+    # The new value set for the property that triggered the notification. Present for propertyChange events.
+    string propertyValue?;
     # The type of the association (e.g. CONTACT_TO_COMPANY, DEAL_TO_LINE_ITEM). Present for associationChange events.
     string associationType?;
     # The ID of the record that the association change was made from. Present for associationChange events.
@@ -76,11 +73,4 @@ public type WebhookEvent record {
     string messageType?;
 };
 
-# The generic data type that holds a HubSpot webhook event payload.
 public type GenericDataType WebhookEvent;
-
-final time:Seconds FIVE_MINUTES_IN_MILLISECONDS = 300000;
-
-final string eventValidationError = "Event validation failed";
-final string signatureVerificationFailure = "Signature verification failure!";
-final string requestTimeoutFailure = "Request timeout failure!";

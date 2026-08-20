@@ -1,6 +1,6 @@
-// Copyright (c) 2022, WSO2 LLC. (http://www.wso2.org) All Rights Reserved.
+// Copyright (c) 2026, WSO2 LLC. (http://www.wso2.com) All Rights Reserved.
 //
-// WSO2 Inc. licenses this file to you under the Apache License,
+// WSO2 LLC. licenses this file to you under the Apache License,
 // Version 2.0 (the "License"); you may not use this file except
 // in compliance with the License.
 // You may obtain a copy of the License at
@@ -14,29 +14,30 @@
 // specific language governing permissions and limitations
 // under the License.
 
+import ballerina/cloud;
 import ballerina/http;
 
-# The HubSpot webhook listener that receives events and dispatches them to the attached services.
+@display {label: "HubSpot Subscription API", iconPath: "icon.png"}
 public class Listener {
     private http:Listener httpListener;
     private DispatcherService dispatcherService;
 
-    public function init(ListenerConfig listenerConfig, int|http:Listener listenOn = 8090) returns error? {
+    public function init(ListenerConfig listenerConfig = {webhookSecret: DEFAULT_SECRET}, @cloud:Expose int|http:Listener listenOn = 8090) returns error? {
         if listenOn is http:Listener {
             self.httpListener = listenOn;
         } else {
             self.httpListener = check new (listenOn);
         }
-        self.dispatcherService = new DispatcherService(listenerConfig);
+        self.dispatcherService = new DispatcherService(listenerConfig.webhookSecret, listenerConfig.callbackUrl);
     }
 
-    public isolated function attach(GenericServiceType serviceRef, () attachPoint) returns @tainted error? {
-        string serviceTypeStr = self.getServiceTypeStr(serviceRef);
+    public isolated function attach(GenericServiceType serviceRef, () attachPoint) returns error? {
+        string serviceTypeStr = check self.getServiceTypeStr(serviceRef);
         check self.dispatcherService.addServiceRef(serviceTypeStr, serviceRef);
     }
 
     public isolated function detach(GenericServiceType serviceRef) returns error? {
-        string serviceTypeStr = self.getServiceTypeStr(serviceRef);
+        string serviceTypeStr = check self.getServiceTypeStr(serviceRef);
         check self.dispatcherService.removeServiceRef(serviceTypeStr);
     }
 
@@ -45,7 +46,7 @@ public class Listener {
         return self.httpListener.'start();
     }
 
-    public isolated function gracefulStop() returns @tainted error? {
+    public isolated function gracefulStop() returns error? {
         return self.httpListener.gracefulStop();
     }
 
@@ -53,21 +54,23 @@ public class Listener {
         return self.httpListener.immediateStop();
     }
 
-    private isolated function getServiceTypeStr(GenericServiceType serviceRef) returns string {
-        if serviceRef is CompanyService {
+    private isolated function getServiceTypeStr(GenericServiceType serviceRef) returns string|error {
+        if serviceRef is TicketService {
+            return "TicketService";
+        } else if serviceRef is CompanyService {
             return "CompanyService";
-        } else if serviceRef is ContactService {
-            return "ContactService";
+        } else if serviceRef is LineItemService {
+            return "LineItemService";
+        } else if serviceRef is ProductService {
+            return "ProductService";
         } else if serviceRef is ConversationService {
             return "ConversationService";
         } else if serviceRef is DealService {
             return "DealService";
-        } else if serviceRef is TicketService {
-            return "TicketService";
-        } else if serviceRef is ProductService {
-            return "ProductService";
+        } else if serviceRef is ContactService {
+            return "ContactService";
         } else {
-            return "LineItemService";
+            return error("Unrecognized service type attached to the listener");
         }
     }
 }
