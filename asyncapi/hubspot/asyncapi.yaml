@@ -3,6 +3,12 @@ x-ballerina-event-identifier:
   type: "body"
   path: "subscriptionType"
   batched: true
+# callbackUrl (below) must exactly match the full external URL HubSpot's webhook subscription is
+# registered against - scheme, host, path, and query string included. HubSpot signs its own
+# "request URI" as part of the payload, which this listener can't reconstruct from the incoming
+# request alone (no scheme/host, and a reverse proxy/load balancer may rewrite the path), so it's
+# supplied as static configuration instead. A mismatch here fails signature verification silently
+# for every request.
 x-ballerina-auth:
   header: "X-HubSpot-Signature-v3"
   signature:

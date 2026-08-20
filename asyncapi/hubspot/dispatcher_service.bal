@@ -83,7 +83,8 @@ service class DispatcherService {
         string freshnessHeaderValue = let var headerValue = trap request.getHeader("X-HubSpot-Request-Timestamp") in (headerValue is string ? headerValue : "");
         decimal freshnessTimestamp = check decimal:fromString(freshnessHeaderValue);
         decimal freshnessNowMillis = <decimal>time:utcNow()[0] * 1000;
-        if (freshnessNowMillis - freshnessTimestamp) > <decimal>300000 {
+        decimal freshnessSkewMillis = freshnessNowMillis - freshnessTimestamp;
+        if freshnessSkewMillis.abs() > <decimal>300000 {
             return error("Unauthorized: Request Timestamp Expired");
         }
         if !request.hasHeader("X-HubSpot-Signature-v3") {

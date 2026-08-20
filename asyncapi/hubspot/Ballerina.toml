@@ -5,7 +5,7 @@ org = "ballerinax"
 name = "trigger.hubspot"
 repository = "https://github.com/ballerina-platform/asyncapi-triggers"
 version = "0.12.0"
-distribution = "2201.12.0"
+distribution = "2201.13.4"
 icon = "docs/icon.png"
 authors = ["Ballerina"]
 
