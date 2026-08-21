@@ -1,0 +1,16 @@
+[
+  {
+    "appId": 3715530,
+    "eventId": 116,
+    "subscriptionId": 2764042,
+    "portalId": 123456,
+    "occurredAt": 1755648116000,
+    "subscriptionType": "conversation.newMessage",
+    "attemptNumber": 0,
+    "objectId": 501234683,
+    "changeSource": "CRM",
+    "sourceId": "userId:864745280",
+    "messageId": 900116,
+    "messageType": "MESSAGE"
+  }
+]

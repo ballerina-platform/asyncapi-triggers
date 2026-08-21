@@ -1,0 +1,18 @@
+[
+  {
+    "appId": 3715530,
+    "eventId": 119,
+    "subscriptionId": 2764045,
+    "portalId": 123456,
+    "occurredAt": 1755648119000,
+    "subscriptionType": "deal.associationChange",
+    "attemptNumber": 0,
+    "changeSource": "USER",
+    "sourceId": "userId:864745280",
+    "associationType": "DEAL_TO_CONTACT",
+    "fromObjectId": 4658499847,
+    "toObjectId": 3907,
+    "associationRemoved": false,
+    "isPrimaryAssociation": true
+  }
+]

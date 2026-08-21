@@ -1,0 +1,16 @@
+[
+  {
+    "appId": 3715530,
+    "eventId": 134,
+    "subscriptionId": 2764060,
+    "portalId": 123456,
+    "occurredAt": 1755648134000,
+    "subscriptionType": "product.propertyChange",
+    "attemptNumber": 0,
+    "objectId": 15098765566,
+    "changeSource": "USER",
+    "sourceId": "userId:864745280",
+    "propertyName": "price",
+    "propertyValue": "199.00"
+  }
+]

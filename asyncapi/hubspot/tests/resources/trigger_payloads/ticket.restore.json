@@ -1,0 +1,14 @@
+[
+  {
+    "appId": 3715530,
+    "eventId": 141,
+    "subscriptionId": 2764067,
+    "portalId": 123456,
+    "occurredAt": 1755648141000,
+    "subscriptionType": "ticket.restore",
+    "attemptNumber": 0,
+    "objectId": 9001122475,
+    "changeSource": "CRM",
+    "sourceId": "userId:864745280"
+  }
+]

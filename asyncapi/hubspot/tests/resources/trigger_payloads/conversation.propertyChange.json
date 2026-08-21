@@ -1,0 +1,16 @@
+[
+  {
+    "appId": 3715530,
+    "eventId": 118,
+    "subscriptionId": 2764044,
+    "portalId": 123456,
+    "occurredAt": 1755648118000,
+    "subscriptionType": "conversation.propertyChange",
+    "attemptNumber": 0,
+    "objectId": 501234685,
+    "changeSource": "USER",
+    "sourceId": "userId:864745280",
+    "propertyName": "name",
+    "propertyValue": "sample-value"
+  }
+]

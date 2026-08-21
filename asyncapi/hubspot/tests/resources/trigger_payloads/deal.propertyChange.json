@@ -1,0 +1,16 @@
+[
+  {
+    "appId": 3715530,
+    "eventId": 123,
+    "subscriptionId": 2764049,
+    "portalId": 123456,
+    "occurredAt": 1755648123000,
+    "subscriptionType": "deal.propertyChange",
+    "attemptNumber": 0,
+    "objectId": 4658499851,
+    "changeSource": "USER",
+    "sourceId": "userId:864745280",
+    "propertyName": "dealstage",
+    "propertyValue": "presentationscheduled"
+  }
+]

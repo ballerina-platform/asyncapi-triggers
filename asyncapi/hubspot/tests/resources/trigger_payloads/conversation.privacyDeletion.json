@@ -1,0 +1,15 @@
+[
+  {
+    "appId": 3715530,
+    "eventId": 117,
+    "subscriptionId": 2764043,
+    "portalId": 123456,
+    "occurredAt": 1755648117000,
+    "subscriptionType": "conversation.privacyDeletion",
+    "attemptNumber": 0,
+    "objectId": 501234684,
+    "changeSource": "CRM",
+    "sourceId": "userId:864745280",
+    "changeFlag": "DELETED"
+  }
+]

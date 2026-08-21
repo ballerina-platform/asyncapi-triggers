@@ -1,0 +1,18 @@
+[
+  {
+    "appId": 3715530,
+    "eventId": 136,
+    "subscriptionId": 2764062,
+    "portalId": 123456,
+    "occurredAt": 1755648136000,
+    "subscriptionType": "ticket.associationChange",
+    "attemptNumber": 0,
+    "changeSource": "USER",
+    "sourceId": "userId:864745280",
+    "associationType": "TICKET_TO_CONTACT",
+    "fromObjectId": 9001122470,
+    "toObjectId": 3924,
+    "associationRemoved": false,
+    "isPrimaryAssociation": true
+  }
+]

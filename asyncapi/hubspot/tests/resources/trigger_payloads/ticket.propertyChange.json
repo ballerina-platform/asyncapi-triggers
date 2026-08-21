@@ -1,0 +1,16 @@
+[
+  {
+    "appId": 3715530,
+    "eventId": 140,
+    "subscriptionId": 2764066,
+    "portalId": 123456,
+    "occurredAt": 1755648140000,
+    "subscriptionType": "ticket.propertyChange",
+    "attemptNumber": 0,
+    "objectId": 9001122474,
+    "changeSource": "USER",
+    "sourceId": "userId:864745280",
+    "propertyName": "hs_ticket_priority",
+    "propertyValue": "HIGH"
+  }
+]

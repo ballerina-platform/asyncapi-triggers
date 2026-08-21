@@ -1,0 +1,16 @@
+[
+  {
+    "appId": 3715530,
+    "eventId": 105,
+    "subscriptionId": 2764031,
+    "portalId": 123456,
+    "occurredAt": 1755648105000,
+    "subscriptionType": "company.propertyChange",
+    "attemptNumber": 0,
+    "objectId": 4001234672,
+    "changeSource": "USER",
+    "sourceId": "userId:864745280",
+    "propertyName": "industry",
+    "propertyValue": "TECHNOLOGY"
+  }
+]

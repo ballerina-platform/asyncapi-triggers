@@ -1,0 +1,20 @@
+[
+  {
+    "appId": 3715530,
+    "eventId": 128,
+    "subscriptionId": 2764054,
+    "portalId": 123456,
+    "occurredAt": 1755648128000,
+    "subscriptionType": "line_item.merge",
+    "attemptNumber": 0,
+    "objectId": 21987654449,
+    "changeSource": "CRM",
+    "sourceId": "userId:864745280",
+    "primaryObjectId": 21987654449,
+    "mergedObjectIds": [
+      21987655449
+    ],
+    "newObjectId": 21987654449,
+    "numberOfPropertiesMoved": 4
+  }
+]
