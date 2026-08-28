@@ -1,4 +1,4 @@
-// Copyright (c) 2022, WSO2 LLC. (http://www.wso2.org) All Rights Reserved.
+// Copyright (c) 2026, WSO2 LLC. (http://www.wso2.com).
 //
 // WSO2 LLC. licenses this file to you under the Apache License,
 // Version 2.0 (the "License"); you may not use this file except
@@ -14,52 +14,36 @@
 // specific language governing permissions and limitations
 // under the License.
 
-@display {label: "Listener Config"}
+const string DEFAULT_SECRET = "";
+
+# Configuration for the webhook listener, including the secret used to verify incoming requests.
 public type ListenerConfig record {
-    @display {label: "Verifier Token", "description": "App-specific verifier token to validate the webhook notifications from the callback are from Intuit"}
-    string verificationToken;
-    @display {label: "Realm IDs", "description": "An array of company IDs to get the events"}
-    string[] realmIds;
+    # The secret used to verify incoming webhook signatures.
+    @display {label: "Webhook Secret"}
+    string webhookSecret = DEFAULT_SECRET;
 };
 
-# Record for QuickBook data change.
-#
+# A single CloudEvents-formatted QuickBooks webhook notification.
 public type QuickBookEvent record {
-    # The latest timestamp in UTC.
-    string lastUpdated?;
-    # The name of the entity that changed (customer, Invoice, etc.).
-    string name?;
-    # The ID of the deleted or merged entity (this only applies to merge events)
-    string deletedID?;
-    # The ID of the changed entity.
-    string id?;
-    # The type of the change.
-    string operation?;
+    # The CloudEvents specification version (currently always "1.0").
+    string specversion;
+    # A unique identifier for this event.
+    string id;
+    # Identifies the QuickBooks company instance that raised the event.
+    string 'source;
+    # The entity and operation this event represents, e.g. qbo.customer.created.v1.
+    string 'type;
+    # The content type of the data field.
+    string datacontenttype?;
+    # The timestamp the event occurred, in ISO 8601 format.
+    string time;
+    # The ID of the entity that changed.
+    string intuitentityid;
+    # The QuickBooks company (realm) ID this event belongs to.
+    string intuitaccountid;
+    # Operation-specific event data. Confirmed shapes so far: empty on create, {"deletedId": "..."} on merge. Shape for update/delete/void/email is not yet confirmed against a real delivery.
+    record {} data?;
 };
 
-# Record for event notification for a company.
-#
-# + realmId - Company Id  
-# + dataChangeEvent - The event changes information
-public type EventNotification record {
-    string realmId;
-    DataChangeEvent dataChangeEvent;
-};
-
-# Record for set of QuickBook data changes
-#
-# + entities - Set of QuickBook data changes
-public type DataChangeEvent record {
-    QuickBookEvent[] entities;
-};
-
-# Record for set of event notification for all companies.
-#
-# + eventNotifications - Set of event notification for all companies
-public type EventNotifications record {|
-    EventNotification[] eventNotifications;
-|};
-
-public type CommonResponseType EventNotifications;
-
+# The union of every possible webhook payload type this listener can receive.
 public type GenericDataType QuickBookEvent;

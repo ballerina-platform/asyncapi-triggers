@@ -1,0 +1,15 @@
+[
+  {
+    "specversion": "1.0",
+    "id": "test-customer-merged-1030",
+    "source": "intuit.testSourceId0000000000000000000000000=",
+    "type": "qbo.customer.merged.v1",
+    "datacontenttype": "application/json",
+    "time": "2026-08-28T09:00:00.000Z",
+    "intuitentityid": "1030",
+    "intuitaccountid": "999000111",
+    "data": {
+      "deletedId": "1030"
+    }
+  }
+]

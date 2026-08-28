@@ -1,808 +1,1771 @@
-asyncapi: "2.4.0"
+asyncapi: 3.0.0
 x-ballerina-event-identifier:
-  type : "body"
-  path : "eventNotifications.dataChangeEvent."
+  type: body
+  path: type
+  batched: true
+x-ballerina-auth:
+  header: Intuit-Signature
+  signature:
+    algorithm: sha256
+    encoding: base64
+    headerFormat: $signature
+    input: $body
 info:
   title: QuickBook Webhooks
-  version: "1.0.0"
+  version: 1.0.0
   description: |
     Use webhooks to receive event triggered callbacks for entities that your app needs to stay on top of.
   license:
     name: Apache 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0
-
 defaultContentType: application/json
-
 externalDocs:
-    description: Common properties returned from Event
-    url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-
+  description: Common properties returned from Event
+  url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
 channels:
   Account:
-    subscribe:
-      message:
-        oneOf:
-          - x-ballerina-event-type: "Account/Create"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
-          - x-ballerina-event-type: "Account/Update"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
-          - x-ballerina-event-type: "Account/Delete"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
-          - x-ballerina-event-type: "Account/Merge"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
+    address: /
+    description: QuickBooks Account entity change notifications.
+    messages:
+      accountCreate:
+        $ref: '#/components/messages/AccountCreateMessage'
+      accountUpdate:
+        $ref: '#/components/messages/AccountUpdateMessage'
+      accountDelete:
+        $ref: '#/components/messages/AccountDeleteMessage'
+      accountMerge:
+        $ref: '#/components/messages/AccountMergeMessage'
+    bindings:
+      http:
+        method: POST
   Bill:
-    subscribe:
-      message:
-        oneOf:
-          - x-ballerina-event-type: "Bill/Create"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
-          - x-ballerina-event-type: "Bill/Update"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
-          - x-ballerina-event-type: "Bill/Delete"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
+    address: /
+    description: QuickBooks Bill entity change notifications.
+    messages:
+      billCreate:
+        $ref: '#/components/messages/BillCreateMessage'
+      billUpdate:
+        $ref: '#/components/messages/BillUpdateMessage'
+      billDelete:
+        $ref: '#/components/messages/BillDeleteMessage'
+    bindings:
+      http:
+        method: POST
   BillPayment:
-    subscribe:
-      message:
-        oneOf:
-          - x-ballerina-event-type: "BillPayment/Create"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
-          - x-ballerina-event-type: "BillPayment/Update"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
-          - x-ballerina-event-type: "BillPayment/Delete"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
-          - x-ballerina-event-type: "BillPayment/Void"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
+    address: /
+    description: QuickBooks BillPayment entity change notifications.
+    messages:
+      billPaymentCreate:
+        $ref: '#/components/messages/BillPaymentCreateMessage'
+      billPaymentUpdate:
+        $ref: '#/components/messages/BillPaymentUpdateMessage'
+      billPaymentDelete:
+        $ref: '#/components/messages/BillPaymentDeleteMessage'
+      billPaymentVoid:
+        $ref: '#/components/messages/BillPaymentVoidMessage'
+    bindings:
+      http:
+        method: POST
   Budget:
-    subscribe:
-      message:
-        oneOf:
-          - x-ballerina-event-type: "Budget/Create"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
-          - x-ballerina-event-type: "Budget/Update"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
+    address: /
+    description: QuickBooks Budget entity change notifications.
+    messages:
+      budgetCreate:
+        $ref: '#/components/messages/BudgetCreateMessage'
+      budgetUpdate:
+        $ref: '#/components/messages/BudgetUpdateMessage'
+    bindings:
+      http:
+        method: POST
+  ChangeOrder:
+    address: /
+    description: QuickBooks ChangeOrder entity change notifications.
+    messages:
+      changeOrderCreate:
+        $ref: '#/components/messages/ChangeOrderCreateMessage'
+      changeOrderUpdate:
+        $ref: '#/components/messages/ChangeOrderUpdateMessage'
+      changeOrderDelete:
+        $ref: '#/components/messages/ChangeOrderDeleteMessage'
+    bindings:
+      http:
+        method: POST
   Class:
-    subscribe:
-      message:
-        oneOf:
-          - x-ballerina-event-type: "Class/Create"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
-          - x-ballerina-event-type: "Class/Update"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
-          - x-ballerina-event-type: "Class/Delete"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
+    address: /
+    description: QuickBooks Class entity change notifications.
+    messages:
+      classCreate:
+        $ref: '#/components/messages/ClassCreateMessage'
+      classUpdate:
+        $ref: '#/components/messages/ClassUpdateMessage'
+      classDelete:
+        $ref: '#/components/messages/ClassDeleteMessage'
+      classMerge:
+        $ref: '#/components/messages/ClassMergeMessage'
+    bindings:
+      http:
+        method: POST
   CreditMemo:
-    subscribe:
-      message:
-        oneOf:
-          - x-ballerina-event-type: "CreditMemo/Create"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
-          - x-ballerina-event-type: "CreditMemo/Update"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
-          - x-ballerina-event-type: "CreditMemo/Delete"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
-          - x-ballerina-event-type: "CreditMemo/Void"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
+    address: /
+    description: QuickBooks CreditMemo entity change notifications.
+    messages:
+      creditMemoCreate:
+        $ref: '#/components/messages/CreditMemoCreateMessage'
+      creditMemoUpdate:
+        $ref: '#/components/messages/CreditMemoUpdateMessage'
+      creditMemoDelete:
+        $ref: '#/components/messages/CreditMemoDeleteMessage'
+      creditMemoVoid:
+        $ref: '#/components/messages/CreditMemoVoidMessage'
+      creditMemoEmail:
+        $ref: '#/components/messages/CreditMemoEmailMessage'
+    bindings:
+      http:
+        method: POST
   Currency:
-    subscribe:
-      message:
-        oneOf:
-          - x-ballerina-event-type: "Currency/Create"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
-          - x-ballerina-event-type: "Currency/Update"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
+    address: /
+    description: QuickBooks Currency entity change notifications.
+    messages:
+      currencyCreate:
+        $ref: '#/components/messages/CurrencyCreateMessage'
+      currencyUpdate:
+        $ref: '#/components/messages/CurrencyUpdateMessage'
+      currencyDelete:
+        $ref: '#/components/messages/CurrencyDeleteMessage'
+    bindings:
+      http:
+        method: POST
   Customer:
-    subscribe:
-      message:
-        oneOf:
-          - x-ballerina-event-type: "Customer/Create"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
-          - x-ballerina-event-type: "Customer/Update"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
-          - x-ballerina-event-type: "Customer/Delete"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
-          - x-ballerina-event-type: "Customer/Merge"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
+    address: /
+    description: QuickBooks Customer entity change notifications.
+    messages:
+      customerCreate:
+        $ref: '#/components/messages/CustomerCreateMessage'
+      customerUpdate:
+        $ref: '#/components/messages/CustomerUpdateMessage'
+      customerDelete:
+        $ref: '#/components/messages/CustomerDeleteMessage'
+      customerMerge:
+        $ref: '#/components/messages/CustomerMergeMessage'
+    bindings:
+      http:
+        method: POST
   Department:
-    subscribe:
-      message:
-        oneOf:
-          - x-ballerina-event-type: "Department/Create"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
-          - x-ballerina-event-type: "Department/Update"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
-          - x-ballerina-event-type: "Department/Merge"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
+    address: /
+    description: QuickBooks Department entity change notifications.
+    messages:
+      departmentCreate:
+        $ref: '#/components/messages/DepartmentCreateMessage'
+      departmentUpdate:
+        $ref: '#/components/messages/DepartmentUpdateMessage'
+      departmentMerge:
+        $ref: '#/components/messages/DepartmentMergeMessage'
+    bindings:
+      http:
+        method: POST
   Deposit:
-    subscribe:
-      message:
-        oneOf:
-          - x-ballerina-event-type: "Deposit/Create"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
-          - x-ballerina-event-type: "Deposit/Update"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
-          - x-ballerina-event-type: "Deposit/Delete"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
+    address: /
+    description: QuickBooks Deposit entity change notifications.
+    messages:
+      depositCreate:
+        $ref: '#/components/messages/DepositCreateMessage'
+      depositUpdate:
+        $ref: '#/components/messages/DepositUpdateMessage'
+      depositDelete:
+        $ref: '#/components/messages/DepositDeleteMessage'
+    bindings:
+      http:
+        method: POST
   Employee:
-    subscribe:
-      message:
-        oneOf:
-          - x-ballerina-event-type: "Employee/Create"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
-          - x-ballerina-event-type: "Employee/Update"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
-          - x-ballerina-event-type: "Employee/Delete"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
-          - x-ballerina-event-type: "Employee/Merge"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
+    address: /
+    description: QuickBooks Employee entity change notifications.
+    messages:
+      employeeCreate:
+        $ref: '#/components/messages/EmployeeCreateMessage'
+      employeeUpdate:
+        $ref: '#/components/messages/EmployeeUpdateMessage'
+      employeeDelete:
+        $ref: '#/components/messages/EmployeeDeleteMessage'
+      employeeMerge:
+        $ref: '#/components/messages/EmployeeMergeMessage'
+    bindings:
+      http:
+        method: POST
   Estimate:
-    subscribe:
-      message:
-        oneOf:
-          - x-ballerina-event-type: "Estimate/Create"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
-          - x-ballerina-event-type: "Estimate/Update"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
-          - x-ballerina-event-type: "Estimate/Delete"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
+    address: /
+    description: QuickBooks Estimate entity change notifications.
+    messages:
+      estimateCreate:
+        $ref: '#/components/messages/EstimateCreateMessage'
+      estimateUpdate:
+        $ref: '#/components/messages/EstimateUpdateMessage'
+      estimateDelete:
+        $ref: '#/components/messages/EstimateDeleteMessage'
+      estimateEmail:
+        $ref: '#/components/messages/EstimateEmailMessage'
+    bindings:
+      http:
+        method: POST
   Invoice:
-    subscribe:
-      message:
-        oneOf:
-          - x-ballerina-event-type: "Invoice/Create"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
-          - x-ballerina-event-type: "Invoice/Update"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
-          - x-ballerina-event-type: "Invoice/Delete"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
-          - x-ballerina-event-type: "Invoice/Void"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
+    address: /
+    description: QuickBooks Invoice entity change notifications.
+    messages:
+      invoiceCreate:
+        $ref: '#/components/messages/InvoiceCreateMessage'
+      invoiceUpdate:
+        $ref: '#/components/messages/InvoiceUpdateMessage'
+      invoiceDelete:
+        $ref: '#/components/messages/InvoiceDeleteMessage'
+      invoiceVoid:
+        $ref: '#/components/messages/InvoiceVoidMessage'
+      invoiceEmail:
+        $ref: '#/components/messages/InvoiceEmailMessage'
+    bindings:
+      http:
+        method: POST
   Item:
-    subscribe:
-      message:
-        oneOf:
-          - x-ballerina-event-type: "Item/Create"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
-          - x-ballerina-event-type: "Item/Update"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
-          - x-ballerina-event-type: "Item/Delete"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
-          - x-ballerina-event-type: "Item/Merge"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
+    address: /
+    description: QuickBooks Item entity change notifications.
+    messages:
+      itemCreate:
+        $ref: '#/components/messages/ItemCreateMessage'
+      itemUpdate:
+        $ref: '#/components/messages/ItemUpdateMessage'
+      itemDelete:
+        $ref: '#/components/messages/ItemDeleteMessage'
+      itemMerge:
+        $ref: '#/components/messages/ItemMergeMessage'
+    bindings:
+      http:
+        method: POST
   JournalCode:
-    subscribe:
-      message:
-        oneOf:
-          - x-ballerina-event-type: "JournalCode/Create"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
-          - x-ballerina-event-type: "JournalCode/Update"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
+    address: /
+    description: QuickBooks JournalCode entity change notifications.
+    messages:
+      journalCodeCreate:
+        $ref: '#/components/messages/JournalCodeCreateMessage'
+      journalCodeUpdate:
+        $ref: '#/components/messages/JournalCodeUpdateMessage'
+    bindings:
+      http:
+        method: POST
   JournalEntry:
-    subscribe:
-      message:
-        oneOf:
-          - x-ballerina-event-type: "JournalEntry/Create"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
-          - x-ballerina-event-type: "JournalEntry/Update"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
-          - x-ballerina-event-type: "JournalEntry/Delete"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
+    address: /
+    description: QuickBooks JournalEntry entity change notifications.
+    messages:
+      journalEntryCreate:
+        $ref: '#/components/messages/JournalEntryCreateMessage'
+      journalEntryUpdate:
+        $ref: '#/components/messages/JournalEntryUpdateMessage'
+      journalEntryDelete:
+        $ref: '#/components/messages/JournalEntryDeleteMessage'
+    bindings:
+      http:
+        method: POST
   Payment:
-    subscribe:
-      message:
-        oneOf:
-          - x-ballerina-event-type: "Payment/Create"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
-          - x-ballerina-event-type: "Payment/Update"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
-          - x-ballerina-event-type: "Payment/Delete"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
-          - x-ballerina-event-type: "Payment/Void"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
+    address: /
+    description: QuickBooks Payment entity change notifications.
+    messages:
+      paymentCreate:
+        $ref: '#/components/messages/PaymentCreateMessage'
+      paymentUpdate:
+        $ref: '#/components/messages/PaymentUpdateMessage'
+      paymentDelete:
+        $ref: '#/components/messages/PaymentDeleteMessage'
+      paymentVoid:
+        $ref: '#/components/messages/PaymentVoidMessage'
+      paymentEmail:
+        $ref: '#/components/messages/PaymentEmailMessage'
+    bindings:
+      http:
+        method: POST
   PaymentMethod:
-    subscribe:
-      message:
-        oneOf:
-          - x-ballerina-event-type: "PaymentMethod/Create"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
-          - x-ballerina-event-type: "PaymentMethod/Update"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
-          - x-ballerina-event-type: "PaymentMethod/Merge"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
+    address: /
+    description: QuickBooks PaymentMethod entity change notifications.
+    messages:
+      paymentMethodCreate:
+        $ref: '#/components/messages/PaymentMethodCreateMessage'
+      paymentMethodUpdate:
+        $ref: '#/components/messages/PaymentMethodUpdateMessage'
+      paymentMethodMerge:
+        $ref: '#/components/messages/PaymentMethodMergeMessage'
+    bindings:
+      http:
+        method: POST
   Preferences:
-    subscribe:
-      message:
-        oneOf:
-          - x-ballerina-event-type: "Preferences/Update"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
+    address: /
+    description: QuickBooks Preferences entity change notifications.
+    messages:
+      preferencesUpdate:
+        $ref: '#/components/messages/PreferencesUpdateMessage'
+    bindings:
+      http:
+        method: POST
   Purchase:
-    subscribe:
-      message:
-        oneOf:
-          - x-ballerina-event-type: "Purchase/Create"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
-          - x-ballerina-event-type: "Purchase/Update"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
-          - x-ballerina-event-type: "Purchase/Delete"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
-          - x-ballerina-event-type: "Purchase/Void"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
+    address: /
+    description: QuickBooks Purchase entity change notifications.
+    messages:
+      purchaseCreate:
+        $ref: '#/components/messages/PurchaseCreateMessage'
+      purchaseUpdate:
+        $ref: '#/components/messages/PurchaseUpdateMessage'
+      purchaseDelete:
+        $ref: '#/components/messages/PurchaseDeleteMessage'
+      purchaseVoid:
+        $ref: '#/components/messages/PurchaseVoidMessage'
+    bindings:
+      http:
+        method: POST
   PurchaseOrder:
-    subscribe:
-      message:
-        oneOf:
-          - x-ballerina-event-type: "PurchaseOrder/Create"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
-          - x-ballerina-event-type: "PurchaseOrder/Update"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
-          - x-ballerina-event-type: "PurchaseOrder/Delete"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
+    address: /
+    description: QuickBooks PurchaseOrder entity change notifications.
+    messages:
+      purchaseOrderCreate:
+        $ref: '#/components/messages/PurchaseOrderCreateMessage'
+      purchaseOrderUpdate:
+        $ref: '#/components/messages/PurchaseOrderUpdateMessage'
+      purchaseOrderDelete:
+        $ref: '#/components/messages/PurchaseOrderDeleteMessage'
+      purchaseOrderEmail:
+        $ref: '#/components/messages/PurchaseOrderEmailMessage'
+    bindings:
+      http:
+        method: POST
   RefundReceipt:
-    subscribe:
-      message:
-        oneOf:
-          - x-ballerina-event-type: "RefundReceipt/Create"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
-          - x-ballerina-event-type: "RefundReceipt/Update"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
-          - x-ballerina-event-type: "RefundReceipt/Delete"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
-          - x-ballerina-event-type: "RefundReceipt/Void"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
+    address: /
+    description: QuickBooks RefundReceipt entity change notifications.
+    messages:
+      refundReceiptCreate:
+        $ref: '#/components/messages/RefundReceiptCreateMessage'
+      refundReceiptUpdate:
+        $ref: '#/components/messages/RefundReceiptUpdateMessage'
+      refundReceiptDelete:
+        $ref: '#/components/messages/RefundReceiptDeleteMessage'
+      refundReceiptVoid:
+        $ref: '#/components/messages/RefundReceiptVoidMessage'
+      refundReceiptEmail:
+        $ref: '#/components/messages/RefundReceiptEmailMessage'
+    bindings:
+      http:
+        method: POST
   SalesReceipt:
-    subscribe:
-      message:
-        oneOf:
-          - x-ballerina-event-type: "SalesReceipt/Create"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
-          - x-ballerina-event-type: "SalesReceipt/Update"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
-          - x-ballerina-event-type: "SalesReceipt/Delete"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
-          - x-ballerina-event-type: "SalesReceipt/Void"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
+    address: /
+    description: QuickBooks SalesReceipt entity change notifications.
+    messages:
+      salesReceiptCreate:
+        $ref: '#/components/messages/SalesReceiptCreateMessage'
+      salesReceiptUpdate:
+        $ref: '#/components/messages/SalesReceiptUpdateMessage'
+      salesReceiptDelete:
+        $ref: '#/components/messages/SalesReceiptDeleteMessage'
+      salesReceiptVoid:
+        $ref: '#/components/messages/SalesReceiptVoidMessage'
+      salesReceiptEmail:
+        $ref: '#/components/messages/SalesReceiptEmailMessage'
+    bindings:
+      http:
+        method: POST
   TaxAgency:
-    subscribe:
-      message:
-        oneOf:
-          - x-ballerina-event-type: "TaxAgency/Create"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
-          - x-ballerina-event-type: "TaxAgency/Update"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
+    address: /
+    description: QuickBooks TaxAgency entity change notifications.
+    messages:
+      taxAgencyCreate:
+        $ref: '#/components/messages/TaxAgencyCreateMessage'
+      taxAgencyUpdate:
+        $ref: '#/components/messages/TaxAgencyUpdateMessage'
+    bindings:
+      http:
+        method: POST
   Term:
-    subscribe:
-      message:
-        oneOf:
-          - x-ballerina-event-type: "Term/Create"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
-          - x-ballerina-event-type: "Term/Update"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
+    address: /
+    description: QuickBooks Term entity change notifications.
+    messages:
+      termCreate:
+        $ref: '#/components/messages/TermCreateMessage'
+      termUpdate:
+        $ref: '#/components/messages/TermUpdateMessage'
+    bindings:
+      http:
+        method: POST
   TimeActivity:
-    subscribe:
-      message:
-        oneOf:
-          - x-ballerina-event-type: "TimeActivity/Create"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
-          - x-ballerina-event-type: "TimeActivity/Update"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
-          - x-ballerina-event-type: "TimeActivity/Delete"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
+    address: /
+    description: QuickBooks TimeActivity entity change notifications.
+    messages:
+      timeActivityCreate:
+        $ref: '#/components/messages/TimeActivityCreateMessage'
+      timeActivityUpdate:
+        $ref: '#/components/messages/TimeActivityUpdateMessage'
+      timeActivityDelete:
+        $ref: '#/components/messages/TimeActivityDeleteMessage'
+    bindings:
+      http:
+        method: POST
   Transfer:
-    subscribe:
-      message:
-        oneOf:
-          - x-ballerina-event-type: "Transfer/Create"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
-          - x-ballerina-event-type: "Transfer/Update"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
-          - x-ballerina-event-type: "Transfer/Delete"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
-          - x-ballerina-event-type: "Transfer/Void"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
+    address: /
+    description: QuickBooks Transfer entity change notifications.
+    messages:
+      transferCreate:
+        $ref: '#/components/messages/TransferCreateMessage'
+      transferUpdate:
+        $ref: '#/components/messages/TransferUpdateMessage'
+      transferDelete:
+        $ref: '#/components/messages/TransferDeleteMessage'
+      transferVoid:
+        $ref: '#/components/messages/TransferVoidMessage'
+    bindings:
+      http:
+        method: POST
+  CompanyCurrency:
+    address: /
+    description: QuickBooks CompanyCurrency entity change notifications.
+    messages:
+      companyCurrencyCreate:
+        $ref: '#/components/messages/CompanyCurrencyCreateMessage'
+      companyCurrencyUpdate:
+        $ref: '#/components/messages/CompanyCurrencyUpdateMessage'
+      companyCurrencyDelete:
+        $ref: '#/components/messages/CompanyCurrencyDeleteMessage'
+    bindings:
+      http:
+        method: POST
   Vendor:
-    subscribe:
-      message:
-        oneOf:
-          - x-ballerina-event-type: "Vendor/Create"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
-          - x-ballerina-event-type: "Vendor/Update"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
-          - x-ballerina-event-type: "Vendor/Delete"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
-          - x-ballerina-event-type: "Vendor/Merge"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
+    address: /
+    description: QuickBooks Vendor entity change notifications.
+    messages:
+      vendorCreate:
+        $ref: '#/components/messages/VendorCreateMessage'
+      vendorUpdate:
+        $ref: '#/components/messages/VendorUpdateMessage'
+      vendorDelete:
+        $ref: '#/components/messages/VendorDeleteMessage'
+      vendorMerge:
+        $ref: '#/components/messages/VendorMergeMessage'
+    bindings:
+      http:
+        method: POST
   VendorCredit:
-    subscribe:
-      message:
-        oneOf:
-          - x-ballerina-event-type: "VendorCredit/Create"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
-          - x-ballerina-event-type: "VendorCredit/Update"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
-          - x-ballerina-event-type: "VendorCredit/Delete"
-            externalDocs:
-              description: Webhook docs
-              url: "https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks"
-            payload:
-              $ref: "#/components/schemas/quickBookEvent"
-            summary: Subscribe only to the message events that mention your app
-
+    address: /
+    description: QuickBooks VendorCredit entity change notifications.
+    messages:
+      vendorCreditCreate:
+        $ref: '#/components/messages/VendorCreditCreateMessage'
+      vendorCreditUpdate:
+        $ref: '#/components/messages/VendorCreditUpdateMessage'
+      vendorCreditDelete:
+        $ref: '#/components/messages/VendorCreditDeleteMessage'
+    bindings:
+      http:
+        method: POST
+operations:
+  onAccount:
+    action: receive
+    channel:
+      $ref: '#/channels/Account'
+    summary: Receive Account change notifications
+    messages:
+      - $ref: '#/channels/Account/messages/accountCreate'
+      - $ref: '#/channels/Account/messages/accountUpdate'
+      - $ref: '#/channels/Account/messages/accountDelete'
+      - $ref: '#/channels/Account/messages/accountMerge'
+  onBill:
+    action: receive
+    channel:
+      $ref: '#/channels/Bill'
+    summary: Receive Bill change notifications
+    messages:
+      - $ref: '#/channels/Bill/messages/billCreate'
+      - $ref: '#/channels/Bill/messages/billUpdate'
+      - $ref: '#/channels/Bill/messages/billDelete'
+  onBillPayment:
+    action: receive
+    channel:
+      $ref: '#/channels/BillPayment'
+    summary: Receive BillPayment change notifications
+    messages:
+      - $ref: '#/channels/BillPayment/messages/billPaymentCreate'
+      - $ref: '#/channels/BillPayment/messages/billPaymentUpdate'
+      - $ref: '#/channels/BillPayment/messages/billPaymentDelete'
+      - $ref: '#/channels/BillPayment/messages/billPaymentVoid'
+  onBudget:
+    action: receive
+    channel:
+      $ref: '#/channels/Budget'
+    summary: Receive Budget change notifications
+    messages:
+      - $ref: '#/channels/Budget/messages/budgetCreate'
+      - $ref: '#/channels/Budget/messages/budgetUpdate'
+  onChangeOrder:
+    action: receive
+    channel:
+      $ref: '#/channels/ChangeOrder'
+    summary: Receive ChangeOrder change notifications
+    messages:
+      - $ref: '#/channels/ChangeOrder/messages/changeOrderCreate'
+      - $ref: '#/channels/ChangeOrder/messages/changeOrderUpdate'
+      - $ref: '#/channels/ChangeOrder/messages/changeOrderDelete'
+  onClass:
+    action: receive
+    channel:
+      $ref: '#/channels/Class'
+    summary: Receive Class change notifications
+    messages:
+      - $ref: '#/channels/Class/messages/classCreate'
+      - $ref: '#/channels/Class/messages/classUpdate'
+      - $ref: '#/channels/Class/messages/classDelete'
+      - $ref: '#/channels/Class/messages/classMerge'
+  onCreditMemo:
+    action: receive
+    channel:
+      $ref: '#/channels/CreditMemo'
+    summary: Receive CreditMemo change notifications
+    messages:
+      - $ref: '#/channels/CreditMemo/messages/creditMemoCreate'
+      - $ref: '#/channels/CreditMemo/messages/creditMemoUpdate'
+      - $ref: '#/channels/CreditMemo/messages/creditMemoDelete'
+      - $ref: '#/channels/CreditMemo/messages/creditMemoVoid'
+      - $ref: '#/channels/CreditMemo/messages/creditMemoEmail'
+  onCurrency:
+    action: receive
+    channel:
+      $ref: '#/channels/Currency'
+    summary: Receive Currency change notifications
+    messages:
+      - $ref: '#/channels/Currency/messages/currencyCreate'
+      - $ref: '#/channels/Currency/messages/currencyUpdate'
+      - $ref: '#/channels/Currency/messages/currencyDelete'
+  onCustomer:
+    action: receive
+    channel:
+      $ref: '#/channels/Customer'
+    summary: Receive Customer change notifications
+    messages:
+      - $ref: '#/channels/Customer/messages/customerCreate'
+      - $ref: '#/channels/Customer/messages/customerUpdate'
+      - $ref: '#/channels/Customer/messages/customerDelete'
+      - $ref: '#/channels/Customer/messages/customerMerge'
+  onDepartment:
+    action: receive
+    channel:
+      $ref: '#/channels/Department'
+    summary: Receive Department change notifications
+    messages:
+      - $ref: '#/channels/Department/messages/departmentCreate'
+      - $ref: '#/channels/Department/messages/departmentUpdate'
+      - $ref: '#/channels/Department/messages/departmentMerge'
+  onDeposit:
+    action: receive
+    channel:
+      $ref: '#/channels/Deposit'
+    summary: Receive Deposit change notifications
+    messages:
+      - $ref: '#/channels/Deposit/messages/depositCreate'
+      - $ref: '#/channels/Deposit/messages/depositUpdate'
+      - $ref: '#/channels/Deposit/messages/depositDelete'
+  onEmployee:
+    action: receive
+    channel:
+      $ref: '#/channels/Employee'
+    summary: Receive Employee change notifications
+    messages:
+      - $ref: '#/channels/Employee/messages/employeeCreate'
+      - $ref: '#/channels/Employee/messages/employeeUpdate'
+      - $ref: '#/channels/Employee/messages/employeeDelete'
+      - $ref: '#/channels/Employee/messages/employeeMerge'
+  onEstimate:
+    action: receive
+    channel:
+      $ref: '#/channels/Estimate'
+    summary: Receive Estimate change notifications
+    messages:
+      - $ref: '#/channels/Estimate/messages/estimateCreate'
+      - $ref: '#/channels/Estimate/messages/estimateUpdate'
+      - $ref: '#/channels/Estimate/messages/estimateDelete'
+      - $ref: '#/channels/Estimate/messages/estimateEmail'
+  onInvoice:
+    action: receive
+    channel:
+      $ref: '#/channels/Invoice'
+    summary: Receive Invoice change notifications
+    messages:
+      - $ref: '#/channels/Invoice/messages/invoiceCreate'
+      - $ref: '#/channels/Invoice/messages/invoiceUpdate'
+      - $ref: '#/channels/Invoice/messages/invoiceDelete'
+      - $ref: '#/channels/Invoice/messages/invoiceVoid'
+      - $ref: '#/channels/Invoice/messages/invoiceEmail'
+  onItem:
+    action: receive
+    channel:
+      $ref: '#/channels/Item'
+    summary: Receive Item change notifications
+    messages:
+      - $ref: '#/channels/Item/messages/itemCreate'
+      - $ref: '#/channels/Item/messages/itemUpdate'
+      - $ref: '#/channels/Item/messages/itemDelete'
+      - $ref: '#/channels/Item/messages/itemMerge'
+  onJournalCode:
+    action: receive
+    channel:
+      $ref: '#/channels/JournalCode'
+    summary: Receive JournalCode change notifications
+    messages:
+      - $ref: '#/channels/JournalCode/messages/journalCodeCreate'
+      - $ref: '#/channels/JournalCode/messages/journalCodeUpdate'
+  onJournalEntry:
+    action: receive
+    channel:
+      $ref: '#/channels/JournalEntry'
+    summary: Receive JournalEntry change notifications
+    messages:
+      - $ref: '#/channels/JournalEntry/messages/journalEntryCreate'
+      - $ref: '#/channels/JournalEntry/messages/journalEntryUpdate'
+      - $ref: '#/channels/JournalEntry/messages/journalEntryDelete'
+  onPayment:
+    action: receive
+    channel:
+      $ref: '#/channels/Payment'
+    summary: Receive Payment change notifications
+    messages:
+      - $ref: '#/channels/Payment/messages/paymentCreate'
+      - $ref: '#/channels/Payment/messages/paymentUpdate'
+      - $ref: '#/channels/Payment/messages/paymentDelete'
+      - $ref: '#/channels/Payment/messages/paymentVoid'
+      - $ref: '#/channels/Payment/messages/paymentEmail'
+  onPaymentMethod:
+    action: receive
+    channel:
+      $ref: '#/channels/PaymentMethod'
+    summary: Receive PaymentMethod change notifications
+    messages:
+      - $ref: '#/channels/PaymentMethod/messages/paymentMethodCreate'
+      - $ref: '#/channels/PaymentMethod/messages/paymentMethodUpdate'
+      - $ref: '#/channels/PaymentMethod/messages/paymentMethodMerge'
+  onPreferences:
+    action: receive
+    channel:
+      $ref: '#/channels/Preferences'
+    summary: Receive Preferences change notifications
+    messages:
+      - $ref: '#/channels/Preferences/messages/preferencesUpdate'
+  onPurchase:
+    action: receive
+    channel:
+      $ref: '#/channels/Purchase'
+    summary: Receive Purchase change notifications
+    messages:
+      - $ref: '#/channels/Purchase/messages/purchaseCreate'
+      - $ref: '#/channels/Purchase/messages/purchaseUpdate'
+      - $ref: '#/channels/Purchase/messages/purchaseDelete'
+      - $ref: '#/channels/Purchase/messages/purchaseVoid'
+  onPurchaseOrder:
+    action: receive
+    channel:
+      $ref: '#/channels/PurchaseOrder'
+    summary: Receive PurchaseOrder change notifications
+    messages:
+      - $ref: '#/channels/PurchaseOrder/messages/purchaseOrderCreate'
+      - $ref: '#/channels/PurchaseOrder/messages/purchaseOrderUpdate'
+      - $ref: '#/channels/PurchaseOrder/messages/purchaseOrderDelete'
+      - $ref: '#/channels/PurchaseOrder/messages/purchaseOrderEmail'
+  onRefundReceipt:
+    action: receive
+    channel:
+      $ref: '#/channels/RefundReceipt'
+    summary: Receive RefundReceipt change notifications
+    messages:
+      - $ref: '#/channels/RefundReceipt/messages/refundReceiptCreate'
+      - $ref: '#/channels/RefundReceipt/messages/refundReceiptUpdate'
+      - $ref: '#/channels/RefundReceipt/messages/refundReceiptDelete'
+      - $ref: '#/channels/RefundReceipt/messages/refundReceiptVoid'
+      - $ref: '#/channels/RefundReceipt/messages/refundReceiptEmail'
+  onSalesReceipt:
+    action: receive
+    channel:
+      $ref: '#/channels/SalesReceipt'
+    summary: Receive SalesReceipt change notifications
+    messages:
+      - $ref: '#/channels/SalesReceipt/messages/salesReceiptCreate'
+      - $ref: '#/channels/SalesReceipt/messages/salesReceiptUpdate'
+      - $ref: '#/channels/SalesReceipt/messages/salesReceiptDelete'
+      - $ref: '#/channels/SalesReceipt/messages/salesReceiptVoid'
+      - $ref: '#/channels/SalesReceipt/messages/salesReceiptEmail'
+  onTaxAgency:
+    action: receive
+    channel:
+      $ref: '#/channels/TaxAgency'
+    summary: Receive TaxAgency change notifications
+    messages:
+      - $ref: '#/channels/TaxAgency/messages/taxAgencyCreate'
+      - $ref: '#/channels/TaxAgency/messages/taxAgencyUpdate'
+  onTerm:
+    action: receive
+    channel:
+      $ref: '#/channels/Term'
+    summary: Receive Term change notifications
+    messages:
+      - $ref: '#/channels/Term/messages/termCreate'
+      - $ref: '#/channels/Term/messages/termUpdate'
+  onTimeActivity:
+    action: receive
+    channel:
+      $ref: '#/channels/TimeActivity'
+    summary: Receive TimeActivity change notifications
+    messages:
+      - $ref: '#/channels/TimeActivity/messages/timeActivityCreate'
+      - $ref: '#/channels/TimeActivity/messages/timeActivityUpdate'
+      - $ref: '#/channels/TimeActivity/messages/timeActivityDelete'
+  onTransfer:
+    action: receive
+    channel:
+      $ref: '#/channels/Transfer'
+    summary: Receive Transfer change notifications
+    messages:
+      - $ref: '#/channels/Transfer/messages/transferCreate'
+      - $ref: '#/channels/Transfer/messages/transferUpdate'
+      - $ref: '#/channels/Transfer/messages/transferDelete'
+      - $ref: '#/channels/Transfer/messages/transferVoid'
+  onCompanyCurrency:
+    action: receive
+    channel:
+      $ref: '#/channels/CompanyCurrency'
+    summary: Receive CompanyCurrency change notifications
+    messages:
+      - $ref: '#/channels/CompanyCurrency/messages/companyCurrencyCreate'
+      - $ref: '#/channels/CompanyCurrency/messages/companyCurrencyUpdate'
+      - $ref: '#/channels/CompanyCurrency/messages/companyCurrencyDelete'
+  onVendor:
+    action: receive
+    channel:
+      $ref: '#/channels/Vendor'
+    summary: Receive Vendor change notifications
+    messages:
+      - $ref: '#/channels/Vendor/messages/vendorCreate'
+      - $ref: '#/channels/Vendor/messages/vendorUpdate'
+      - $ref: '#/channels/Vendor/messages/vendorDelete'
+      - $ref: '#/channels/Vendor/messages/vendorMerge'
+  onVendorCredit:
+    action: receive
+    channel:
+      $ref: '#/channels/VendorCredit'
+    summary: Receive VendorCredit change notifications
+    messages:
+      - $ref: '#/channels/VendorCredit/messages/vendorCreditCreate'
+      - $ref: '#/channels/VendorCredit/messages/vendorCreditUpdate'
+      - $ref: '#/channels/VendorCredit/messages/vendorCreditDelete'
 components:
+  messages:
+    AccountCreateMessage:
+      x-ballerina-event-type: qbo.account.created.v1
+      x-ballerina-event-label: AccountCreated
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Account has been created
+    AccountUpdateMessage:
+      x-ballerina-event-type: qbo.account.updated.v1
+      x-ballerina-event-label: AccountUpdated
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Account has been updated
+    AccountDeleteMessage:
+      x-ballerina-event-type: qbo.account.deleted.v1
+      x-ballerina-event-label: AccountDeleted
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Account has been deleted
+    AccountMergeMessage:
+      x-ballerina-event-type: qbo.account.merged.v1
+      x-ballerina-event-label: AccountMerged
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Account has been merged
+    BillCreateMessage:
+      x-ballerina-event-type: qbo.bill.created.v1
+      x-ballerina-event-label: BillCreated
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Bill has been created
+    BillUpdateMessage:
+      x-ballerina-event-type: qbo.bill.updated.v1
+      x-ballerina-event-label: BillUpdated
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Bill has been updated
+    BillDeleteMessage:
+      x-ballerina-event-type: qbo.bill.deleted.v1
+      x-ballerina-event-label: BillDeleted
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Bill has been deleted
+    BillPaymentCreateMessage:
+      x-ballerina-event-type: qbo.billpayment.created.v1
+      x-ballerina-event-label: BillPaymentCreated
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Bill Payment has been created
+    BillPaymentUpdateMessage:
+      x-ballerina-event-type: qbo.billpayment.updated.v1
+      x-ballerina-event-label: BillPaymentUpdated
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Bill Payment has been updated
+    BillPaymentDeleteMessage:
+      x-ballerina-event-type: qbo.billpayment.deleted.v1
+      x-ballerina-event-label: BillPaymentDeleted
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Bill Payment has been deleted
+    BillPaymentVoidMessage:
+      x-ballerina-event-type: qbo.billpayment.void.v1
+      x-ballerina-event-label: BillPaymentVoided
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Bill Payment has been voided
+    BudgetCreateMessage:
+      x-ballerina-event-type: qbo.budget.created.v1
+      x-ballerina-event-label: BudgetCreated
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Budget has been created
+    BudgetUpdateMessage:
+      x-ballerina-event-type: qbo.budget.updated.v1
+      x-ballerina-event-label: BudgetUpdated
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Budget has been updated
+    ChangeOrderCreateMessage:
+      x-ballerina-event-type: qbo.changeorder.created.v1
+      x-ballerina-event-label: ChangeOrderCreated
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Change Order has been created
+    ChangeOrderUpdateMessage:
+      x-ballerina-event-type: qbo.changeorder.updated.v1
+      x-ballerina-event-label: ChangeOrderUpdated
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Change Order has been updated
+    ChangeOrderDeleteMessage:
+      x-ballerina-event-type: qbo.changeorder.deleted.v1
+      x-ballerina-event-label: ChangeOrderDeleted
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Change Order has been deleted
+    ClassCreateMessage:
+      x-ballerina-event-type: qbo.class.created.v1
+      x-ballerina-event-label: ClassCreated
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Class has been created
+    ClassUpdateMessage:
+      x-ballerina-event-type: qbo.class.updated.v1
+      x-ballerina-event-label: ClassUpdated
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Class has been updated
+    ClassDeleteMessage:
+      x-ballerina-event-type: qbo.class.deleted.v1
+      x-ballerina-event-label: ClassDeleted
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Class has been deleted
+    ClassMergeMessage:
+      x-ballerina-event-type: qbo.class.merged.v1
+      x-ballerina-event-label: ClassMerged
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Class has been merged
+    CreditMemoCreateMessage:
+      x-ballerina-event-type: qbo.creditmemo.created.v1
+      x-ballerina-event-label: CreditMemoCreated
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Credit Memo has been created
+    CreditMemoUpdateMessage:
+      x-ballerina-event-type: qbo.creditmemo.updated.v1
+      x-ballerina-event-label: CreditMemoUpdated
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Credit Memo has been updated
+    CreditMemoDeleteMessage:
+      x-ballerina-event-type: qbo.creditmemo.deleted.v1
+      x-ballerina-event-label: CreditMemoDeleted
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Credit Memo has been deleted
+    CreditMemoVoidMessage:
+      x-ballerina-event-type: qbo.creditmemo.void.v1
+      x-ballerina-event-label: CreditMemoVoided
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Credit Memo has been voided
+    CreditMemoEmailMessage:
+      x-ballerina-event-type: qbo.creditmemo.emailed.v1
+      x-ballerina-event-label: CreditMemoEmailed
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Credit Memo has been emailed
+    CurrencyCreateMessage:
+      x-ballerina-event-type: qbo.currency.created.v1
+      x-ballerina-event-label: CurrencyCreated
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Currency has been created
+    CurrencyUpdateMessage:
+      x-ballerina-event-type: qbo.currency.updated.v1
+      x-ballerina-event-label: CurrencyUpdated
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Currency has been updated
+    CurrencyDeleteMessage:
+      x-ballerina-event-type: qbo.currency.deleted.v1
+      x-ballerina-event-label: CurrencyDeleted
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Currency has been deleted
+    CustomerCreateMessage:
+      x-ballerina-event-type: qbo.customer.created.v1
+      x-ballerina-event-label: CustomerCreated
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Customer has been created
+    CustomerUpdateMessage:
+      x-ballerina-event-type: qbo.customer.updated.v1
+      x-ballerina-event-label: CustomerUpdated
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Customer has been updated
+    CustomerDeleteMessage:
+      x-ballerina-event-type: qbo.customer.deleted.v1
+      x-ballerina-event-label: CustomerDeleted
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Customer has been deleted
+    CustomerMergeMessage:
+      x-ballerina-event-type: qbo.customer.merged.v1
+      x-ballerina-event-label: CustomerMerged
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Customer has been merged
+    DepartmentCreateMessage:
+      x-ballerina-event-type: qbo.department.created.v1
+      x-ballerina-event-label: DepartmentCreated
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Department has been created
+    DepartmentUpdateMessage:
+      x-ballerina-event-type: qbo.department.updated.v1
+      x-ballerina-event-label: DepartmentUpdated
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Department has been updated
+    DepartmentMergeMessage:
+      x-ballerina-event-type: qbo.department.merged.v1
+      x-ballerina-event-label: DepartmentMerged
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Department has been merged
+    DepositCreateMessage:
+      x-ballerina-event-type: qbo.deposit.created.v1
+      x-ballerina-event-label: DepositCreated
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Deposit has been created
+    DepositUpdateMessage:
+      x-ballerina-event-type: qbo.deposit.updated.v1
+      x-ballerina-event-label: DepositUpdated
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Deposit has been updated
+    DepositDeleteMessage:
+      x-ballerina-event-type: qbo.deposit.deleted.v1
+      x-ballerina-event-label: DepositDeleted
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Deposit has been deleted
+    EmployeeCreateMessage:
+      x-ballerina-event-type: qbo.employee.created.v1
+      x-ballerina-event-label: EmployeeCreated
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Employee has been created
+    EmployeeUpdateMessage:
+      x-ballerina-event-type: qbo.employee.updated.v1
+      x-ballerina-event-label: EmployeeUpdated
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Employee has been updated
+    EmployeeDeleteMessage:
+      x-ballerina-event-type: qbo.employee.deleted.v1
+      x-ballerina-event-label: EmployeeDeleted
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Employee has been deleted
+    EmployeeMergeMessage:
+      x-ballerina-event-type: qbo.employee.merged.v1
+      x-ballerina-event-label: EmployeeMerged
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Employee has been merged
+    EstimateCreateMessage:
+      x-ballerina-event-type: qbo.estimate.created.v1
+      x-ballerina-event-label: EstimateCreated
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Estimate has been created
+    EstimateUpdateMessage:
+      x-ballerina-event-type: qbo.estimate.updated.v1
+      x-ballerina-event-label: EstimateUpdated
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Estimate has been updated
+    EstimateDeleteMessage:
+      x-ballerina-event-type: qbo.estimate.deleted.v1
+      x-ballerina-event-label: EstimateDeleted
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Estimate has been deleted
+    EstimateEmailMessage:
+      x-ballerina-event-type: qbo.estimate.emailed.v1
+      x-ballerina-event-label: EstimateEmailed
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Estimate has been emailed
+    InvoiceCreateMessage:
+      x-ballerina-event-type: qbo.invoice.created.v1
+      x-ballerina-event-label: InvoiceCreated
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Invoice has been created
+    InvoiceUpdateMessage:
+      x-ballerina-event-type: qbo.invoice.updated.v1
+      x-ballerina-event-label: InvoiceUpdated
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Invoice has been updated
+    InvoiceDeleteMessage:
+      x-ballerina-event-type: qbo.invoice.deleted.v1
+      x-ballerina-event-label: InvoiceDeleted
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Invoice has been deleted
+    InvoiceVoidMessage:
+      x-ballerina-event-type: qbo.invoice.void.v1
+      x-ballerina-event-label: InvoiceVoided
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Invoice has been voided
+    InvoiceEmailMessage:
+      x-ballerina-event-type: qbo.invoice.emailed.v1
+      x-ballerina-event-label: InvoiceEmailed
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Invoice has been emailed
+    ItemCreateMessage:
+      x-ballerina-event-type: qbo.item.created.v1
+      x-ballerina-event-label: ItemCreated
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Item has been created
+    ItemUpdateMessage:
+      x-ballerina-event-type: qbo.item.updated.v1
+      x-ballerina-event-label: ItemUpdated
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Item has been updated
+    ItemDeleteMessage:
+      x-ballerina-event-type: qbo.item.deleted.v1
+      x-ballerina-event-label: ItemDeleted
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Item has been deleted
+    ItemMergeMessage:
+      x-ballerina-event-type: qbo.item.merged.v1
+      x-ballerina-event-label: ItemMerged
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Item has been merged
+    JournalCodeCreateMessage:
+      x-ballerina-event-type: qbo.journalcode.created.v1
+      x-ballerina-event-label: JournalCodeCreated
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Journal Code has been created
+    JournalCodeUpdateMessage:
+      x-ballerina-event-type: qbo.journalcode.updated.v1
+      x-ballerina-event-label: JournalCodeUpdated
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Journal Code has been updated
+    JournalEntryCreateMessage:
+      x-ballerina-event-type: qbo.journalentry.created.v1
+      x-ballerina-event-label: JournalEntryCreated
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Journal Entry has been created
+    JournalEntryUpdateMessage:
+      x-ballerina-event-type: qbo.journalentry.updated.v1
+      x-ballerina-event-label: JournalEntryUpdated
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Journal Entry has been updated
+    JournalEntryDeleteMessage:
+      x-ballerina-event-type: qbo.journalentry.deleted.v1
+      x-ballerina-event-label: JournalEntryDeleted
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Journal Entry has been deleted
+    PaymentCreateMessage:
+      x-ballerina-event-type: qbo.payment.created.v1
+      x-ballerina-event-label: PaymentCreated
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Payment has been created
+    PaymentUpdateMessage:
+      x-ballerina-event-type: qbo.payment.updated.v1
+      x-ballerina-event-label: PaymentUpdated
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Payment has been updated
+    PaymentDeleteMessage:
+      x-ballerina-event-type: qbo.payment.deleted.v1
+      x-ballerina-event-label: PaymentDeleted
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Payment has been deleted
+    PaymentVoidMessage:
+      x-ballerina-event-type: qbo.payment.void.v1
+      x-ballerina-event-label: PaymentVoided
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Payment has been voided
+    PaymentEmailMessage:
+      x-ballerina-event-type: qbo.payment.emailed.v1
+      x-ballerina-event-label: PaymentEmailed
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Payment has been emailed
+    PaymentMethodCreateMessage:
+      x-ballerina-event-type: qbo.paymentmethod.created.v1
+      x-ballerina-event-label: PaymentMethodCreated
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Payment Method has been created
+    PaymentMethodUpdateMessage:
+      x-ballerina-event-type: qbo.paymentmethod.updated.v1
+      x-ballerina-event-label: PaymentMethodUpdated
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Payment Method has been updated
+    PaymentMethodMergeMessage:
+      x-ballerina-event-type: qbo.paymentmethod.merged.v1
+      x-ballerina-event-label: PaymentMethodMerged
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Payment Method has been merged
+    PreferencesUpdateMessage:
+      x-ballerina-event-type: qbo.preferences.updated.v1
+      x-ballerina-event-label: PreferencesUpdated
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Preferences has been updated
+    PurchaseCreateMessage:
+      x-ballerina-event-type: qbo.purchase.created.v1
+      x-ballerina-event-label: PurchaseCreated
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Purchase has been created
+    PurchaseUpdateMessage:
+      x-ballerina-event-type: qbo.purchase.updated.v1
+      x-ballerina-event-label: PurchaseUpdated
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Purchase has been updated
+    PurchaseDeleteMessage:
+      x-ballerina-event-type: qbo.purchase.deleted.v1
+      x-ballerina-event-label: PurchaseDeleted
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Purchase has been deleted
+    PurchaseVoidMessage:
+      x-ballerina-event-type: qbo.purchase.void.v1
+      x-ballerina-event-label: PurchaseVoided
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Purchase has been voided
+    PurchaseOrderCreateMessage:
+      x-ballerina-event-type: qbo.purchaseorder.created.v1
+      x-ballerina-event-label: PurchaseOrderCreated
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Purchase Order has been created
+    PurchaseOrderUpdateMessage:
+      x-ballerina-event-type: qbo.purchaseorder.updated.v1
+      x-ballerina-event-label: PurchaseOrderUpdated
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Purchase Order has been updated
+    PurchaseOrderDeleteMessage:
+      x-ballerina-event-type: qbo.purchaseorder.deleted.v1
+      x-ballerina-event-label: PurchaseOrderDeleted
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Purchase Order has been deleted
+    PurchaseOrderEmailMessage:
+      x-ballerina-event-type: qbo.purchaseorder.emailed.v1
+      x-ballerina-event-label: PurchaseOrderEmailed
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Purchase Order has been emailed
+    RefundReceiptCreateMessage:
+      x-ballerina-event-type: qbo.refundreceipt.created.v1
+      x-ballerina-event-label: RefundReceiptCreated
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Refund Receipt has been created
+    RefundReceiptUpdateMessage:
+      x-ballerina-event-type: qbo.refundreceipt.updated.v1
+      x-ballerina-event-label: RefundReceiptUpdated
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Refund Receipt has been updated
+    RefundReceiptDeleteMessage:
+      x-ballerina-event-type: qbo.refundreceipt.deleted.v1
+      x-ballerina-event-label: RefundReceiptDeleted
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Refund Receipt has been deleted
+    RefundReceiptVoidMessage:
+      x-ballerina-event-type: qbo.refundreceipt.void.v1
+      x-ballerina-event-label: RefundReceiptVoided
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Refund Receipt has been voided
+    RefundReceiptEmailMessage:
+      x-ballerina-event-type: qbo.refundreceipt.emailed.v1
+      x-ballerina-event-label: RefundReceiptEmailed
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Refund Receipt has been emailed
+    SalesReceiptCreateMessage:
+      x-ballerina-event-type: qbo.salesreceipt.created.v1
+      x-ballerina-event-label: SalesReceiptCreated
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Sales Receipt has been created
+    SalesReceiptUpdateMessage:
+      x-ballerina-event-type: qbo.salesreceipt.updated.v1
+      x-ballerina-event-label: SalesReceiptUpdated
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Sales Receipt has been updated
+    SalesReceiptDeleteMessage:
+      x-ballerina-event-type: qbo.salesreceipt.deleted.v1
+      x-ballerina-event-label: SalesReceiptDeleted
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Sales Receipt has been deleted
+    SalesReceiptVoidMessage:
+      x-ballerina-event-type: qbo.salesreceipt.void.v1
+      x-ballerina-event-label: SalesReceiptVoided
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Sales Receipt has been voided
+    SalesReceiptEmailMessage:
+      x-ballerina-event-type: qbo.salesreceipt.emailed.v1
+      x-ballerina-event-label: SalesReceiptEmailed
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Sales Receipt has been emailed
+    TaxAgencyCreateMessage:
+      x-ballerina-event-type: qbo.taxagency.created.v1
+      x-ballerina-event-label: TaxAgencyCreated
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Tax Agency has been created
+    TaxAgencyUpdateMessage:
+      x-ballerina-event-type: qbo.taxagency.updated.v1
+      x-ballerina-event-label: TaxAgencyUpdated
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Tax Agency has been updated
+    TermCreateMessage:
+      x-ballerina-event-type: qbo.term.created.v1
+      x-ballerina-event-label: TermCreated
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Term has been created
+    TermUpdateMessage:
+      x-ballerina-event-type: qbo.term.updated.v1
+      x-ballerina-event-label: TermUpdated
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Term has been updated
+    TimeActivityCreateMessage:
+      x-ballerina-event-type: qbo.timeactivity.created.v1
+      x-ballerina-event-label: TimeActivityCreated
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Time Activity has been created
+    TimeActivityUpdateMessage:
+      x-ballerina-event-type: qbo.timeactivity.updated.v1
+      x-ballerina-event-label: TimeActivityUpdated
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Time Activity has been updated
+    TimeActivityDeleteMessage:
+      x-ballerina-event-type: qbo.timeactivity.deleted.v1
+      x-ballerina-event-label: TimeActivityDeleted
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Time Activity has been deleted
+    TransferCreateMessage:
+      x-ballerina-event-type: qbo.transfer.created.v1
+      x-ballerina-event-label: TransferCreated
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Transfer has been created
+    TransferUpdateMessage:
+      x-ballerina-event-type: qbo.transfer.updated.v1
+      x-ballerina-event-label: TransferUpdated
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Transfer has been updated
+    TransferDeleteMessage:
+      x-ballerina-event-type: qbo.transfer.deleted.v1
+      x-ballerina-event-label: TransferDeleted
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Transfer has been deleted
+    TransferVoidMessage:
+      x-ballerina-event-type: qbo.transfer.void.v1
+      x-ballerina-event-label: TransferVoided
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Transfer has been voided
+    CompanyCurrencyCreateMessage:
+      x-ballerina-event-type: qbo.companycurrency.created.v1
+      x-ballerina-event-label: CompanyCurrencyCreated
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Company Currency has been created
+    CompanyCurrencyUpdateMessage:
+      x-ballerina-event-type: qbo.companycurrency.updated.v1
+      x-ballerina-event-label: CompanyCurrencyUpdated
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Company Currency has been updated
+    CompanyCurrencyDeleteMessage:
+      x-ballerina-event-type: qbo.companycurrency.deleted.v1
+      x-ballerina-event-label: CompanyCurrencyDeleted
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Company Currency has been deleted
+    VendorCreateMessage:
+      x-ballerina-event-type: qbo.vendor.created.v1
+      x-ballerina-event-label: VendorCreated
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Vendor has been created
+    VendorUpdateMessage:
+      x-ballerina-event-type: qbo.vendor.updated.v1
+      x-ballerina-event-label: VendorUpdated
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Vendor has been updated
+    VendorDeleteMessage:
+      x-ballerina-event-type: qbo.vendor.deleted.v1
+      x-ballerina-event-label: VendorDeleted
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Vendor has been deleted
+    VendorMergeMessage:
+      x-ballerina-event-type: qbo.vendor.merged.v1
+      x-ballerina-event-label: VendorMerged
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Vendor has been merged
+    VendorCreditCreateMessage:
+      x-ballerina-event-type: qbo.vendorcredit.created.v1
+      x-ballerina-event-label: VendorCreditCreated
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Vendor Credit has been created
+    VendorCreditUpdateMessage:
+      x-ballerina-event-type: qbo.vendorcredit.updated.v1
+      x-ballerina-event-label: VendorCreditUpdated
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Vendor Credit has been updated
+    VendorCreditDeleteMessage:
+      x-ballerina-event-type: qbo.vendorcredit.deleted.v1
+      x-ballerina-event-label: VendorCreditDeleted
+      externalDocs:
+        description: Webhook docs
+        url: https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks
+      payload:
+        $ref: '#/components/schemas/quickBookEvent'
+      summary: QBO Vendor Credit has been deleted
   schemas:
     quickBookEvent:
-      additionalProperties: true
+      type: object
+      description: A single CloudEvents-formatted QuickBooks webhook notification.
+      required:
+        - specversion
+        - id
+        - source
+        - type
+        - time
+        - intuitentityid
+        - intuitaccountid
       properties:
-        name:
+        specversion:
           type: string
-          description: The name of the entity that changed (Customer, Invoice, etc.).
+          description: The CloudEvents specification version (currently always "1.0").
         id:
           type: string
-          description: The ID of the changed entity.
-        operation:
+          description: A unique identifier for this event.
+        source:
           type: string
-          description: The type of the change.
-        lastUpdated:
+          description: Identifies the QuickBooks company instance that raised the event.
+        type:
           type: string
-          description: The latest timestamp in UTC.
-        deletedID:
+          description: The entity and operation this event represents, e.g. qbo.customer.created.v1.
+        datacontenttype:
           type: string
-          description: The ID of the deleted or merged entity (this only applies to merge events)
+          description: The content type of the data field.
+        time:
+          type: string
+          description: The timestamp the event occurred, in ISO 8601 format.
+        intuitentityid:
+          type: string
+          description: The ID of the entity that changed.
+        intuitaccountid:
+          type: string
+          description: The QuickBooks company (realm) ID this event belongs to.
+        data:
+          type: object
+          additionalProperties: true
+          description: >-
+            Operation-specific event data. Confirmed shapes so far: empty on create,
+            {"deletedId": "..."} on merge. Shape for update/delete/void/email is not
+            yet confirmed against a real delivery.
