@@ -1,0 +1,13 @@
+[
+  {
+    "specversion": "1.0",
+    "id": "88cd52aa-33b6-4351-9aa4-47572edbd068",
+    "source": "intuit.dsnBgbseACLLRZNxo2dfc4evmEJdxde58xeeYcZliOU=",
+    "type": "qbo.customer.created.v1",
+    "datacontenttype": "application/json",
+    "time": "2025-09-10T21:31:25.179Z",
+    "intuitentityid": "1234",
+    "intuitaccountid": "310687",
+    "data": {}
+  }
+]

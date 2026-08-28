@@ -1,0 +1,13 @@
+[
+  {
+    "specversion": "1.0",
+    "id": "test-bill-deleted-1006",
+    "source": "intuit.testSourceId0000000000000000000000000=",
+    "type": "qbo.bill.deleted.v1",
+    "datacontenttype": "application/json",
+    "time": "2026-08-28T09:00:00.000Z",
+    "intuitentityid": "1006",
+    "intuitaccountid": "999000111",
+    "data": {}
+  }
+]

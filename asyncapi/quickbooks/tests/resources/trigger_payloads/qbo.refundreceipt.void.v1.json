@@ -1,0 +1,13 @@
+[
+  {
+    "specversion": "1.0",
+    "id": "test-refundreceipt-void-1079",
+    "source": "intuit.testSourceId0000000000000000000000000=",
+    "type": "qbo.refundreceipt.void.v1",
+    "datacontenttype": "application/json",
+    "time": "2026-08-28T09:00:00.000Z",
+    "intuitentityid": "1079",
+    "intuitaccountid": "999000111",
+    "data": {}
+  }
+]

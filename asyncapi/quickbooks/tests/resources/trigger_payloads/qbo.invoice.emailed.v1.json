@@ -1,0 +1,13 @@
+[
+  {
+    "specversion": "1.0",
+    "id": "test-invoice-emailed-1049",
+    "source": "intuit.testSourceId0000000000000000000000000=",
+    "type": "qbo.invoice.emailed.v1",
+    "datacontenttype": "application/json",
+    "time": "2026-08-28T09:00:00.000Z",
+    "intuitentityid": "1049",
+    "intuitaccountid": "999000111",
+    "data": {}
+  }
+]
