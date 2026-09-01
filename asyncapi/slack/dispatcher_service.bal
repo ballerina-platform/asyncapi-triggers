@@ -42,7 +42,9 @@ service class DispatcherService {
         } else {
             GenericDataType genericDataType = check payload.cloneWithType(GenericDataType);
             check self.matchRemoteFunc(genericDataType);
-            check caller->respond(http:STATUS_OK);
+            http:Response ackRes = new;
+            ackRes.statusCode = http:STATUS_OK;
+            check caller->respond(ackRes);
         }
     }
 

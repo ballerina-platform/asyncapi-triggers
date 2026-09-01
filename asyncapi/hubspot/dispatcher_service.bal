@@ -72,7 +72,8 @@ service class DispatcherService {
             }
         }
 
-        check caller->respond(http:STATUS_OK);
+        response.statusCode = http:STATUS_OK;
+        check caller->respond(response);
         return;
     }
 

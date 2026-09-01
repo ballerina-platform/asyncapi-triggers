@@ -59,7 +59,9 @@ service class DispatcherService {
         }
         GenericDataType genericDataType = check payload.cloneWithType(GenericDataType);
         check self.matchRemoteFunc(genericDataType, eventIdentifier, eventType);
-        check caller->respond(http:STATUS_OK);
+        http:Response ackRes = new;
+        ackRes.statusCode = http:STATUS_OK;
+        check caller->respond(ackRes);
     }
 
     private function verifyWebhookSignature(http:Request request, string webhookSecret) returns error? {
