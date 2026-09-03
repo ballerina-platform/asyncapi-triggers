@@ -1,0 +1,49 @@
+{
+  "version": "v1.0",
+
+  "listeners": [
+    {
+      "id": "$listener",
+      "doc": "Webhook listener that dispatches each inbound Shopify event to the concrete service type matching its topic.",
+      "type": { "name": "Listener" },
+      "services": ["$orders", "$customers", "$products", "$fulfillments"],
+      "multipleServicesAllowed": true,
+      "multipleServicesOfSameTypeAllowed": false
+    }
+  ],
+
+  "serviceTypes": [
+    {
+      "id": "$orders",
+      "doc": "Receives order events: created, updated, paid, cancelled, and the other order lifecycle topics.",
+      "type": { "name": "OrdersService" },
+      "concrete": true,
+      "multipleListenersAllowed": true,
+      "handlers": { "backedByConcreteType": true }
+    },
+    {
+      "id": "$customers",
+      "doc": "Receives customer events: created, updated, and deleted.",
+      "type": { "name": "CustomersService" },
+      "concrete": true,
+      "multipleListenersAllowed": true,
+      "handlers": { "backedByConcreteType": true }
+    },
+    {
+      "id": "$products",
+      "doc": "Receives product events: created, updated, and deleted.",
+      "type": { "name": "ProductsService" },
+      "concrete": true,
+      "multipleListenersAllowed": true,
+      "handlers": { "backedByConcreteType": true }
+    },
+    {
+      "id": "$fulfillments",
+      "doc": "Receives fulfillment events: created and updated, including shipment and tracking changes.",
+      "type": { "name": "FulfillmentsService" },
+      "concrete": true,
+      "multipleListenersAllowed": true,
+      "handlers": { "backedByConcreteType": true }
+    }
+  ]
+}

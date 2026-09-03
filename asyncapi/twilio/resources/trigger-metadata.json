@@ -1,0 +1,33 @@
+{
+  "version": "v1.0",
+
+  "listeners": [
+    {
+      "id": "$listener",
+      "doc": "Webhook listener that dispatches each inbound Twilio status callback to the concrete service type matching its callback kind.",
+      "type": { "name": "Listener" },
+      "services": ["$callStatus", "$smsStatus"],
+      "multipleServicesAllowed": true,
+      "multipleServicesOfSameTypeAllowed": false
+    }
+  ],
+
+  "serviceTypes": [
+    {
+      "id": "$callStatus",
+      "doc": "Receives call status callback events for an outbound or inbound voice call, such as ringing, answered, or completed.",
+      "type": { "name": "CallStatusService" },
+      "concrete": true,
+      "multipleListenersAllowed": true,
+      "handlers": { "backedByConcreteType": true }
+    },
+    {
+      "id": "$smsStatus",
+      "doc": "Receives SMS/MMS delivery status callback events, such as sent, delivered, or failed.",
+      "type": { "name": "SmsStatusService" },
+      "concrete": true,
+      "multipleListenersAllowed": true,
+      "handlers": { "backedByConcreteType": true }
+    }
+  ]
+}

@@ -8,6 +8,7 @@ version = "0.10.0"
 icon = "docs/icon.png"
 distribution = "2201.11.0"
 authors = ["Ballerina"]
+include = ["resources/**/*"]
 
 [build-options]
 observabilityIncluded = true
