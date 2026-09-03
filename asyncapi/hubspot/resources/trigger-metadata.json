@@ -1,0 +1,81 @@
+{
+  "version": "v1.0",
+
+  "listeners": [
+    {
+      "id": "$listener",
+      "doc": "Webhook listener that dispatches each inbound HubSpot event to the concrete service type matching its object type.",
+      "type": { "name": "Listener" },
+      "services": [
+        "$company",
+        "$contact",
+        "$conversation",
+        "$deal",
+        "$ticket",
+        "$product",
+        "$lineItem"
+      ],
+      "multipleServicesAllowed": true,
+      "multipleServicesOfSameTypeAllowed": false
+    }
+  ],
+
+  "serviceTypes": [
+    {
+      "id": "$company",
+      "doc": "Receives company object events: created, updated, and deleted.",
+      "type": { "name": "CompanyService" },
+      "concrete": true,
+      "multipleListenersAllowed": true,
+      "handlers": { "backedByConcreteType": true }
+    },
+    {
+      "id": "$contact",
+      "doc": "Receives contact object events: created, updated, and deleted.",
+      "type": { "name": "ContactService" },
+      "concrete": true,
+      "multipleListenersAllowed": true,
+      "handlers": { "backedByConcreteType": true }
+    },
+    {
+      "id": "$conversation",
+      "doc": "Receives conversation object events: created, updated, and deleted.",
+      "type": { "name": "ConversationService" },
+      "concrete": true,
+      "multipleListenersAllowed": true,
+      "handlers": { "backedByConcreteType": true }
+    },
+    {
+      "id": "$deal",
+      "doc": "Receives deal object events: created, updated, and deleted.",
+      "type": { "name": "DealService" },
+      "concrete": true,
+      "multipleListenersAllowed": true,
+      "handlers": { "backedByConcreteType": true }
+    },
+    {
+      "id": "$ticket",
+      "doc": "Receives ticket object events: created, updated, and deleted.",
+      "type": { "name": "TicketService" },
+      "concrete": true,
+      "multipleListenersAllowed": true,
+      "handlers": { "backedByConcreteType": true }
+    },
+    {
+      "id": "$product",
+      "doc": "Receives product object events: created, updated, and deleted.",
+      "type": { "name": "ProductService" },
+      "concrete": true,
+      "multipleListenersAllowed": true,
+      "handlers": { "backedByConcreteType": true }
+    },
+    {
+      "id": "$lineItem",
+      "doc": "Receives line item object events: created, updated, and deleted.",
+      "type": { "name": "LineItemService" },
+      "concrete": true,
+      "multipleListenersAllowed": true,
+      "handlers": { "backedByConcreteType": true }
+    }
+  ]
+}
