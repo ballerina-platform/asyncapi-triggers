@@ -1,3 +1,11 @@
+> [!WARNING]
+> **This package is deprecated.** Use [`ballerinax/twilio.trigger`](https://central.ballerina.io/ballerinax/twilio.trigger) instead. It verifies every status callback with your Auth Token, and handles five more statuses. This package gets no further updates.
+>
+> To move to it:
+> - Import `ballerinax/twilio.trigger as twilio` in place of `ballerinax/trigger.twilio`.
+> - The service types and callbacks are the same. `SmsStatusService` adds `onScheduled`, `onRead`, `onCanceled` and `onPartiallyDelivered`, and `CallStatusService` adds `onInitiated`, so implement those too.
+> - Set `ListenerConfig.webhookSecret` to your Auth Token and `webhookBaseUrl` to the public URL Twilio calls.
+
 ## Overview
 
 The Twilio trigger allows you to listen to Twilio SMS and call status change events similar to the following.
