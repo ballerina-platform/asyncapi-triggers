@@ -1,0 +1,24 @@
+{
+  "version": "v1.0",
+
+  "listeners": [
+    {
+      "id": "$listener",
+      "doc": "Watches the authorized Gmail mailbox through a Google Cloud Pub/Sub push subscription and dispatches each mailbox change to the attached Gmail service.",
+      "type": { "name": "Listener" },
+      "services": ["$gmail"],
+      "multipleServicesAllowed": false
+    }
+  ],
+
+  "serviceTypes": [
+    {
+      "id": "$gmail",
+      "doc": "Receives Gmail mailbox events, such as new emails, new threads, label changes, star changes, and new attachments.",
+      "type": { "name": "GmailService" },
+      "concrete": true,
+      "multipleListenersAllowed": true,
+      "handlers": { "backedByConcreteType": true }
+    }
+  ]
+}

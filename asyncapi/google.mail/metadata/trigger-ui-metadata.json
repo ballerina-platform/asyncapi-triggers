@@ -1,0 +1,328 @@
+{
+  "version": "v1.0",
+  "metadata": {
+    "kind": "event"
+  },
+  "trigger": {
+    "displayName": "Gmail Event Integration",
+    "description": "Create a service to handle mailbox events from Gmail",
+    "type": "gmail"
+  },
+  "readOnlyMetadata": [
+    {
+      "key": "serviceType",
+      "displayName": "Event Channel",
+      "extractor": "SERVICE_DESCRIPTION"
+    }
+  ],
+  "initForm": {
+    "fields": [
+      {
+        "target": {
+          "kind": "recordField",
+          "owner": "trigger.initProperties",
+          "path": "serviceType"
+        },
+        "metadata": {
+          "label": "Event Channel",
+          "description": "The type of Gmail event to listen for"
+        },
+        "source": {
+          "construct": {
+            "kind": "SERVICE_TYPE_DESCRIPTOR"
+          },
+          "module": {
+            "name": "mail"
+          }
+        },
+        "state": {
+          "enabled": true,
+          "editable": true,
+          "optional": false,
+          "advanced": false
+        },
+        "key": "serviceType",
+        "default": "mail:GmailService"
+      }
+    ]
+  },
+  "listeners": [
+    {
+      "target": "$listener",
+      "form": {
+        "section": {
+          "label": "Listener",
+          "description": "Attach the service to a new or existing Gmail listener."
+        },
+        "createNew": {
+          "label": "Create New Listener",
+          "description": "Define a new Gmail listener in the project."
+        },
+        "listenerConfig": {
+          "label": "Listener Configurations",
+          "description": "Configure the Gmail listener."
+        },
+        "useExisting": {
+          "label": "Use Existing Listener",
+          "description": "Attach to a Gmail listener already declared in the project."
+        },
+        "existingListener": {
+          "label": "Listener",
+          "description": "Select an existing listener to attach the service to."
+        },
+        "existingListenerItems": [
+          "gmailListener"
+        ],
+        "existingListenerValue": "gmailListener"
+      },
+      "formFields": {
+        "listenerVarName": {
+          "key": "listenerVarName",
+          "default": "gmailListener",
+          "metadata": {
+            "label": "Listener Name",
+            "description": "Provide a name for the listener being created"
+          },
+          "widget": {
+            "widgetKind": "IDENTIFIER",
+            "selected": true,
+            "ballerinaType": "mail:Listener"
+          },
+          "source": {
+            "construct": {
+              "kind": "LISTENER_VAR_NAME"
+            }
+          },
+          "state": {
+            "enabled": true,
+            "editable": true,
+            "optional": false,
+            "advanced": false
+          }
+        },
+        "clientId": {
+          "key": "clientId",
+          "placeholder": "",
+          "default": "",
+          "validations": [
+            {
+              "rule": "common.validate.required"
+            }
+          ],
+          "metadata": {
+            "label": "Client ID",
+            "description": "OAuth 2.0 client ID of the Google Cloud project"
+          },
+          "source": {
+            "argument": {
+              "kind": "LISTENER_PARAM_CONFIG_FIELD",
+              "originalName": "clientId",
+              "position": 1
+            },
+            "path": "clientId"
+          },
+          "state": {
+            "enabled": true,
+            "editable": true,
+            "optional": false,
+            "advanced": false
+          }
+        },
+        "clientSecret": {
+          "key": "clientSecret",
+          "placeholder": "",
+          "default": "",
+          "validations": [
+            {
+              "rule": "common.validate.required"
+            }
+          ],
+          "metadata": {
+            "label": "Client Secret",
+            "description": "OAuth 2.0 client secret of the Google Cloud project"
+          },
+          "source": {
+            "argument": {
+              "kind": "LISTENER_PARAM_CONFIG_FIELD",
+              "originalName": "clientSecret",
+              "position": 1
+            },
+            "path": "clientSecret"
+          },
+          "state": {
+            "enabled": true,
+            "editable": true,
+            "optional": false,
+            "advanced": false
+          }
+        },
+        "refreshToken": {
+          "key": "refreshToken",
+          "placeholder": "",
+          "default": "",
+          "validations": [
+            {
+              "rule": "common.validate.required"
+            }
+          ],
+          "metadata": {
+            "label": "Refresh Token",
+            "description": "OAuth 2.0 refresh token with Gmail and Cloud Pub/Sub scopes"
+          },
+          "source": {
+            "argument": {
+              "kind": "LISTENER_PARAM_CONFIG_FIELD",
+              "originalName": "refreshToken",
+              "position": 1
+            },
+            "path": "refreshToken"
+          },
+          "state": {
+            "enabled": true,
+            "editable": true,
+            "optional": false,
+            "advanced": false
+          }
+        },
+        "refreshUrl": {
+          "key": "refreshUrl",
+          "placeholder": "https://oauth2.googleapis.com/token",
+          "default": "",
+          "validations": [
+            {
+              "rule": "common.validate.required"
+            }
+          ],
+          "metadata": {
+            "label": "Refresh URL",
+            "description": "OAuth 2.0 token endpoint used to refresh the access token"
+          },
+          "source": {
+            "argument": {
+              "kind": "LISTENER_PARAM_CONFIG_FIELD",
+              "originalName": "refreshUrl",
+              "position": 1
+            },
+            "path": "refreshUrl"
+          },
+          "state": {
+            "enabled": true,
+            "editable": true,
+            "optional": false,
+            "advanced": false
+          }
+        },
+        "project": {
+          "key": "project",
+          "placeholder": "",
+          "default": "",
+          "validations": [
+            {
+              "rule": "common.validate.required"
+            }
+          ],
+          "metadata": {
+            "label": "Project ID",
+            "description": "Google Cloud project ID in which the Pub/Sub topic and subscription are created"
+          },
+          "source": {
+            "argument": {
+              "kind": "LISTENER_PARAM_CONFIG_FIELD",
+              "originalName": "project",
+              "position": 1
+            },
+            "path": "project"
+          },
+          "state": {
+            "enabled": true,
+            "editable": true,
+            "optional": false,
+            "advanced": false
+          }
+        },
+        "callbackURL": {
+          "key": "callbackURL",
+          "placeholder": "",
+          "default": "",
+          "validations": [
+            {
+              "rule": "common.validate.required"
+            }
+          ],
+          "metadata": {
+            "label": "Callback URL",
+            "description": "Public URL of this listener that Pub/Sub pushes mailbox notifications to"
+          },
+          "source": {
+            "argument": {
+              "kind": "LISTENER_PARAM_CONFIG_FIELD",
+              "originalName": "callbackURL",
+              "position": 1
+            },
+            "path": "callbackURL"
+          },
+          "state": {
+            "enabled": true,
+            "editable": true,
+            "optional": false,
+            "advanced": false
+          }
+        },
+        "listenOn": {
+          "key": "listenOn",
+          "placeholder": "8090",
+          "default": "8090",
+          "metadata": {
+            "label": "Webhook Listener Port",
+            "description": "The port on which the listener accepts incoming Pub/Sub push requests"
+          },
+          "source": {
+            "argument": {
+              "kind": "LISTENER_PARAM_REQUIRED",
+              "position": 2,
+              "originalName": "listenOn"
+            }
+          },
+          "state": {
+            "enabled": true,
+            "editable": true,
+            "optional": true,
+            "advanced": false
+          }
+        }
+      }
+    }
+  ],
+  "serviceTypes": [
+    {
+      "target": "$gmail",
+      "metadata": {
+        "label": "Gmail",
+        "description": "Triggers when a new event related to Gmail is received. Available actions: onNewEmail, onNewThread, onEmailLabelAdded, onEmailStarred, onEmailLabelRemoved, onEmailStarRemoved, and onNewAttachment."
+      },
+      "source": {
+        "construct": {
+          "kind": "SERVICE_TYPE_DESCRIPTOR"
+        },
+        "argument": {
+          "originalName": "GmailService"
+        },
+        "module": {
+          "name": "mail"
+        }
+      },
+      "state": {
+        "enabled": true,
+        "editable": true
+      }
+    }
+  ],
+  "artifactInfo": {
+    "displayLabel": "Gmail Event Integration",
+    "icon": {
+      "lightPath": "icons/light.svg",
+      "darkPath": "icons/dark.svg",
+      "color": "#EA4335"
+    }
+  }
+}
