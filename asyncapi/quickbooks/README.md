@@ -1,3 +1,11 @@
+> [!WARNING]
+> **This package is deprecated.** Use [`ballerinax/quickbooks.trigger`](https://central.ballerina.io/ballerinax/quickbooks.trigger) instead. It verifies every delivery with your app's webhook verifier token. This package gets no further updates.
+>
+> To move to it:
+> - Import `ballerinax/quickbooks.trigger as quickbooks` in place of `ballerinax/trigger.quickbooks`.
+> - Service types, callbacks and payload types are the same.
+> - Set your Intuit app's webhook payload format to CloudEvents.
+
 ## Overview
 The QuickBooks trigger allows you to listen to [QuickBooks webhook notifications](https://developer.intuit.com/app/developer/qbo/docs/develop/webhooks).
 

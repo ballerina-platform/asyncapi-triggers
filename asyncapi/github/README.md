@@ -1,3 +1,11 @@
+> [!WARNING]
+> **This package is deprecated.** Use [`ballerinax/github.trigger`](https://central.ballerina.io/ballerinax/github.trigger) instead. It is generated from GitHub's webhook definitions, verifies every delivery with your webhook secret, and covers all 75 GitHub events. This package gets no further updates.
+>
+> To move to it:
+> - Import `ballerinax/github.trigger as github` in place of `ballerinax/trigger.github`.
+> - Callbacks are named after their event: `IssuesService.onReopened` is now `onIssuesReopened`.
+> - Payload types end in `Payload`: `IssuesEvent` is now `IssuesPayload`.
+> - `ListenerConfig.webhookSecret` stays, and every delivery is rejected until it is set.
 
 ## Overview
 The GitHub Trigger module allows you to listen to following events occur in GitHub. 

@@ -1,3 +1,11 @@
+> [!WARNING]
+> **This package is deprecated.** Use [`ballerinax/identityserver.trigger`](https://central.ballerina.io/ballerinax/identityserver.trigger) instead. It receives the webhooks of both WSO2 Identity Server and Asgardeo, verified with a webhook secret. This package gets no further updates.
+>
+> To move to it:
+> - Import `ballerinax/identityserver.trigger` in place of `ballerinax/trigger.identityserver`.
+> - Events are grouped in 10 service types, such as `LoginService` and `UserService`, following the server's webhook events.
+> - `ListenerConfig.webhookSecret` stays.
+
 ## Overview
 
 The `ballerinax/trigger.identityserver` module provides a Listener to grasp events triggered from your [WSO2 Identity Server](https://wso2.com/identity-server/). This functionality is provided by the [WSO2 Identity Server webhooks](https://is.docs.wso2.com/en/next/guides/webhooks/webhook-events-and-payloads/).

@@ -1,3 +1,11 @@
+> [!WARNING]
+> **This package is deprecated.** Use [`ballerinax/hubspot.trigger`](https://central.ballerina.io/ballerinax/hubspot.trigger) instead. It verifies every delivery with HubSpot's v3 signature. This package gets no further updates.
+>
+> To move to it:
+> - Import `ballerinax/hubspot.trigger as hubspot` in place of `ballerinax/trigger.hubspot`.
+> - Callbacks are recased, such as `onCompanyPropertychange` to `onCompanyPropertyChange`.
+> - `ListenerConfig.clientSecret` is now `webhookSecret`, and `callbackURL` is now `callbackUrl`.
+
 ## Overview
 
 The [Ballerina](https://ballerina.io/) listener for Hubspot allows you to listen to the following events in a HubSpot account, grouped by the CRM object they relate to.

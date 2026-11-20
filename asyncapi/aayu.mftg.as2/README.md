@@ -1,3 +1,10 @@
+> [!WARNING]
+> **This package is deprecated.** Use [`ballerinax/aayu.mftg.as2.trigger`](https://central.ballerina.io/ballerinax/aayu.mftg.as2.trigger) instead. It verifies every delivery with your MFT Gateway webhook public key, and adds a service for sends that weren't confirmed. This package gets no further updates.
+>
+> To move to it:
+> - Import `ballerinax/aayu.mftg.as2.trigger as aayu` in place of `ballerinax/trigger.aayu.mftg.as2`.
+> - The existing service types and callbacks are the same.
+> - Set `ListenerConfig.webhookSecret` to your MFT Gateway webhook public key.
 
 ## Overview
 

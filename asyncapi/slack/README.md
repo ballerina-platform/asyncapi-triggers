@@ -1,3 +1,11 @@
+> [!WARNING]
+> **This package is deprecated.** Use [`ballerinax/slack.trigger`](https://central.ballerina.io/ballerinax/slack.trigger) instead. It verifies every request with your app's signing secret and covers more Slack events. This package gets no further updates.
+>
+> To move to it:
+> - Import `ballerinax/slack.trigger as slack` in place of `ballerinax/trigger.slack`.
+> - Most service types and callbacks keep their names; some events changed, so check the new package's service types.
+> - `ListenerConfig.verificationToken` is now `webhookSecret`, which takes your app's Signing Secret.
+
 ## Overview
 
 The `ballerinax/trigger.slack` module provides a Listener to grasp events triggered from your Slack App. This functionality is provided by [Slack Events API](https://api.slack.com/apis/connections/events-api).

@@ -1,3 +1,11 @@
+> [!WARNING]
+> **This package is deprecated.** Use [`ballerinax/shopify.trigger`](https://central.ballerina.io/ballerinax/shopify.trigger) instead. It verifies every delivery with your app's client secret. This package gets no further updates.
+>
+> To move to it:
+> - Import `ballerinax/shopify.trigger as shopify` in place of `ballerinax/trigger.shopify`.
+> - Service types, callbacks and payload types are the same.
+> - `ListenerConfig.apiSecretKey` is now `webhookSecret`.
+
 ## Overview
 The Shopify trigger allows you to listen to [Shopify webhook notifications](https://shopify.dev/apps/webhooks).
 You can use webhook subscriptions to receive notifications about particular events in Shopify shops.
